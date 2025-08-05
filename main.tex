@@ -1,0 +1,29 @@
+% Main thesis file
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Your Thesis Title}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+% Chapters
+\input{chapters/intro.tex}
+\input{chapters/chap_1.tex}
+\input{chapters/chap_2.tex}
+
+% References
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
