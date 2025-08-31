@@ -6,7 +6,14 @@
 \usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{multicol}
 \geometry{margin=1in}
+
+% Remove "Chapter" and chapter numbers from chapter headings
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{}{0pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{50pt}{40pt}
 
 \title{Your Thesis Title}
 \author{Your Name}
@@ -14,13 +21,20 @@
 
 \begin{document}
 
+% Single column for title and TOC
 \maketitle
 \tableofcontents
+
+% Switch to double column for chapters
+\twocolumn
 
 % Chapters
 \input{chapters/intro.tex}
 \input{chapters/chap_1.tex}
 \input{chapters/chap_2.tex}
+
+% Switch back to single column for references
+\onecolumn
 
 % References
 \bibliographystyle{plainnat}
