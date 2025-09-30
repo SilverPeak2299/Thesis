@@ -6,16 +6,14 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{hyperref}
-\usepackage{natbib}
+% IEEE numeric style citations
+\usepackage[numbers,sort&compress]{natbib}
 % Better kerning & protrusion (tighter, more readable)
 \usepackage{microtype}
 \usepackage{geometry}
 \usepackage{titlesec}
 \usepackage{multicol}
-% Previous: uniform 1in margins. Adjusted to typical thesis layout on A4 with a slightly
-% wider inner margin for binding (gutter) and a comfortable bottom margin.
-% Measurements chosen (approx mm converted to bp via geometry):
-% inner 32mm, outer 24mm, top 25mm, bottom 30mm, headsep 12pt, headheight 14pt.
+
 \geometry{
   inner=32mm,
   outer=24mm,
@@ -26,7 +24,7 @@
   footskip=14mm
 }
 
-% Remove "Chapter" and chapter numbers from chapter headings
+
 
 \title{Your Thesis Title}
 \author{Your Name}
@@ -38,7 +36,6 @@
 \maketitle
 \tableofcontents
 
-% Switch to double column for chapters
 \twocolumn
 
 % Chapters
@@ -53,8 +50,8 @@
 % Switch back to single column for references
 \onecolumn
 
-% References
-\bibliographystyle{plainnat}
+% References (IEEE style)
+\bibliographystyle{IEEEtranN}
 \bibliography{references}
 
 \end{document}
