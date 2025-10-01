@@ -15,8 +15,8 @@ This chapter reviews the state of knowledge relevant to the design of ETL pipeli
 DevSecOps can be understood as the proactive and continuous enforcement of security 
 and compliance requirements throughout the software development lifecycle (SDLC) 
 \cite{anisetti_devsecops-based_2022}.
-Opposed to approaches that treat security as a discrete stage or external review, 
-DevSecOps seeks to embed security within every activity of the lifecycle 
+Opposed to approaches that treat security as a separate stage or external review, 
+DevSecOps seeks to embed security within every stage of the lifecycle 
 \cite{anisetti_semi-automatic_2020}. In this model, compliance is the default state, 
 and deviations from established requirements are treated as explicit exceptions that 
 must be justified \cite{castellanos_accordant_2021}.  
@@ -30,13 +30,38 @@ that can be evaluated by regulators or auditors;
 effectively bridging the concerns of development teams and governance stakeholders 
 \cite{anisetti_semi-automatic_2020}.  
 
-Through the integration cultural expectations of shared responsibility with technical mechanisms 
+Through the integration of cultural expectations and shared responsibility with technical mechanisms 
 for enforcement, DevSecOps establishes a framework where security and compliance are 
 continuous, measurable, and intrinsic to software delivery, rather than externally 
 imposed constraints.
 
 \subsection{ETL}
+\noindent
+\noindent
+Extract-Transform-Load (ETL) is a structured pattern of processes, that ingests data, transforms it 
+into analytics-ready formats, and persists it into target repositories such as data warehouses, 
+data lakes, or file stores \cite{kimball_data_2004}. ETL is traditionally characterized by three 
+interdependent stages: extraction, the sourcing of data from diverse and often inconsistent 
+operational systems; transformation, the cleansing, standardization, integration, and reshaping 
+of this data into consistent semantic structures; and loading, the deposition of transformed data 
+into persistent storage for later use \cite{kimball_data_2004}. Kimball and Caserta emphasize that 
+ETL has historically represented the most time-consuming and resource-intensive component of 
+data warehousing, serving as the critical link between operational data and use.  
 
+While the classical framing describes ETL as a sequential and batch-oriented workflow, 
+modern practice reflects more flexible execution models, including extract-load-transform 
+(ELT) and hybrid streaming-batch architectures that exploit distributed and cloud-native 
+infrastructure \cite{mahmud_role_2022}. Beyond data movement, ETL operationalizes data integration, 
+ensures quality and standardization, and increasingly serves as a locus for governance and 
+compliance requirements. In regulated industries, ETL pipelines are expected not only to 
+provide scalable data preparation, but also to guarantee lineage, reproducibility, and auditability 
+as part of broader data governance frameworks \cite{mahmud_role_2022}.  
+
+Accordingly, ETL should not be conceived as a rigid boundary of operations, but as a flexible 
+socio-technical pattern that concludes once data is made persistent and reusable, yet intersects 
+with wider lifecycle concerns such as orchestration, monitoring, and policy enforcement. In this 
+sense, ETL pipelines underpin both analytic scalability and the assurance of institutional trust 
+and regulatory legitimacy \cite{mahmud_role_2022}.
 
 \subsection{Auditability}
 
