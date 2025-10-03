@@ -1,5 +1,5 @@
 # Thesis
-The document get compiled to main.pdf
+The document itself gets compiled to main.pdf
 
 
 ## Related Repositories and Prototypes
