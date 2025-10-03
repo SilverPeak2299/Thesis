@@ -105,7 +105,45 @@ sense, ETL pipelines underpin both analytic scalability and the assurance of ins
 and regulatory legitimacy \cite{mahmud_role_2022}.
 
 \subsection{Auditability}
+\noindent
+Auditability is a designed property of systems that enables 
+their processes, controls, and outcomes to be rendered knowable and verifiable 
+by stakeholders. Weigand and Elsas \cite{weigand_auditability_2019} define 
+auditability through five interdependent requirements:
+\textit{normativity}, the presence of a clear regulatory or contractual framework 
+governing operations; 
+\textit{accountability}, the production of verifiable statements linking actions 
+to responsible agents and norms; 
+\textit{referentiality infrastructure}, the existence of records that connect 
+operations to points of first recording; 
+\textit{reliability}, the faithful and tamper-resistant representation of events; 
+and \textit{verifiability}, the ability of external parties to test or validate 
+the correctness of claims. Although this originates in the domain of 
+financial reporting and organizational control, it provides a transferable 
+structure for information systems more broadly.  
 
+Extending these principles into technical settings, Wang et al. 
+\cite{wang_enabling_2011} demonstrate how auditability can be operationalized 
+for cloud storage through mechanisms such as third-party verification, 
+cryptographic proofs of integrity, and support for dynamic data operations. 
+Their work highlights that auditability is not merely an organisational concept, 
+but one that can be concretely engineered into data management infrastructures.  
+
+In the context of ETL pipelines and DevSecOps practices, these requirements 
+translate directly into regulated-industry concerns. 
+\textit{Normativity} implies embedding compliance and data protection policies 
+within workflow execution; 
+\textit{accountability} requires associating each transformation or deployment 
+with authenticated agents or automated processes; 
+\textit{referentiality infrastructure} corresponds to full lineage tracking across 
+extraction, transformation, and loading; 
+\textit{reliability} is realised through immutable logs, signed artifacts, and 
+cryptographic hashing; 
+and \textit{verifiability} involves reproducibility testing and the possibility of 
+independent or delegated audits via CI/CD-integrated checks. 
+Taken together, these adapted requirements frame auditability in ETL pipelines as 
+a designed capability: every data operation and system change can be traced, 
+reproduced, and independently validated against regulatory expectations.
 
 \subsection{Governance}
 
