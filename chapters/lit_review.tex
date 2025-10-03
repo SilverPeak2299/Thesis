@@ -3,10 +3,51 @@
 This chapter reviews the state of knowledge relevant to the design of ETL pipelines in regulated industries and the application of DevSecOps principles. It begins by introducing the context of ETL and governance requirements, then defines the key concepts used in this thesis. From this foundation, the research questions are posed explicitly. Each subsequent subsection addresses one sub-question through a focused review of the literature.
 
 \section{Background}
-% High-level introduction
-% - Role of ETL pipelines in data-intensive, regulated industries
-% - Importance of auditability and governance
-% - Emergence of DevOps and extension into DevSecOps
+\section{Background}
+\noindent
+- pipelines underpin data-intensive systems, producing usable data for fraud detection, 
+market analysis, compliance reporting, and application metadata processing.
+    
+- Although the extract-transform-load process appears straightforward, in practice it is 
+resource-intensive, complex, and often the most time-consuming part of data warehousing 
+\cite{kimball_data_2004}.
+    
+- ETL pipelines function as the ``eyes of the system,'' feeding downstream analytics and operations; 
+failures or opacity here undermine the reliability of the entire enterprise stack.
+
+- In regulated industries, compliance is tied as much to \textit{how} data is processed as to the 
+outcomes produced.
+
+- Regulatory frameworks (e.g., GDPR, SOX, APRA) require secure and responsible handling of data, 
+not just correct outputs.
+
+- Auditability can be understood as the ability to demonstrate compliance through reproducibility, 
+lineage, and tamper-resistant logs. [Find relevant citation here]
+
+- Governance encompasses the policies, frameworks, and controls that institutionalize compliance 
+practices. [Find relevant citation here]
+
+- Failures in either area expose organizations to fines, license revocation, reputational damage, 
+and loss of investor trust. [Find relevant citation here]
+
+- DevOps was originally conceived to accelerate software delivery cycles through automation, CI/CD, 
+and rapid feedback loops. [Find relevant citation here]
+
+- DevSecOps extends this model by embedding security and compliance throughout the software development 
+lifecycle, using practices such as automated testing, compliance-as-code, artifact signing, and immutable 
+logging \cite{anisetti_devsecops-based_2022, castellanos_accordant_2021}.
+
+
+
+- These practices generate auditable artifacts that can be inspected by regulators and governance 
+stakeholders, bridging engineering and compliance concerns.
+
+- Data itself is increasingly recognized as a valuable artifact, often outweighing the systems that 
+process it. [Find relevant citation here]
+
+
+- This shift has intensified regulatory scrutiny of data workflows, highlighting the need to extend 
+DevSecOps principles into ETL pipelines.
 
 \section{Defining Key Concepts}
 
@@ -19,7 +60,8 @@ Opposed to approaches that treat security as a separate stage or external review
 DevSecOps seeks to embed security within every stage of the lifecycle 
 \cite{anisetti_semi-automatic_2020}. In this model, compliance is the default state, 
 and deviations from established requirements are treated as explicit exceptions that 
-must be justified \cite{castellanos_accordant_2021}.  
+must be justified \cite{castellanos_accordant_2021}.
+
 
 A defining characteristic of DevSecOps is its reliance on automation to enforce 
 non-functional requirements; such as auditability and governance. This is achieved through testing, 
@@ -28,15 +70,14 @@ provisioning, monitoring, logging, and policy enforcement
 These automated controls produce auditable evidence, such as immutable logs and signed artifacts,
 that can be evaluated by regulators or auditors;
 effectively bridging the concerns of development teams and governance stakeholders 
-\cite{anisetti_semi-automatic_2020}.  
+\cite{anisetti_semi-automatic_2020}.
 
-Through the integration of cultural expectations and shared responsibility with technical mechanisms 
+Through the integration of cultural expectations and shared responsibility with technical mechanisms
 for enforcement, DevSecOps establishes a framework where security and compliance are 
 continuous, measurable, and intrinsic to software delivery, rather than externally 
 imposed constraints.
 
 \subsection{ETL}
-\noindent
 \noindent
 Extract-Transform-Load (ETL) is a structured pattern of processes, that ingests data, transforms it 
 into analytics-ready formats, and persists it into target repositories such as data warehouses, 
