@@ -1,1 +1,23 @@
 \chapter{Proposed Architecture}
+
+\section{Design Principles}
+Outline the guiding principles of the proposed DevSecOps-integrated ETL system:
+automation, immutability, traceability, reproducibility.
+
+\section{High-Level Overview}
+Provide an architectural diagram comparing baseline and proposed design.
+
+\section{Core Components}
+Explain each layer:
+\begin{itemize}
+    \item \textbf{Infrastructure as Code:} Terraform for provisioning.
+    \item \textbf{Orchestration:} Airflow for controlled execution.
+    \item \textbf{Security:} CI/CD checks, artifact signing, SAST/SCA.
+    \item \textbf{Governance:} Immutable audit logs, metadata tracking.
+\end{itemize}
+
+\section{Integration with DevSecOps Practices}
+Map the proposed pipeline to the DevSecOps lifecycle (plan → code → build → test → release → monitor).
+
+\section{Expected Outcomes}
+Summarize the architectural advantages for auditability and compliance.

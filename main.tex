@@ -1,18 +1,20 @@
-% Main thesis file
-% Changed global font size from 12pt to 10pt to make text more compact.
-% Enable twoside for proper inner/outer margins (book-style)
 \documentclass[10pt,a4paper,twoside]{report}
+
+% --- fonts: use scalable CM + proper encoding ---
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{hyperref}
-% IEEE numeric style citations
 \usepackage[numbers,sort&compress]{natbib}
-% Better kerning & protrusion (tighter, more readable)
-\usepackage{microtype}
+\usepackage{microtype} % keep after fonts
 \usepackage{geometry}
 \usepackage{titlesec}
 \usepackage{multicol}
+
+% (good practice) load hyperref last
+\usepackage{hyperref}
 
 \geometry{
   inner=32mm,
@@ -24,7 +26,7 @@
   footskip=14mm
 }
 
-
+\raggedbottom
 
 \title{Designing a DevSecOps Toolchain to Support ETL Workflows in Regulated Industries}
 \author{Daniel Dickerson}
@@ -43,9 +45,11 @@
 \input{chapters/lit_review.tex}
 \input{chapters/methodology.tex}
 \input{chapters/baseline_pipeline.tex}
-\include{chapters/proposed_architecture.tex}
-\include{chapters/prototype_implementation.tex}
-\include{chapters/evaluation.tex}
+\input{chapters/proposed_architecture.tex}
+\input{chapters/prototype_implementation.tex}
+\input{chapters/evaluation.tex}
+\input{chapters/discussion.tex}
+\input{chapters/conclusion.tex}
 
 % Switch back to single column for references
 \onecolumn
