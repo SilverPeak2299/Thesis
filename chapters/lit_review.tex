@@ -106,18 +106,23 @@ and regulatory legitimacy \cite{mahmud_role_2022}.
 \subsection{Auditability}
 \noindent
 Auditability is a designed property of systems that enables 
-their processes, controls, and outcomes to be rendered knowable and verifiable 
+their processes, controls, and outcomes to be observed and verified 
 by stakeholders. Weigand and Elsas \cite{weigand_auditability_2019} define 
 auditability through five interdependent requirements:
-\textit{normativity}, the presence of a clear regulatory or contractual framework 
-governing operations; 
-\textit{accountability}, the production of verifiable statements linking actions 
-to responsible agents and norms; 
-\textit{referentiality infrastructure}, the existence of records that connect 
-operations to points of first recording; 
-\textit{reliability}, the faithful and tamper-resistant representation of events; 
-and \textit{verifiability}, the ability of external parties to test or validate 
-the correctness of claims. Although this originates in the domain of 
+\begin{itemize}
+    \item\textbf{\textit{Normativity}}: the presence of a clear regulatory or contractual framework 
+governing operations.
+    \item\textbf{\textit{Accountability}}: the production of verifiable statements linking actions 
+to responsible agents and norms.
+    \item\textbf{\textit{Referentiality Infrastructure}}: the existence of records that connect 
+operations to points of first recording.
+    \item \textbf{\textit{Reliability}}: the faithful and tamper-resistant representation of events;
+    \item \textbf{\textit{Rerifiability}}: the ability of external parties to test or validate 
+the correctness of claims. 
+
+\end{itemize}
+
+While these originate in the domain of 
 financial reporting and organizational control, it provides a transferable 
 structure for information systems more broadly.  
 
@@ -129,17 +134,14 @@ Their work highlights that auditability is not merely an organisational concept,
 but one that can be concretely engineered into data management infrastructures.  
 
 In the context of ETL pipelines and DevSecOps practices, these requirements 
-translate directly into regulated-industry concerns. 
-\textit{Normativity} implies embedding compliance and data protection policies 
-within workflow execution; 
-\textit{accountability} requires associating each transformation or deployment 
-with authenticated agents or automated processes; 
-\textit{referentiality infrastructure} corresponds to full lineage tracking across 
-extraction, transformation, and loading; 
-\textit{reliability} is realised through immutable logs, signed artifacts, and 
-cryptographic hashing; 
-and \textit{verifiability} involves reproducibility testing and the possibility of 
-independent or delegated audits via CI/CD-integrated checks. 
+translate directly into regulated-industry concerns: 
+\begin{itemize}
+    \item \textbf{\textit{Normativity}}: embedding compliance and data protection policies within workflow execution.
+    \item \textbf{\textit{Accountability}}: associating each transformation or deployment with authenticated agents or automated processes.
+    \item \textbf{\textit{Referentiality Infrastructure}}: full lineage tracking across extraction, transformation, and loading.
+    \item \textbf{\textit{Reliability}}: immutable logs, signed artifacts, and cryptographic hashing.
+    \item \textbf{\textit{Verifiability}}: reproducibility testing and the possibility of independent or delegated audits via CI/CD-integrated checks.
+\end{itemize}
 Taken together, these adapted requirements frame auditability in ETL pipelines as 
 a designed capability: every data operation and system change can be traced, 
 reproduced, and independently validated against regulatory expectations.
