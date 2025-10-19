@@ -1,121 +1,124 @@
 \chapter{Introduction}
 
-% TODO: Expland more on citations + clean up grammar and spellings
-
 \section{Context and Motivation}
-In recent years, the economic and operational value of data has surpassed that of
-the software systems which process it. Organisations are increasingly treating
-data as a product, complete with ownership structures, stewardship
-responsibilities, and lifecycle management requirements. This evolution has
-coincided with escalating regulatory scrutiny across jurisdictions. Frameworks
-such as APRA’s Prudential Standards \cite{cps234,cps230,cps510,australian_prudential_regulation_authority_prudential_2013}
-among international instruments such as the EU’s General Data
-Protection Regulation (GDPR) and the United States’ HIPAA mandate not only secure the
-handling of information assets, but also demand transparent processes that
-demonstrate accountability and control.
+\noindent
+In recent years, the value of data has surpassed that of the software systems
+built to process it \cite{elbaghazaoui_data_2025, elbaghazaoui_ensuring_2025}.
+Organisations increasingly treat data as a product, complete with ownership
+structures, stewardship responsibilities, and lifecycle management frameworks
+\cite{elbaghazaoui_data_2025}. This shift has coincided with growing regulatory
+scrutiny across jurisdictions \cite{elbaghazaoui_data_2025}. Frameworks such as
+APRA’s Prudential Standards \cite{cps234,cps230,cps510,
+australian_prudential_regulation_authority_prudential_2013}, alongside global
+instruments such as the EU’s GDPR and the United States’ HIPAA, demand not only
+the secure handling of information assets but also transparent processes that
+demonstrate accountability and control \cite{elbaghazaoui_ensuring_2025}.
 
-Extract--Transform--Load (ETL) workflows lie at the centre of this
-transformation. They serve as the operational backbone of analytical systems,
-ensuring that data is accurately extracted, transformed, and loaded into
-governed repositories. As Mahmud and Ikbal~\cite{mahmud_role_2022} emphasise,
-modern ETL pipelines have evolved into socio-technical infrastructures that
-sustain the scalability, reliability, and legitimacy of data-driven
-decision-making. Yet, despite the rise of DataOps practices, many data pipelines
-remain opaque, lacking end-to-end lineage, reproducibility, and verifiable
-controls. In regulated industries, this opacity undermines the ability to
-demonstrate compliance and erodes institutional trust.
+Extract–Transform–Load (ETL) workflows lie at the heart of this transformation,
+serving as the operational backbone of analytical systems
+\cite{elbaghazaoui_metadata_2025, elbaghazaoui_data_2025-1}. As Mahmud and
+Ikbal~\cite{mahmud_role_2022} note, modern ETL pipelines have evolved into
+socio-technical infrastructures that sustain the scalability, reliability, and
+legitimacy of data-driven decision-making. Yet despite the rise of DataOps,
+many pipelines remain opaque, lacking end-to-end lineage, reproducibility, and
+verifiable controls \cite{elbaghazaoui_ensuring_2025}. In regulated
+environments, such opacity undermines compliance and erodes institutional
+trust.
 
-The field of software engineering, by contrast, has already confronted similar
-challenges. DevSecOps—the integration of development, security, and
-operations—has matured into a discipline that embeds verification, automation,
-and governance throughout the software delivery lifecycle
-\cite{anisetti_devsecops-based_2022,castellanos_accordant_2021,anisetti_semi-automatic_2020}.
-If data is now the product, then DevSecOps provides an architectural and
-cultural foundation for treating data pipelines with the same rigour
-historically applied to software systems. This research explores that proposition
-by examining how DevSecOps principles can be adapted to enable auditability and
-\emph{data governance} within ETL workflows.
+Software engineering has already faced similar challenges. DevSecOps — the
+integration of development, security, and operations — has matured into a
+discipline embedding verification, automation, and governance across the
+software delivery lifecycle \cite{anisetti_devsecops-based_2022,
+castellanos_accordant_2021, anisetti_semi-automatic_2020,
+elbaghazaoui_integrating_2025-1}. If data is now the product, DevSecOps offers
+an architectural and cultural foundation for treating data pipelines with the
+same rigour once reserved for software systems \cite{elbaghazaoui_integrating_2025}.
+This research explores that proposition: how DevSecOps principles can be adapted
+to strengthen auditability and data governance within ETL workflows.
 
 \section{Problem Statement}
-Although the DataOps movement has improved automation and observability within
-ETL processes, its focus has largely been operational efficiency rather than
-regulatory assurance~\cite{munappy_ad-hoc_2020,mahmud_role_2022}. Current
-orchestration frameworks, while powerful, rarely produce immutable audit trails,
-reproducible execution states, or cryptographically verifiable lineage, leaving
-auditability an emergent rather than designed property
-\cite{wang_enabling_2011,weigand_auditability_2019}. Consequently, organisations
-face a persistent gap between the technical execution of pipelines and the
-evidentiary requirements of regulators~\cite{cps234,cps230}.
+\noindent
+While the DataOps movement has improved automation and observability, its
+primary focus remains operational efficiency rather than regulatory assurance
+\cite{munappy_ad-hoc_2020, mahmud_role_2022}. Existing orchestration frameworks,
+though powerful, rarely produce immutable audit trails, reproducible execution
+states, or cryptographically verifiable lineage. Auditability thus emerges as an
+accidental property rather than a designed one
+\cite{wang_enabling_2011, weigand_auditability_2019}. As a result,
+organisations face a persistent gap between the technical execution of
+pipelines and the evidentiary requirements of regulators
+\cite{cps234, cps230}.
 
-This thesis addresses that gap. Specifically, it investigates how a
-\emph{DevSecOps-enabled toolchain} can enhance auditability and data governance
-across the ETL lifecycle. Whereas DevSecOps has institutionalised security and
-compliance for software artifacts, an equivalent model for data artifacts has yet
-to emerge. The absence of such a model exposes regulated organisations to
-compliance risk, weakens governance, and impairs the ability to demonstrate
-trustworthy data management.
+This thesis addresses that gap. It investigates how a \emph{DevSecOps-enabled
+toolchain} can enhance auditability and data governance across the ETL
+lifecycle. DevSecOps has already institutionalised security and compliance for
+software artifacts, but an equivalent framework for data artifacts has yet to
+emerge. This absence exposes regulated organisations to compliance risk,
+weakens governance, and impairs their ability to demonstrate trustworthy data
+management.
 
 \section{Research Objectives}
+\noindent
 This research adopts a Design Science methodology
-\cite{hevner_design_2004} to design, implement, and evaluate a
-DevSecOps-based toolchain that enhances auditability and data governance within
-ETL workflows. The study follows an iterative process of artifact design,
-prototype construction, and evaluation against explicit metrics for lineage
-completeness, reproducibility, and tamper detection.
+\cite{hevner_design_2004} to design, implement, and evaluate a DevSecOps-based
+toolchain that enhances auditability and governance in ETL workflows. The study
+follows an iterative cycle of artifact design, prototype construction, and
+evaluation against explicit metrics for lineage completeness, reproducibility,
+and tamper detection.
 
-The investigation is guided by the following research questions:
-
-\textbf{Main Research Question:}
+\subsection{Primary Research Question}
 \begin{quote}
 How can a DevSecOps toolchain be designed to support ETL workflows in regulated
 industries, enhancing auditability and data governance?
 \end{quote}
 
-\textbf{Sub-questions:}
+In the process of answering the above question, this paper explores four sub-questions:
+\subsection{Sub-Questions}
 \begin{enumerate}
-  \item How do data workflows such as ETL manifest in regulated industries, and
-  what auditability and data governance challenges do they face?
+  \item How do ETL workflows manifest in regulated industries, and what
+  auditability and data governance challenges do they face?
   \item How do DevSecOps practices enhance auditability and data governance
   within the software development lifecycle?
   \item In what ways do the stages of the data lifecycle align with or diverge
-  from the stages of the software development lifecycle, and how does this
-  affect the integration of DevSecOps practices?
-  \item What are the key categories of tooling in DevSecOps and in ETL
-  pipelines, and how do their features compare in terms of supporting
-  auditability and data governance?
+  from the software development lifecycle, and how does this affect the
+  integration of DevSecOps practices?
+  \item What categories of tooling exist in DevSecOps and ETL pipelines, and how
+  do their features support auditability and data governance?
 \end{enumerate}
 
 \section{Contributions}
+\noindent
 This thesis makes three primary contributions.  
 First, it proposes an \textbf{architectural model} for a DevSecOps-enabled ETL
 toolchain, aligning the data lifecycle with secure software delivery practices
-to improve auditability and data governance.  
+to improve auditability and governance.  
 Second, it presents a \textbf{prototype implementation} that integrates
 infrastructure as code, automated security scanning, and immutable logging into
-an operational ETL environment based on Airflow, Spark, and AWS components.  
-Third, it provides an \textbf{evaluation framework} that quantifies
-auditability and data governance using traceability, reproducibility, and
-tamper-resistance metrics. Together, these contributions establish a
-proof-of-concept for embedding DevSecOps principles within data-centric systems
-in regulated environments.
+an operational ETL environment built with Airflow, Spark, and AWS components.  
+Third, it defines an \textbf{evaluation framework} for quantifying auditability
+and governance through traceability, reproducibility, and tamper-resistance
+metrics.  
+Together, these contributions demonstrate how DevSecOps principles can be
+embedded in data-centric systems to enhance compliance and trust.
 
 \section{Thesis Structure}
+\noindent
 The remainder of this thesis is organised as follows:
 \begin{itemize}
-  \item \textbf{Chapter~2} reviews the literature on ETL pipelines, data
-  governance frameworks, and DevSecOps practices.
-  \item \textbf{Chapter~3} details the Design Science methodology and research
-  design.
+  \item \textbf{Chapter~2} reviews literature on ETL pipelines, data governance,
+  and DevSecOps practices.
+  \item \textbf{Chapter~3} explains the Design Science methodology,
+  design constraints,and evaluation criteria.
   \item \textbf{Chapter~4} describes the baseline ETL pipeline and identifies
-  auditability and data governance gaps.
+  auditability and governance gaps.
   \item \textbf{Chapter~5} presents the proposed DevSecOps-integrated
   architecture.
-  \item \textbf{Chapter~6} outlines the prototype implementation and tooling
+  \item \textbf{Chapter~6} outlines the prototype implementation and toolchain
   configuration.
-  \item \textbf{Chapter~7} evaluates the system against auditability and data
-  governance metrics.
-  \item \textbf{Chapter~8} discusses the implications, limitations, and avenues
-  for future research.
+  \item \textbf{Chapter~7} evaluates the system against defined auditability and
+  governance metrics from Chapter~3.
+  \item \textbf{Chapter~8} discusses implications, limitations, and avenues for
+  future research.
   \item \textbf{Chapter~9} concludes with reflections on how DevSecOps can
   enable trustworthy data governance in regulated environments.
 \end{itemize}
