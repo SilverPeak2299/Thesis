@@ -231,7 +231,9 @@ utilities into compliance-critical systems, embedding automation, lineage, and
 policy enforcement at their core. Yet fragmented lineage, limited immutability,
 and opaque transformation logic continue to hinder full auditability. These
 gaps highlight the need for lifecycle-aware approaches that integrate security
-and verification from design through deployment. The next section examines how
+and verification from design through deployment.
+
+The next section examines how
 DevSecOps practices—originating within the software development lifecycle—extend
 these governance capabilities into data pipelines, bridging software assurance
 and data lifecycle management.
@@ -239,19 +241,139 @@ and data lifecycle management.
 
 
 \section{RQ2: DevSecOps and Governance in the SDLC}
-% Address sub-question 2
-% - Define DevSecOps practices (CI/CD, IaC scanning, automated testing, SAST/DAST, etc.)
-% - Evidence of enhanced traceability and auditability in software systems
-% - Challenges in adoption and organizational culture
-% - Identify literature gaps
+\noindent
+
+The software development lifecycle (SDLC) provides a disciplined framework for
+the design, construction, and maintenance of software systems. It translates
+functional and non-functional requirements into verifiable artefacts and
+operational releases, maintaining quality, reliability, and security across
+iterations. International standards such as ISO/IEC/IEEE~12207 and~15288
+formalise these stages through defined information items, plans, and reports
+that collectively establish traceability and accountability within engineering
+processes \cite{noauthor_isoiecieee_2019, hernandez_requirements_2023}. The
+SDLC thereby acts as a governance mechanism—an architecture of control in which
+security, assurance, and auditability can be systematically embedded
+\cite{souppaya_secure_2022, anisetti_devsecops-based_2022}.
+
+As established in Chapter~2, auditability extends beyond retrospective review to
+a system’s designed capacity to produce immutable, contextualised evidence of
+operation. The SDLC becomes the medium through which this evidence is
+constructed and preserved, transforming the development process itself into a
+chain of accountability.
+
+DevSecOps elevates this framework by embedding compliance and verification
+directly within the lifecycle. Instead of treating assurance as post-hoc
+oversight, DevSecOps positions it as a continuous, measurable property of
+delivery. Machine-readable artefacts—signed binaries, immutable logs, and
+compliance manifests—are generated automatically at each stage of development
+\cite{anisetti_devsecops-based_2022, anisetti_semi-automatic_2020,
+chen_design_2022, weigand_auditability_2019}. These artefacts form a living
+record of integrity that binds design intent to operational reality.
+
+In this model, pipelines are annotated with non-functional requirements that are
+continuously verified through automated checks. Each stage yields testable
+outputs that contribute to an operational chain of trust, supported by
+continuous certification frameworks validating service behaviour against
+assurance policies \cite{anisetti_semi-automatic_2020, chen_design_2022,
+souppaya_secure_2022}. Auditability thus shifts from a retrospective activity to
+a real-time system property, maintained by automation and policy-as-code.
+
+Infrastructure-as-code (IaC), continuous integration and delivery (CI/CD), and
+policy-as-code collectively translate this philosophy into practice. Static and
+dynamic analysis, dependency scanning, and pre-deployment gates transform
+traditional control functions into machine-verifiable checkpoints distributed
+throughout the pipeline \cite{li_evolution_2025,
+anisetti_semi-automatic_2020}. Governance artefacts emerge alongside the code
+itself, enhancing reproducibility and traceability across environments
+\cite{anisetti_devsecops-based_2022, hernandez_requirements_2023}. This
+shift-left paradigm ensures that compliance is achieved through construction,
+not inspection.
+
+These practices mirror the Secure Software Development Framework (SSDF)
+outlined in NIST Special Publication~800-218 \cite{souppaya_secure_2022}, which
+defines four domains: Prepare the Organization, Protect Software, Produce
+Well-Secured Software, and Respond to Vulnerabilities. NIST prescribes
+traceable metadata, provenance records, and policy enforcement as essential
+lifecycle artefacts—principles that align closely with DevSecOps’ focus on
+continuous verification and toolchain provenance
+\cite{anisetti_devsecops-based_2022, chen_design_2022}. When embedded within
+CI/CD pipelines, these practices create persistent audit readiness and
+measurable compliance, satisfying both technical and regulatory governance
+requirements \cite{australian_prudential_regulation_authority_prudential_2013,
+weigand_auditability_2019}.
+
+Contemporary security research reinforces this need for governance-by-design.
+The evolution of the OWASP Top~10 and CWE/SANS Top~25 demonstrates the rise of
+supply-chain, API, cloud, and AI/ML vulnerabilities
+\cite{li_evolution_2025}. Sustaining auditability under these conditions
+requires continuous dependency scanning, provenance validation, and policy-as-
+code \cite{souppaya_secure_2022, anisetti_devsecops-based_2022}. In regulated
+domains such as automotive software, integrated security audits at code, build,
+and runtime achieve real-time compliance validation while maintaining delivery
+velocity \cite{achuthan_shifting_2024, chen_design_2022}. These architectures
+prove that auditability and agility need not be in opposition.
+
+Emerging techniques extend this assurance through intelligent automation.
+Large language models (LLMs) are being embedded into enterprise pipelines to
+interpret and enforce compliance policies. Hybrid systems combining rule-based
+and AI-driven validation reduce manual review effort while maintaining
+regulatory precision, enabling adaptive monitoring across Kubernetes,
+Terraform, and IAM configurations \cite{mittal_practical_2025,
+souppaya_secure_2022, anisetti_semi-automatic_2020}. Such augmentation
+illustrates DevSecOps’ ability to evolve as a semantic layer of governance that
+adapts with the technologies it protects.
+
+Traceability remains the connective tissue binding these mechanisms together.
+Integrated requirements management and automated linkage validation establish a
+bidirectional audit trail between regulatory intent and deployed artefacts
+\cite{noauthor_isoiecieee_2019, anisetti_devsecops-based_2022,
+souppaya_secure_2022}. This alignment bridges organisational policy and
+technical execution, ensuring that governance is both demonstrable and durable
+\cite{hernandez_requirements_2023, chen_design_2022}. In cloud-native contexts,
+where distributed workloads complicate oversight, embedded vulnerability
+scanning, configuration policy enforcement, and runtime monitoring preserve
+provenance and certification integrity
+\cite{elbaghazaoui_integrating_2025-1, anisetti_devsecops-based_2022,
+souppaya_secure_2022}. Every deployment becomes reconstructable, verifiable, and
+provable in context.
+
+These lifecycle-integrated practices parallel the expectations of APRA’s
+Prudential Practice Guide CPG~235: Managing Data Risk
+\cite{australian_prudential_regulation_authority_prudential_2013}, which
+requires continuous validation, classification, and assurance of information
+assets throughout their operational life. DevSecOps provides the technical means
+to satisfy these expectations through automated control validation and evidence
+generation \cite{anisetti_semi-automatic_2020,
+weigand_auditability_2019}.  
+
+At its core, auditability is a design property. Systems must be architected for
+observability, referential integrity, and completeness of evidence
+\cite{weigand_auditability_2019}. In a DevSecOps context, the CI/CD pipeline
+itself functions as the referential infrastructure linking policy to artefact:
+a dynamic chain of evidence that binds governance to execution
+\cite{anisetti_devsecops-based_2022, souppaya_secure_2022,
+chen_design_2022}. Auditability thus emerges not as a final checklist but as an
+inherent characteristic of the lifecycle architecture
+\cite{anisetti_semi-automatic_2020}.
+
+Collectively, these developments show that DevSecOps transforms governance from
+a procedural burden into a continuous property of software production. By
+combining assurance, policy-as-code, and machine-verifiable artefacts, it fuses
+engineering and compliance into a unified system of accountability—capable of
+sustaining trust and regulatory transparency in real time
+\cite{souppaya_secure_2022, anisetti_devsecops-based_2022,
+anisetti_semi-automatic_2020, weigand_auditability_2019,
+australian_prudential_regulation_authority_prudential_2013}.
+
+The next section compares the data and software lifecycles, examining how this
+integration of assurance can extend from code to data, bridging lifecycle-based
+auditability into the domain of data governance.
+
+
 
 \section{RQ3: Comparing the Data Lifecycle and the SDLC}
-% Address sub-question 3
-% - Define lifecycle models: CRISP-DM, DAMA-DMBOK vs. classic SDLC
-% - Points of alignment (iterative processes, versioning, QA/validation)
-% - Divergences (archiving vs. deployment, retention vs. maintenance)
-% - Implications for applying DevSecOps to ETL
-% - Identify literature gaps
+\noindent
+
 
 \section{RQ4: Tooling for Auditability and Governance}
 % Address sub-question 4
