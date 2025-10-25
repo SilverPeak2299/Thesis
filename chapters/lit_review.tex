@@ -179,11 +179,64 @@ expectations.
 
 
 \section{RQ1: ETL Pipelines in Regulated Industries}
-% Address sub-question 1
-% - Survey ETL practices in finance, healthcare, government
-% - Typical auditability/governance challenges (lineage, compliance, tamper detection)
-% - Existing frameworks and standards (GDPR, HIPAA, SOX)
-% - Identify literature gaps
+\noindent
+
+ETL pipelines in regulated industries operate under a dual mandate: they must
+deliver analytical value while producing verifiable evidence of control. Mahmud
+and Ikbal~\cite{mahmud_role_2022} describe ETL systems as socio-technical
+infrastructures that extend beyond data integration to support institutional
+trust. Their study highlights that scalability and performance alone are
+insufficient; true maturity lies in sustaining lineage, transparency, and
+compliance across distributed environments.
+
+This tension is most visible in financial, healthcare, and critical
+infrastructure domains, where frameworks such as APRA’s CPS~230, CPS~234, and
+CPS~510~\cite{cps230,cps234,cps510} formalise separation of duties and
+controlled change promotion. Broader governance research echoes these
+principles, emphasising role-based accountability, immutable logging, and
+retention aligned with compliance lifecycles
+\cite{elbaghazaoui_ensuring_2025, elbaghazaoui_metadata_2025,
+elbaghazaoui_data_2025}. Cloud-native orchestration services such as AWS Glue
+and Azure Data Factory address elasticity demands, yet their adoption is
+tempered by the need for traceability, access control, and evidence retention
+consistent with CPG~235
+\cite{australian_prudential_regulation_authority_prudential_2013}. The result
+is a tightly controlled ecosystem where orchestrators such as Airflow and
+serverless triggers coordinate data movement while preserving verifiable
+execution histories~\cite{pogiatzis_event-driven_2021}.
+
+Within this environment, ETL pipelines increasingly act as vehicles for
+automated governance. Vayyala~\cite{elbaghazaoui_ensuring_2025} argues that
+integrating DevSecOps-style validation—continuous testing, versioning, and
+policy enforcement—transforms pipelines into compliance mechanisms rather than
+mere conduits for data. Metadata management reinforces this shift. By capturing
+provenance, transformation logic, and operational context, metadata forms the
+connective tissue between policy and process
+\cite{elbaghazaoui_metadata_2025}. Process metadata in particular documents each
+transformation step, producing an intrinsic audit trail that enables
+reproducibility and accountability.
+
+Despite these advances, persistent obstacles limit complete auditability.
+Heterogeneous toolchains fragment lineage across orchestration and storage
+layers, while transformation logic embedded in SQL or user-defined functions
+remains difficult to trace~\cite{mahmud_role_2022}. Schema drift and
+inconsistent metadata propagation further erode reliability, and few systems
+produce immutable, cryptographically verifiable artifacts by default
+\cite{elbaghazaoui_metadata_2025, weigand_auditability_2019}. As Weigand and
+Elsas~\cite{weigand_auditability_2019} note, such weaknesses disrupt the chain
+of evidence essential to verifiable governance.
+
+In summary, ETL workflows in regulated industries have evolved from operational
+utilities into compliance-critical systems, embedding automation, lineage, and
+policy enforcement at their core. Yet fragmented lineage, limited immutability,
+and opaque transformation logic continue to hinder full auditability. These
+gaps highlight the need for lifecycle-aware approaches that integrate security
+and verification from design through deployment. The next section examines how
+DevSecOps practices—originating within the software development lifecycle—extend
+these governance capabilities into data pipelines, bridging software assurance
+and data lifecycle management.
+
+
 
 \section{RQ2: DevSecOps and Governance in the SDLC}
 % Address sub-question 2
