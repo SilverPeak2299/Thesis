@@ -15,6 +15,8 @@
 
 % (good practice) load hyperref last
 \usepackage{hyperref}
+% Hide colored boxes around links in the generated PDF
+\hypersetup{hidelinks}
 
 \geometry{
   inner=32mm,
@@ -40,7 +42,13 @@
 
 % Single column for title and TOC
 \maketitle
-\tableofcontents
+% Typeset the ToC with compact paragraph spacing (local change)
+\begingroup
+  % reset paragraph spacing locally so the ToC is tighter
+  \setlength{\parskip}{0pt}
+  \setlength{\parindent}{0pt}
+  	\tableofcontents
+\endgroup
 
 
 % Chapters
@@ -53,9 +61,6 @@
 \input{chapters/evaluation.tex}
 \input{chapters/discussion.tex}
 \input{chapters/conclusion.tex}
-
-% Switch back to single column for references
-\onecolumn
 
 % References (IEEE style)
 \bibliographystyle{IEEEtranN}
