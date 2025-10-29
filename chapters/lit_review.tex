@@ -221,7 +221,7 @@ layers of orchestration, computation, and storage. Business logic embedded in
 SQL or user-defined functions escapes formal tracing, while schema drift and
 inconsistent metadata propagation corrode reliability
 \cite{mahmud_role_2022}. Few frameworks create immutable,
-cryptographically-verifiable artefacts by default
+cryptographically-verifiable artifacts by default
 \cite{elbaghazaoui_metadata_2025, weigand_auditability_2019}. What is missing is
 not information, but integrity—the ability to prove that recorded operations are
 both complete and untampered. The fragility of this evidentiary chain provides
@@ -231,122 +231,470 @@ property.
 
 \section{RQ2: DevSecOps and Governance in the SDLC}
 
-Where ETL pipelines reveal the symptoms of audit fragility, the software
-development lifecycle (SDLC) offers a model for its remedy. The SDLC formalises
-change as a controlled process, translating intent into artefact through a
-sequence of verifiable stages. Standards such as ISO/IEC/IEEE 12207 and 15288
-codify these stages into information items—plans, specifications, procedures,
-and reports—that render software creation traceable and accountable
-\cite{noauthor_isoiecieee_2019, hernandez_requirements_2023}. Governance is
-therefore not an afterthought but a structural feature of disciplined
-development.
+Where ETL pipelines expose audit gaps, the software development lifecycle (SDLC)
+offers a way to close them. The SDLC treats change as a controlled process; it
+translates intent into artifacts through defined stages. Standards such as
+ISO/IEC/IEEE 12207 and 15288 set out information items—plans, specifications,
+procedures, and reports—that make software construction observable and
+accountable \cite{noauthor_isoiecieee_2019, hernandez_requirements_2023}.
+Governance is not bolted on; it is built in.
 
-DevSecOps intensifies this structure by embedding assurance, security, and
-compliance mechanisms into each phase of delivery
-\cite{souppaya_secure_2022, anisetti_devsecops-based_2022}. It reframes the
-pipeline not merely as a path to deployment but as a generator of evidence. Each
-build, test, and deployment event produces signed artefacts, immutable logs, and
-compliance manifests—machine-verifiable records that bind design to behaviour
+DevSecOps strengthens this frame. It embeds assurance, security, and compliance
+into each phase of delivery \cite{souppaya_secure_2022, anisetti_devsecops-based_2022}.
+The pipeline stops being just a path to deployment; it becomes a source of
+evidence. Each build, test, and release produces signed artifacts, immutable
+logs, and compliance manifests that bind design to behaviour
 \cite{anisetti_devsecops-based_2022, anisetti_semi-automatic_2020,
-chen_design_2022, weigand_auditability_2019}. These artefacts form a distributed
-chain of trust, updated with every iteration. The system thus audits itself as
-it operates, transforming assurance from a scheduled inspection to a continuous
-state.
+chen_design_2022, weigand_auditability_2019}. These records form a chain of
+trust; the system audits itself as it runs.
 
-The philosophy extends through automation patterns such as
-infrastructure-as-code, continuous integration and delivery, and
-policy-as-code. Automated testing, dependency scanning, and approval gates make
-verification habitual rather than exceptional
-\cite{li_evolution_2025, anisetti_semi-automatic_2020,
-hernandez_requirements_2023}. NIST’s Secure Software Development Framework
-(SSDF) \cite{souppaya_secure_2022} codifies these expectations: traceable
-metadata, provenance records, and policy enforcement are no longer optional but
-integral lifecycle artefacts. When embedded in CI/CD toolchains, these
-mechanisms sustain persistent audit readiness and measurable compliance
-\cite{australian_prudential_regulation_authority_prudential_2013,
-weigand_auditability_2019}.  
+Automation makes this practical. Infrastructure-as-code, CI/CD, and
+policy-as-code place checks where work happens. Static and dynamic analysis,
+dependency scanning, and approval gates make verification routine
+\cite{li_evolution_2025, anisetti_semi-automatic_2020, hernandez_requirements_2023}.
+NIST’s Secure Software Development Framework (SSDF) captures the expectation:
+traceable metadata, provenance, and policy enforcement are standard lifecycle
+artifacts \cite{souppaya_secure_2022}. Embedded in CI/CD, they keep audit
+readiness constant \cite{australian_prudential_regulation_authority_prudential_2013,
+weigand_auditability_2019}. Mature build systems act as provenance engines;
+requirements, commits, and runtime behaviour line up in the same evidentiary
+trail.
 
-The growing complexity of digital supply chains has made this form of assurance
-indispensable. Expanding attack surfaces, opaque third-party dependencies, and
-volatile cloud environments require constant verification of integrity and
-origin \cite{li_evolution_2025, souppaya_secure_2022}. DevSecOps adapts by
-introducing autonomous scanning, provenance analysis, and even
-AI-assisted policy reasoning to detect deviation as it occurs
+As supply chains grow more complex, this approach is essential. Third-party
+components, container registries, and cloud services expand the attack surface;
+integrity and origin must be verified continuously
+\cite{li_evolution_2025, souppaya_secure_2022}. Toolchains adapt with
+autonomous scanning, provenance analysis, and AI-assisted policy checks
 \cite{mittal_practical_2025, achuthan_shifting_2024}. Requirement traceability
-links regulatory intent to runtime artefacts
-\cite{noauthor_isoiecieee_2019, chen_design_2022}, ensuring that what is built,
-what is deployed, and what is audited all refer to the same authoritative chain
-of evidence \cite{elbaghazaoui_integrating_2025-1}. The SDLC thereby evolves
-into an operational architecture of continuous assurance—a framework where
-compliance is produced, not declared.
+links regulatory intent to runtime artifacts \cite{noauthor_isoiecieee_2019,
+chen_design_2022}; what is built, deployed, and audited refers to the same
+authoritative record \cite{elbaghazaoui_integrating_2025-1}.
+
+This logic naturally extends into operations through GitOps. GitOps applies
+version control, traceability, and automation to runtime governance. Desired
+system state is declared in Git; automated controllers reconcile live
+infrastructure to that state. Every operational change flows through a commit;
+authorship, justification, and policy checks are preserved as immutable history
+\cite{gupta_prevalence_2022, souppaya_secure_2022}. Operations become auditable
+artifacts; drift, reconciliation, and approval form a verifiable provenance
+chain \cite{anisetti_devsecops-based_2022, chen_design_2022}. By codifying
+operational state, GitOps turns observability into accountability. The same
+commit that describes infrastructure also sets the boundary of permitted change.
+Each reconciliation is both a technical and regulatory act, written into the
+same evidentiary chain as delivery. This symmetry with data lineage sets up RQ3
+\cite{wing_data_2019, zhang_best_2022}.
+
+Together, DevSecOps and GitOps evolve the SDLC into an architecture of
+continuous assurance; compliance is produced, not declared, and the system
+emits the evidence of its own trustworthiness.
 
 \section{RQ3: Comparing the Data Lifecycle and the SDLC}
 
-The data lifecycle (DLC) mirrors the SDLC’s ambition for control but lacks its
-formal codification. Wing \cite{wing_data_2019} describes the DLC as a dynamic
-abstraction, moulded by institutional context rather than dictated by a single
-methodology. Despite the absence of a universal model, most frameworks converge
-on a shared aim: to maintain reliability, accessibility, and verifiability
-across the data’s lifespan \cite{ball_review_2012, lenhardt_data_2014}. The
-contrast is instructive. The SDLC governs transformation and release; the DLC
-governs persistence and stewardship. One manages the creation of systems, the
-other their informational memory. Both, however, rely on artefacts that can
-sustain trust through time.
+The data lifecycle (DLC) aims for control and reliability but lacks the SDLC’s
+formal standardisation. Wing describes the DLC as a dynamic abstraction shaped
+by context, not a fixed staircase \cite{wing_data_2019}. Even so, most models
+converge on a shared goal: keep data reliable, accessible, and verifiable across
+its life \cite{ball_review_2012, lenhardt_data_2014}. The emphasis differs:
+the SDLC governs transformation and release; the DLC governs persistence and
+stewardship. One manages evolution; the other curates memory.
 
-DAMA-DMBOK \cite{cupoli_dama-dmbok2_nodate} formalises this idea by organising
-data governance around defined roles, metadata catalogues, lineage reports, and
-quality assessments that together form an auditable chain of evidence. These
-mirror the artefacts enumerated in ISO/IEC/IEEE 15289
-\cite{noauthor_isoiecieee_2019}, suggesting that the epistemic logic of
-software assurance—control through documentation—translates naturally into data
-management. DevSecOps provides the operational mechanism for this translation.
-By embedding continuous verification and security controls across both
-lifecycles \cite{souppaya_secure_2022, anisetti_devsecops-based_2022},
-DevSecOps aligns the treatment of data artefacts with that of software artefacts:
-each becomes a controlled, versioned, and verifiable object.
+The two lifecycles are complementary. DAMA-DMBOK organises data governance
+around roles, metadata catalogues, lineage reports, and quality assessments that
+together form an auditable chain of evidence
+\cite{cupoli_dama-dmbok2_nodate}. These artifacts mirror ISO/IEC/IEEE 15289’s
+information items \cite{noauthor_isoiecieee_2019}; the logic of software
+assurance maps well to data management. DevSecOps supplies the mechanism.
+Continuous verification and security controls attach to both code and data
+\cite{souppaya_secure_2022, anisetti_devsecops-based_2022}. Lineage manifests,
+schema definitions, and transformation scripts sit alongside code and config as
+controlled, versioned objects.
 
-This alignment is not merely procedural but conceptual. Within a unified
-lifecycle, lineage manifests, schema definitions, and transformation scripts
-stand alongside code repositories and configuration files as equal participants
-in compliance. Encryption, secrets management, and role-based access controls
-produce logs and proofs of activity that serve as the raw material for
-regulatory assurance \cite{elbaghazaoui_safeguarding_2025,
-elbaghazaoui_integrating_2025}. Agile governance models add an iterative layer,
-moving validation and data-quality checks upstream to the earliest stages of
-development \cite{elbaghazaoui_agility_2025,
-elbaghazaoui_metadata_2025, elbaghazaoui_data_2025-1}. These frameworks echo the
-stewardship and control expectations embedded in DAMA-DMBOK and in APRA’s
-prudential standards \cite{australian_prudential_regulation_authority_prudential_2013,
-cps234, cps230, cps510}, transforming compliance from a retrospective audit to a
-property continuously generated by the system itself.
+This is more than procedure; it is a way to make proof routine. Encryption,
+secrets management, and role-based access create logs and signatures that
+support regulatory assurance \cite{elbaghazaoui_safeguarding_2025,
+elbaghazaoui_integrating_2025}. Agile governance pushes validation and data
+quality checks earlier in delivery \cite{elbaghazaoui_agility_2025,
+elbaghazaoui_metadata_2025, elbaghazaoui_data_2025-1}. These expectations echo
+DAMA-DMBOK and APRA’s prudential standards
+\cite{australian_prudential_regulation_authority_prudential_2013, cps234,
+cps230, cps510}; the proof of compliance is the trace the system leaves.
 
-When the SDLC and DLC converge, they form a continuous system of evidence. The
-information items of ISO/IEC/IEEE 15289—plans, specifications, procedures, and
-reports—extend naturally to include data-lineage documentation, schema-evolution
-logs, and validation results. Automation frameworks such as
-infrastructure-as-code and policy-as-code operationalise these records
+When the SDLC and DLC converge, they form one system of evidence. ISO/IEC/IEEE
+15289’s artifacts—plans, specifications, procedures, reports—expand to include
+lineage documentation, schema-evolution logs, and validation results. IaC and
+policy-as-code make these records executable
 \cite{anisetti_semi-automatic_2020, myrbakken_devsecops_2017,
-elbaghazaoui_integrating_2025-1}, ensuring that reproducibility, tamper
-detection, and governance share the same delivery pipelines as application code.
-In this synthesis, the distinction between developing software and managing data
-collapses into a single assurance practice grounded in verifiable process.
+elbaghazaoui_integrating_2025-1}. Reproducibility, tamper detection, and
+governance share the same pipelines that deliver applications.
 
-Ultimately, the integration of these lifecycles reframes auditability as both a
-technical and organisational design principle. Governance, provenance, and
-verification cease to be external constraints; they become generative forces
-that shape how systems evolve. In regulated ETL workflows, every transformation
-of code or data leaves a signed, immutable trace—an artefact that documents not
-only what occurred, but why it was permitted to occur. This capacity to bind
-intent, execution, and evidence within a single architectural rhythm marks the
-threshold where compliance becomes indistinguishable from engineering itself.
-
+The result is a shift in stance. Auditability becomes a design principle for
+both software and data. Governance, provenance, and verification live in the
+same feedback loops that drive delivery. In regulated ETL, every transformation
+of code or data leaves a signed, immutable trace; it records what happened and
+why it was allowed.
 
 \section{RQ4: Tooling for Auditability and Governance}
-% Address sub-question 4
-% - Categories of DevSecOps tools: CI/CD automation, IaC security, artifact signing, monitoring
-% - Categories of ETL tools: orchestration (Airflow), processing (Spark), storage (S3), metadata management, lineage
-% - Comparative discussion of features relevant to auditability and governance
-% - Gaps where ETL tooling lacks equivalent DevSecOps maturity
+
+Auditability depends not only on principle but on implementation. The ability to
+trace, verify, and reproduce each operational event emerges from the tools that
+enforce control, record lineage, and preserve evidence of change. In both
+DevSecOps and ETL ecosystems, tooling transforms governance from policy into
+practice—translating regulatory requirements such as those outlined in
+CPG~235 and CPS~234/510 into verifiable, machine-generated artifacts
+\cite{australian_prudential_regulation_authority_prudential_2013, cps234,
+cps510}.  
+
+This section examines the categories of tools that make such evidence possible.
+Within DevSecOps, frameworks for infrastructure-as-code, policy validation, and
+continuous integration generate signed artifacts and provenance records that
+prove system integrity. Within ETL pipelines, orchestration, metadata
+management, and validation platforms create traceable datasets and transformation
+histories that support data governance. Each tool category contributes a distinct
+piece of the same evidentiary chain, linking software and data processes into a
+continuous fabric of assurance.
+
+\subsection*{DevSecOps tooling: from code to operations}
+
+\paragraph{Infrastructure- and Policy-as-Code.}
+IaC and PaC turn infrastructure and policy into versioned artifacts; compliance
+checks run before change. Terraform, CloudFormation, OPA, Checkov, and Conftest
+produce explicit evidence of desired state and policy evaluation
+\cite{elbaghazaoui_integrating_2025-1, chen_design_2022,
+elbaghazaoui_safeguarding_2025}. Key contrasts appear in
+Table~\ref{tab:iac-pac}.
+
+\begin{table}[H]\small\centering
+\caption{IaC/PaC tools and the evidence they produce}
+\label{tab:iac-pac}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Terraform & Versioned infra; plan/apply logs; OPA integration & State file handling; limited native change provenance \\
+\hline
+CloudFormation & CloudTrail linkage; tight IAM controls & Vendor lock-in; weaker multi-cloud patterns \\
+\hline
+OPA / Conftest & Declarative policy; decision logs as evidence & Rule complexity; learning overhead \\
+\hline
+Checkov & IaC scanning; SBOM export & Limited contextual policy correlation \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{CI/CD orchestration.}
+GitHub Actions, GitLab CI, Jenkins, and Azure Pipelines attach identity, review,
+and signatures to every run; the pipeline logs become the audit trail
+\cite{anisetti_devsecops-based_2022, myrbakken_devsecops_2017}. See
+Table~\ref{tab:cicd}.
+
+\begin{table}[H]\small\centering
+\caption{CI/CD systems as provenance engines}
+\label{tab:cicd}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+GitHub Actions & Signed runs and artifacts; Git provenance & Coarse-grained access audit \\
+\hline
+GitLab CI & Built-in approvals; compliance reports & Higher ops cost when self-hosted \\
+\hline
+Jenkins & Extensible audit plugins; broad ecosystem & Plugin sprawl; uneven retention defaults \\
+\hline
+Azure Pipelines & RBAC tie-in; Azure policy checks & Cloud-specific integrations \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{SAST, DAST, and SCA.}
+Security scanners create structured evidence of findings and dependency lineage;
+they slot into CI/CD and feed policy gates
+\cite{cruz_open_2023, rangnau_continuous_2020, elbaghazaoui_safeguarding_2025}.
+Table~\ref{tab:scanners} summarises trade-offs.
+
+\begin{table}[H]\small\centering
+\caption{Security scanning tools and audit artifacts}
+\label{tab:scanners}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+SonarQube & Persistent quality and issue history & Needs tuning; limited container context \\
+\hline
+OWASP ZAP & Reproducible web tests; open formats & Lower throughput at enterprise scale \\
+\hline
+Snyk & Dependency risk; SBOM generation & Proprietary backend; partial offline mode \\
+\hline
+Trivy & Unified SCA/SAST; SBOM export & Narrow policy correlation scope \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Testing and validation.}
+Test suites are repeatable proof; results are evidence of expected behaviour
+\cite{rangnau_continuous_2020, chen_design_2022}. Table~\ref{tab:testing}.
+
+\begin{table}[H]\small\centering
+\caption{Testing frameworks as reproducible evidence}
+\label{tab:testing}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Framework} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Postman / Newman & Versioned API suites; runnable logs & Manual upkeep of collections \\
+\hline
+PyTest & Parametrised fixtures; stable outputs & Python-only scope \\
+\hline
+JUnit & Mature CI integration; clear reports & No native audit metadata \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Containers and runtime.}
+Images, admissions, and runtime events become integrity artifacts
+\cite{elbaghazaoui_safeguarding_2025, elbaghazaoui_integrating_2025-1}.
+Table~\ref{tab:runtime}.
+
+\begin{table}[H]\small\centering
+\caption{Container and runtime controls as integrity evidence}
+\label{tab:runtime}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Docker & Image digests and signatures & Limited fine-grained runtime policy \\
+\hline
+Kubernetes & Declarative policy; drift detection & Multi-cluster audit complexity \\
+\hline
+Falco & Real-time event evidence & Rule maintenance overhead \\
+\hline
+Prisma Cloud / Sysdig & Centralised compliance view & Proprietary; cost \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Monitoring and observability.}
+Metrics and logs are the final layer of evidence; they enable incident
+reconstruction and trend analysis \cite{castellanos_accordant_2021,
+chen_design_2022}. Table~\ref{tab:observability-devsecops}.
+
+\begin{table}[H]\small\centering
+\caption{Observability stacks and audit support}
+\label{tab:observability-devsecops}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Prometheus & Transparent, timestamped metrics & High cost for long retention \\
+\hline
+Grafana & Clear dashboards; evidence views & Dependent on source data quality \\
+\hline
+ELK / Splunk & Searchable forensic logs & Operational cost; index complexity \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{ETL tooling: from Orchestration to lineage}
+
+
+\paragraph{Orchestration.}
+Orchestrators manage dependency scheduling, retries, and operational flow. Their
+execution histories, task states, and approval metadata provide the temporal
+structure of audit evidence \cite{sreepathy_data_2024, mahmud_role_2022}.
+They connect ingestion with transformation, ensuring each step can be replayed
+and verified. Table~\ref{tab:orchestration} compares common orchestration
+frameworks and their respective governance features.
+
+\begin{table}[H]\small\centering
+\caption{Orchestration systems and their execution evidence}
+\label{tab:orchestration}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Apache Airflow & DAG-based transparency; detailed run and task history & Manual scaling; limited native lineage propagation \\
+\hline
+Azure Data Factory & Built-in orchestration; Purview lineage integration & Limited cross-cloud orchestration \\
+\hline
+AWS Step Functions & Visual dependency control; CloudWatch integration & Coarse logging; AWS-specific scope \\
+\hline
+Dagster & Data-aware orchestration; built-in lineage and asset metadata & Smaller ecosystem; operational learning curve \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\paragraph{Ingestion.}
+Ingestion frameworks collect and prepare data from diverse operational systems
+for secure processing. Their logs, schema captures, and metadata exports
+establish provenance, replayability, and source accountability
+\cite{sreepathy_data_2024, mahmud_role_2022}. Together, these tools define the
+first link in the audit chain—where external data enters governed
+infrastructure. Table~\ref{tab:ingestion} summarises the main ingestion tools
+and the forms of evidence they generate.
+
+\begin{table}[H]\small\centering
+\caption{Ingestion tools and the provenance they expose}
+\label{tab:ingestion}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Apache NiFi & End-to-end flow provenance; visual audit trail & Runtime overhead at scale \\
+\hline
+Kafka Connect & Scalable source/sink ingestion; offset-based replay & Limited deep lineage without plugins \\
+\hline
+AWS Glue & Managed ETL ingestion; integrated CloudTrail and Data Catalog & Opaque internal transforms; AWS lock-in \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\paragraph{Transformation engines.}
+Spark, EMR, Dataflow, and Delta Lake create deterministic checkpoints and
+time-travel; they support reproducible proofs of change
+\cite{mohna_ai-ready_2022, mahmud_role_2022}. Table~\ref{tab:engines}.
+
+\begin{table}[H]\small\centering
+\caption{Processing engines and reproducibility guarantees}
+\label{tab:engines}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Engine} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Apache Spark / EMR & Distributed compute; versionable checkpoints & Complex end-to-end lineage \\
+\hline
+Google Dataflow & Managed scaling; audit logs & Cloud dependency \\
+\hline
+Delta Lake & ACID tables; rollback and time-travel & Storage overhead \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Metadata and lineage.}
+Catalogues and lineage systems are the spine of auditability
+\cite{elbaghazaoui_metadata_2025, yang_impact_2025}. Table~\ref{tab:metadata}.
+
+\begin{table}[H]\small\centering
+\caption{Metadata and lineage systems as audit structure}
+\label{tab:metadata}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Apache Atlas & Open lineage; policy hooks & Latency at large scale \\
+\hline
+Microsoft Purview & Rich lineage views; Azure native & Proprietary integrations \\
+\hline
+Amundsen & Lightweight discovery & Weak enforcement coupling \\
+\hline
+AI-assisted lineage & Automated extraction & Opaque inference paths \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+\paragraph{Operational monitoring.}
+Azure Monitor, CloudWatch, and Prometheus turn runtime behaviour into evidence;
+they support lineage verification and incident reconstruction
+\cite{sreepathy_data_2024}. Table~\ref{tab:observability-etl}.
+
+\begin{table}[H]\small\centering
+\caption{ETL observability as an audit surface}
+\label{tab:observability-etl}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Tool} & \textbf{Strengths} & \textbf{Limitations} \\
+\hline
+Azure Monitor & Unified infra and data views & Short retention on base tiers \\
+\hline
+AWS CloudWatch & Tight AWS integration; trace evidence & Complex queries for audits \\
+\hline
+Prometheus & Open telemetry; transparent metrics & High volume overhead \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Convergence}
+
+\noindent
+\noindent
+GitOps puts DevSecOps principles into action at the operational layer. It takes
+the same ideas—automation, version control, and continuous verification—and
+applies them to live environments. System state is defined declaratively in a
+Git repository, and automated controllers ensure that what runs in production
+matches what is recorded. In doing so, GitOps extends DevSecOps from software
+delivery into infrastructure and data governance, creating a single, verifiable
+source of truth. When infrastructure, security policies, and data pipelines all
+follow this pattern, governance becomes unified: every change is reviewed,
+approved, and promoted through version-controlled commits. The controllers that
+apply these changes—such as ArgoCD, Flux, or native cloud configuration
+synchronisers—produce reconciliation logs that, along with software bills of
+materials, policy checks, and lineage exports, form a shared audit trail
+\cite{gupta_prevalence_2022, souppaya_secure_2022,
+anisetti_devsecops-based_2022, elbaghazaoui_agility_2025}.
+
+In practice, the same controls that prove software integrity now also prove data
+integrity. Approval gates in CI/CD pipelines govern when ETL workflows move into
+production; policy-as-code checks act as guardrails for data transfers; and
+container attestations cover both application services and transformation jobs.
+Observability tools then link these records into a single audit timeline that
+spans code, infrastructure, and data. The requirements for traceability and
+control set out in CPG~235 are met once, not separately, by aligning software
+and data under the same declarative and verified process
+\cite{australian_prudential_regulation_authority_prudential_2013}.
+
+\begin{table}[H]\small\centering
+\caption{Converging evidence through GitOps patterns}
+\label{tab:gitops-convergence}
+\begin{tabular}{|p{3cm}|p{4.8cm}|p{4.8cm}|}
+\hline
+\textbf{Evidence} & \textbf{DevSecOps source} & \textbf{ETL source} \\
+\hline
+Change intent & Merge commits, signed tags, release manifests &
+Versioned DAGs or SQL models; data contracts \\
+\hline
+Preconditions & Policy-as-code checks (OPA, Conftest, Checkov);
+compliance gates & Schema and validation suites (Great Expectations,
+Deequ); PII risk policies \\
+\hline
+Build or artifact & SBOMs, image digests, provenance attestations &
+Transformation plans, checkpoints, table versions (Delta Lake) \\
+\hline
+Runtime traces & Controller and admission logs; Falco events &
+Orchestrator run logs, task lineage, execution metrics \\
+\hline
+Postconditions & Deployment reports; signed releases &
+Data-quality results; lineage closure; reconciliation diffs \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Assurance patterns.}
+Three patterns make this convergence practical. First, \textit{single-path
+promotion}: the same approval chain promotes both applications and pipeline
+assets, keeping reviewer identity and intent consistent. Second,
+\textit{policy-guarded reconciliation}: controllers apply changes only when
+policy checks pass, linking control objectives to every state change. Third,
+\textit{attested runtime}: container attestations and orchestrator runs are tied
+to specific commits and policies, closing the loop between intent and outcome
+\cite{souppaya_secure_2022, anisetti_devsecops-based_2022}.
+
+\paragraph{Limits and anti-patterns.}
+GitOps does not guarantee complete lineage or privacy by itself. Gaps between
+commits and data artifacts, opaque managed transformations, or ad-hoc fixes
+outside version control weaken provenance. These are governance issues rather
+than technical ones. They can be reduced by enforcing “no change outside Git,”
+using consistent identifiers across CI/CD, orchestration, and catalogues, and
+aligning log retention with audit periods
+\cite{elbaghazaoui_agility_2025, gupta_prevalence_2022}.
+
+\paragraph{Lifecycle callback.}
+With GitOps, both the software and data lifecycles share one foundation and one
+promotion path. DevSecOps automates the controls that govern data; ETL
+workflows create the lineage that confirms those controls. Auditability becomes
+the shared evidence model linking the two.
+
 
 \section{Synthesis}
 % Summarize insights from RQ1–RQ4
