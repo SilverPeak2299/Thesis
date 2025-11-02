@@ -1,27 +1,230 @@
 \chapter{Methodology}
+\noindent
+This chapter outlines the methodology used to design, construct, and evaluate a
+DevSecOps toolchain that governs ETL workflows in regulated environments. The
+research applies a Design Science Research (DSR) approach, chosen for its focus
+on building artifacts that address real-world problems while generating
+transferable knowledge \cite{hevner_design_2004}. Rather than developing a new
+ETL pipeline, this study designs the system that governs such pipelines—the
+architecture, control automation, and controls that embed assurance and
+compliance into operational data workflows.
 
-\section{Research Approach}
-Explain the overall design science methodology used.
-Justify its selection for solving an engineering problem through artifact design.
+\section{Design Science Context}
+\noindent
+Design Science generates knowledge through the purposeful creation and
+evaluation of artifacts \cite{peffers_design_2007}. It follows an iterative
+build–evaluate process in which understanding arises from constructing,
+implementing, and refining solutions. In this study, the artifact is a
+\textit{DevSecOps governance and assurance framework}—a set of integrated
+components that enforce policy, record lineage and evidence metadata, and assure
+integrity across an ETL pipeline. The pipeline itself functions as a
+\textit{reference pipeline} that represents a typical control-baseline
+environment within a regulated domain.
 
-\section{Design Science Process}
-Describe each stage:
+This methodological choice is appropriate because Design Science balances
+\textit{rigour}—alignment with regulatory and theoretical principles—with
+\textit{relevance}—demonstrated utility in practice. Each design iteration:
+problem identification, artifact construction, demonstration, and evaluation,
+corresponds to a development stage where the framework’s assurance features are
+incrementally refined and tested. This cyclical process mirrors the continuous
+control monitoring model advocated in DevSecOps, where systems evolve through
+assurance evidence and feedback.
+
+\section{Regulatory Context and Requirement Derivation}
+\noindent
+The toolchain design is guided by the Australian Prudential Regulation
+Authority’s (APRA) Prudential Standards: CPS~230
+(\textit{Operational~Risk~Management}), CPS~234
+(\textit{Information~Security}), and CPS~510 (\textit{Governance})
+\cite{cps230,cps234,cps510}. These standards define what regulated entities
+must achieve in governance, security, and resilience, but they do not prescribe
+how those objectives should be implemented technically. Their descriptive,
+outcomes-based language demands interpretation into enforceable engineering
+controls.
+
+Although the methodology is domain-agnostic, this research focuses on the
+\textit{financial sector}. Finance offers a mature and well-documented
+regulatory landscape that provides both conceptual depth and practical
+relevance for governance evaluation. APRA’s prudential standards form a
+coherent, enforceable set of requirements that align with the objectives of
+assurance, lineage, and accountability identified in the literature. This focus
+reflects the local regulatory environment and the availability of structured
+compliance expectations that make the sector suitable for Design Science
+evaluation.
+
+Accordingly, the scope is narrowed to a practical subset of CPS requirements
+most relevant to data-pipeline governance. The selected principles—continuity,
+accountability, and control—are translated into implementable requirements for
+control automation and evidence generation. This refinement is informed by the
+literature review in Chapter~2, which frames auditability (as defined there) in
+terms of lineage, evidence, and verification across socio-technical systems.
+
+\section{Requirements}
+\noindent
+The following requirements define what the DevSecOps framework must achieve to
+operationalise prudential expectations. They establish the conditions under
+which the framework can govern a pipeline by embedding control, lineage, and
+continuous assurance.
+
+\begin{enumerate}
+  \item \textbf{R1: Governance Accountability (CPS~510).}  
+        The framework must preserve authorship and approval lineage for all
+        operational and configuration changes, ensuring full traceability of
+        decision authority and execution.
+
+  \item \textbf{R2: Information Security Assurance (CPS~234).}  
+        The framework must maintain artifact integrity and confidentiality
+        through tamper-evident storage, cryptographic verification, and
+        continuous security scanning (SCA, SAST, and DAST).
+
+  \item \textbf{R3: Operational Risk Control (CPS~230).}  
+        The framework must detect, record, and remediate process or
+        configuration failures, maintaining reproducibility and recovery within
+        defined assurance thresholds.
+
+  \item \textbf{R4: Continuous Control Monitoring (CPS~234,~510).}  
+        The framework must automate policy validation and control testing in the
+        CI/CD process, producing machine-verifiable assurance evidence through
+        policy-as-code enforcement.
+
+  \item \textbf{R5: End-to-End Evidence Chain (CPS~230).}  
+        The framework must generate and retain a tamper-evident, queryable
+        record that captures the lineage of code, configuration, and data
+        artifacts throughout the system lifecycle.
+\end{enumerate}
+
+\noindent
+These requirements shift focus from the business logic of ETL processes to the
+\textit{meta-layer} of assurance—how evidence is produced, tested, and
+preserved. They align with the five auditability dimensions defined in
+Section~2.2: normativity, accountability, referentiality, reliability, and
+verifiability.
+
+\begin{table}[h]
+  \centering
+  \caption{Mapping between toolchain requirements and auditability dimensions.}
+  \label{tab:req-auditability}
+  \renewcommand{\arraystretch}{1.15}
+  \resizebox{\textwidth}{!}{
+  \begin{tabular}{@}{lccccc@{}}
+    \toprule
+    \textbf{Requirement} &
+    \textbf{Normativity} &
+    \textbf{Accountability} &
+    \textbf{Referentiality} &
+    \textbf{Reliability} &
+    \textbf{Verifiability} \\
+    \midrule
+    R1 Governance Accountability & \CIRCLE & \CIRCLE &  &  &  \\
+    R2 Information Security Assurance &  &  &  & \CIRCLE & \CIRCLE \\
+    R3 Operational Risk Control &  &  & \CIRCLE & \CIRCLE &  \\
+    R4 Continuous Control Monitoring & \CIRCLE & \CIRCLE &  &  &  \\
+    R5 End-to-End Evidence Chain &  &  & \CIRCLE &  & \CIRCLE \\
+    \bottomrule
+  \end{tabular}}
+\end{table}
+
+\noindent
+Governance and control monitoring (R1,~R4) express the normative and accountable
+aspects of control; security and risk management (R2,~R3) reinforce reliability
+and traceability; and the end-to-end evidence chain (R5) provides verifiable,
+referential links across artifacts and executions. Together, these create a
+governance and assurance framework where assurance is continuous and evidence is
+intrinsic.
+
+\section{Evaluation Framework}
+\noindent
+Evaluation in Design Science verifies that an artifact fulfils its intended
+purpose. Here, the goal is to confirm that the DevSecOps framework meets each
+requirement (R1–R5). Each requirement becomes an evaluation unit with defined
+control indicators, data sources, and assurance thresholds.
+
+\subsection*{R1 Governance Accountability}
+\noindent
+\textbf{Objective:} Confirm that all changes are traceable to authenticated
+identities and documented approvals. 
+
+\textbf{Method:} Examine change events, approval records, and version metadata
+for completeness and signature validity.  
+
+\textbf{Control Indicators:}
 \begin{itemize}
-    \item \textbf{Problem identification:} Auditability and governance gaps in ETL.
-    \item \textbf{Artifact design:} A DevSecOps toolchain architecture.
-    \item \textbf{Demonstration:} Implementing the prototype.
-    \item \textbf{Evaluation:} Measuring lineage, reproducibility, and tamper detection.
+  \item 100\% of configuration and code changes linked to a verified identity.
+  \item 100\% of recorded approvals associated with tamper-evident artifacts.
+  \item Continuous lineage maintained across system versions.
 \end{itemize}
+\textbf{Auditability Dimensions:} Normativity, Accountability.
 
-\section{Case Study Context}
-Briefly describe the regulated domain (e.g., financial systems, SEC filings dataset).
-Justify its representativeness and constraints.
+\subsection*{R2 Information Security Assurance}
+\noindent
+\textbf{Objective:} Demonstrate that artifacts and configurations are verified
+for integrity and security.  
 
-\section{Artifact Design Process}
-Detail the iterative development process—tools, versioning, and validation loops.
+\textbf{Method:} Conduct automated and manual reviews confirming that artifacts
+are signed, validated, and free from known vulnerabilities.  
 
-\section{Evaluation Plan}
-Summarize how you’ll measure auditability, reproducibility, and tamper resistance.
+\textbf{Control Indicators:}
+\begin{itemize}
+  \item 100\% of artifacts validated through checksum or signature verification.
+  \item Zero undetected tampering events during testing.
+  \item Complete retention of verification records.
+\end{itemize}
+\textbf{Auditability Dimensions:} Reliability, Verifiability.
 
-\section{Limitations}
-Acknowledge what is out of scope or constrained (e.g., scalability, dataset variety).
+\subsection*{R3 Operational Risk Control}
+\noindent
+\textbf{Objective:} Validate reproducibility and recovery from prior workflow
+states.  
+
+\textbf{Method:} Execute controlled replays of historical states and compare
+outputs to reference baselines.  
+
+\textbf{Control Indicators:}
+\begin{itemize}
+  \item $\geq$95\% lineage completeness between input, process, and output.
+  \item Successful re-execution of three or more historical states.
+  \item Recovery times within defined assurance thresholds.
+\end{itemize}
+\textbf{Auditability Dimensions:} Referentiality, Reliability.
+
+\subsection*{R4 Continuous Control Monitoring}
+\noindent
+\textbf{Objective:} Verify that compliance enforcement and validation operate
+automatically for every change.  
+
+\textbf{Method:} Observe multiple workflow executions to confirm policy checks
+and validations occur consistently.  
+
+\textbf{Control Indicators:}
+\begin{itemize}
+  \item $\geq$95\% of executions meet all control criteria.
+  \item No unapproved or unverified changes reach production.
+  \item All control evaluations generate verifiable records.
+\end{itemize}
+\textbf{Auditability Dimensions:} Normativity, Accountability.
+
+\subsection*{R5 End-to-End Evidence Chain}
+\noindent
+\textbf{Objective:} Confirm that the framework maintains a tamper-evident,
+queryable record of artifacts and lineage.  
+
+\textbf{Method:} Perform end-to-end tracing of artifacts across executions to
+ensure each output can be reconstructed from recorded evidence.  
+
+\textbf{Control Indicators:}
+\begin{itemize}
+  \item 100\% of evidence and lineage records validate without error.
+  \item All transformations traceable to original inputs.
+  \item Zero discrepancies in signature or hash verification tests.
+\end{itemize}
+\textbf{Auditability Dimensions:} Referentiality, Verifiability.
+
+\subsection*{Evaluation Synthesis}
+\noindent
+Each requirement is tested through direct observation and measurement, with
+results mapped back to the auditability dimensions in
+Table~\ref{tab:req-auditability}. Collectively, these evaluations determine
+whether the governance and assurance framework establishes a verifiable
+end-to-end evidence chain across its lifecycle. The analysis confirms not only
+functional correctness but also the degree to which the artifact embodies the
+principles of continuous assurance defined in Chapter~2.
