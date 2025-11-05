@@ -75,7 +75,7 @@ explicitly justified \cite{castellanos_accordant_2021}.
 
 DevSecOps is notoriously difficult to define succinctly. It is often described
 as the sum of its implementation patterns—CI/CD, infrastructure-as-code (IaC),
-policy-as-code (PaC), software composition analysis (SCA), and GitOps. A more
+policy-as-code (PaC), software scanning, automated tests, and GitOps. A more
 practical lens is to examine the gap created when DevSecOps is removed: the
 ungoverned space between code that compiles and a production service. In that
 gap, identity and approval are ad hoc, policy enforcement is manual, change
@@ -302,14 +302,16 @@ verifiable throughout its lifespan \cite{ball_review_2012, lenhardt_data_2014}.
 The SDLC governs change and transformation; the DLC governs persistence and
 stewardship. One manages evolution, the other preserves continuity.
 
-Despite their differences, the two lifecycles can be aligned. DAMA-DMBOK
-organises data governance around roles, metadata catalogues, lineage records,
-and quality assessments that together form an end-to-end evidence chain
-\cite{cupoli_dama-dmbok2_nodate}. These artifacts mirror ISO/IEC/IEEE~15289’s
-information items \cite{noauthor_isoiecieee_2019}, showing that the logic of
-software assurance maps closely to data management. DevSecOps provides the
-mechanisms for this connection. Continuous validation and automated security
-controls apply equally to code and data
+Despite their structural differences, the two lifecycles can be aligned. The
+Data Management Body of Knowledge (DAMA-DMBOK) provides one of the most widely
+adopted codifications of the DLC, framing governance through roles, metadata
+catalogues, lineage records, and quality assessments that together establish an
+end-to-end evidence chain \cite{cupoli_dama-dmbok2_nodate}. These governance
+artifacts closely mirror the information items defined in
+ISO/IEC/IEEE~15289~\cite{noauthor_isoiecieee_2019}, demonstrating that the logic
+of software assurance maps naturally onto data management practice. DevSecOps
+supplies the mechanisms for this connection: continuous validation and automated
+security controls apply equally to code and data
 \cite{souppaya_secure_2022, anisetti_devsecops-based_2022}. Lineage manifests,
 schema definitions, and transformation scripts can therefore be versioned and
 audited alongside software components.
@@ -527,7 +529,7 @@ reconciliation* binds control objectives to each applied change.
 commits and policies, closing the loop between declared intent and observed
 outcome \cite{anisetti_devsecops-based_2022, souppaya_secure_2022}.
 
-\subsection*{Synthesis and Related Works}
+\section{Synthesis and Related Works}
 
 Research at the intersection of DevSecOps and data governance converges on the
 same foundation—automation, traceability, and verifiable control—but few works
