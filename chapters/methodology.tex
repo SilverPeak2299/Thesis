@@ -105,23 +105,24 @@ verifiability.
   \caption{Mapping between toolchain requirements and auditability dimensions.}
   \label{tab:req-auditability}
   \renewcommand{\arraystretch}{1.15}
-  \resizebox{\textwidth}{!}{
-  \begin{tabular}{@}{lccccc@{}}
-    \toprule
-    \textbf{Requirement} &
-    \textbf{Normativity} &
-    \textbf{Accountability} &
-    \textbf{Referentiality} &
-    \textbf{Reliability} &
-    \textbf{Verifiability} \\
-    \midrule
-    R1 Governance Accountability & \CIRCLE & \CIRCLE &  &  &  \\
-    R2 Information Security Assurance &  &  &  & \CIRCLE & \CIRCLE \\
-    R3 Operational Risk Control &  &  & \CIRCLE & \CIRCLE &  \\
-    R4 Continuous Control Monitoring & \CIRCLE & \CIRCLE &  &  &  \\
-    R5 End-to-End Evidence Chain &  &  & \CIRCLE &  & \CIRCLE \\
-    \bottomrule
-  \end{tabular}}
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}lccccc@{}}
+      \toprule
+      \textbf{Requirement} &
+      \textbf{Normativity} &
+      \textbf{Accountability} &
+      \textbf{Referentiality} &
+      \textbf{Reliability} &
+      \textbf{Verifiability} \\
+      \midrule
+      R1 Governance Accountability         & \CIRCLE & \CIRCLE &           & \phantom{\CIRCLE} & \phantom{\CIRCLE} \\
+      R2 Information Security Assurance    &          &          &           & \CIRCLE           & \CIRCLE           \\
+      R3 Operational Risk Control          &          &          & \CIRCLE   & \CIRCLE           &                    \\
+      R4 Continuous Control Monitoring     & \CIRCLE  & \CIRCLE  &           &                   &                    \\
+      R5 End-to-End Evidence Chain         &          &          & \CIRCLE   &                   & \CIRCLE           \\
+      \bottomrule
+    \end{tabular}%
+  }
 \end{table}
 
 \noindent
