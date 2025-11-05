@@ -1,0 +1,24 @@
+flowchart LR
+  %% --- Dark theme styling (same palette) ---
+  classDef meta fill:#2f2f2f,stroke:#aaaaaa,color:#ffffff,stroke-dasharray:3 2;
+  classDef orchestrate fill:#1e3a8a,stroke:#3b82f6,color:#ffffff,stroke-width:1px;
+  classDef compute fill:#7c2d12,stroke:#f97316,color:#ffffff,stroke-width:1px;
+  classDef data fill:#064e3b,stroke:#34d399,color:#ffffff,stroke-width:1px;
+  classDef ext fill:#3f3f46,stroke:#a1a1aa,color:#ffffff,stroke-dasharray:3 2;
+
+  %% --- Nodes ---
+  Source["EDGAR SEC API"]:::ext
+  Ingest["Python ingestion task
+  (fetch and write raw)"]:::compute
+  S3raw["S3 Raw Bucket
+  (CSV snapshots)"]:::data
+  Spark["Spark on EMR
+  (clean, normalise, dedupe)"]:::compute
+  S3cur["S3 Curated Bucket
+  (Parquet outputs)"]:::data
+
+  %% --- Data flow ---
+  Source -->|"download filings"| Ingest
+  Ingest -->|"write raw CSV"| S3raw
+  S3raw -->|"read via Spark job"| Spark
+  Spark -->|"write curated Parquet"| S3cur

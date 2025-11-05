@@ -1,0 +1,29 @@
+flowchart LR
+  %% --- Dark theme styling ---
+  classDef meta fill:#2f2f2f,stroke:#aaaaaa,color:#ffffff,stroke-dasharray:3 2;
+  classDef orchestrate fill:#1e3a8a,stroke:#3b82f6,color:#ffffff,stroke-width:1px;
+  classDef compute fill:#7c2d12,stroke:#f97316,color:#ffffff,stroke-width:1px;
+  classDef data fill:#064e3b,stroke:#34d399,color:#ffffff,stroke-width:1px;
+  classDef ext fill:#3f3f46,stroke:#a1a1aa,color:#ffffff,stroke-dasharray:3 2;
+
+  %% --- Nodes and group ---
+  subgraph AWS["AWS Environment"]
+    EC2["Airflow (EC2 container)
+     Orchestrator"]:::orchestrate
+    EMR["PySpark on EMR
+    – Transformation Engine"]:::compute
+    S3raw["S3 Raw Bucket
+    (CSV snapshots)"]:::data
+    S3cur["S3 Curated Bucket
+    (Parquet outputs)"]:::data
+  end
+
+  Source["EDGAR SEC API"]:::ext
+
+  %% --- Relationships ---
+  EC2 -->|"run Python ingestion task"| Source
+  EC2 -->|"write raw data
+  via Python task"| S3raw
+  EC2 -->|"submit Spark job"| EMR
+  EMR -->|"read raw data"| S3raw
+  EMR -->|"write curated Parquet"| S3cur
