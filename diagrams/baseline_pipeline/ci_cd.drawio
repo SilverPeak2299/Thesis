@@ -1,0 +1,106 @@
+<mxfile host="65bd71144e">
+    <diagram id="ci-cd" name="CI/CD Workflow">
+        <mxGraphModel dx="930" dy="941" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="dev" value="Developer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;dashed=1;dashPattern=3 2;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="120" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="gh" value="GitHub Repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;dashed=1;dashPattern=3 2;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="230" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha" value="GitHub Actions – CI/CD Workflow" style="swimlane;horizontal=1;rounded=1;whiteSpace=wrap;html=1;strokeColor=#aaaaaa;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="120" width="420" height="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha_start" value="Workflow Start (push to main)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f2f2f;strokeColor=#aaaaaa;fontColor=#ffffff;dashed=1;dashPattern=3 2;" parent="gha" vertex="1">
+                    <mxGeometry x="30" y="40" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha_pycheck" value="Python Build Check&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="gha" vertex="1">
+                    <mxGeometry x="30" y="120" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha_tfapply" value="Terraform Apply&#xa;(provision EC2, EMR, S3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="gha" vertex="1">
+                    <mxGeometry x="30" y="200" width="280" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha_image" value="Build &amp; Push Airflow Docker Image&#xa;(includes DAGs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="gha" vertex="1">
+                    <mxGeometry x="30" y="290" width="320" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha_deploy" value="Pull New Image on EC2&#xa;(restart Airflow)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="gha" vertex="1">
+                    <mxGeometry x="30" y="380" width="300" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="gha_end" value="Workflow End" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f2f2f;strokeColor=#aaaaaa;fontColor=#ffffff;dashed=1;dashPattern=3 2;" parent="gha" vertex="1">
+                    <mxGeometry x="80" y="480" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;" parent="gha" source="gha_start" target="gha_pycheck" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;" parent="gha" source="gha_pycheck" target="gha_tfapply" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="160" y="190"/>
+                            <mxPoint x="160" y="190"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;" parent="gha" source="gha_tfapply" target="gha_image" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="170" y="280"/>
+                            <mxPoint x="170" y="280"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;" parent="gha" source="gha_image" target="gha_deploy" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="180" y="370"/>
+                            <mxPoint x="180" y="370"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;" parent="gha" source="gha_deploy" target="gha_end" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="aws" value="AWS Environment" style="swimlane;horizontal=1;rounded=1;whiteSpace=wrap;html=1;strokeColor=#aaaaaa;" parent="1" vertex="1">
+                    <mxGeometry x="980" y="240" width="360" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="ec2" value="Airflow (EC2 container) – Orchestrator&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="aws" vertex="1">
+                    <mxGeometry x="30" y="40" width="320" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="emr" value="Spark on EMR – Transformation Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="aws" vertex="1">
+                    <mxGeometry x="30" y="130" width="320" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3" value="S3 Buckets (raw / curated)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="aws" vertex="1">
+                    <mxGeometry x="30" y="210" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="git push (main)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="dev" target="gh" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="trigger workflow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="gh" target="gha_start" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="370" y="280"/>
+                            <mxPoint x="370" y="190"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e8" value="create/update infra" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="gha_tfapply" target="aws" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="855" y="355"/>
+                            <mxPoint x="855" y="280"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9" value="pull new image&#xa;(run docker compose up)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="gha_deploy" target="ec2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="910" y="535"/>
+                            <mxPoint x="910" y="315"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
