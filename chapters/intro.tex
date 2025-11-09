@@ -72,7 +72,9 @@ How can a DevSecOps toolchain be designed to support ETL workflows in regulated
 industries, enhancing auditability and data governance?
 \end{quote}
 
-In the process of answering the above question, this paper explores four sub-questions:
+In the process of answering the above question, this paper explores five
+sub-questions:
+
 \subsection*{Sub-Questions}
 \begin{enumerate}
   \item How do ETL workflows manifest in regulated industries, and what
@@ -84,7 +86,10 @@ In the process of answering the above question, this paper explores four sub-que
   principles are applied to ETL workflows in regulated environments?
   \item What categories of tooling exist in DevSecOps and ETL pipelines, and how
   do their features support auditability and data governance?
+  \item How can the effectiveness of a DevSecOps-enabled ETL toolchain be
+  evaluated in terms of auditability and data governance?
 \end{enumerate}
+
 
 \section{Contributions}
 \noindent
@@ -95,11 +100,19 @@ to improve auditability and governance.
 Second, it presents a \textbf{prototype implementation} that integrates
 infrastructure as code, automated security scanning, and immutable logging into
 an operational ETL environment built with Airflow, Spark, and AWS components.  
-Third, it defines an \textbf{evaluation framework} for quantifying auditability
-and governance through traceability, reproducibility, and tamper-resistance
-metrics.  
+Third, it defines an \textbf{evaluation framework} for characterising
+auditability and governance through traceability, reproducibility, and
+tamper-resistance criteria, directly addressing Sub-Question~5.  
 Together, these contributions demonstrate how DevSecOps principles can be
 embedded in data-centric systems to enhance compliance and trust.
+
+\section{Project Timeline}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{timeline.pdf}
+  \caption{Gantt chart of project timeline.}
+  \label{fig:Project_Timeline}
+\end{figure}
 
 \section{Thesis Structure}
 \noindent
@@ -115,10 +128,13 @@ The remainder of this thesis is organised as follows:
   architecture.
   \item \textbf{Chapter~6} outlines the prototype implementation and toolchain
   configuration.
-  \item \textbf{Chapter~7} evaluates the system against defined auditability and
-  governance metrics from Chapter~3.
+  \item \textbf{Chapter~7} evaluates the system against the auditability and
+  governance criteria defined in Chapter~3, addressing Sub-Question~5.
   \item \textbf{Chapter~8} discusses implications, limitations, and avenues for
   future research.
   \item \textbf{Chapter~9} concludes with reflections on how DevSecOps can
   enable trustworthy data governance in regulated environments.
 \end{itemize}
+
+The Preliminary results for this Thesis are split between the evaluation framework found in Chapter~3
+and the base ETL pipeline described in Chapter~4.

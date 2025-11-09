@@ -1,34 +1,34 @@
 <mxfile host="65bd71144e">
     <diagram id="data-path" name="Data Path">
-        <mxGraphModel dx="651" dy="659" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+        <mxGraphModel dx="1582" dy="879" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="source" value="EDGAR SEC API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;dashed=1;dashPattern=3 2;" parent="1" vertex="1">
+                <mxCell id="source" value="EDGAR SEC API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;dashed=1;dashPattern=3 2;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry y="225" width="200" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="ingest" value="Python ingestion task&#xa;(fetch and write raw)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="1" vertex="1">
+                <mxCell id="ingest" value="Python ingestion task&#xa;(fetch and write raw)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry x="330" y="220" width="250" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="s3raw" value="S3 Raw Bucket&#xa;(CSV snapshots)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
-                    <mxGeometry x="690" y="220" width="230" height="70" as="geometry"/>
+                <mxCell id="s3raw" value="S3 Raw Bucket&#xa;(CSV snapshots)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="220" width="230" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="spark" value="Spark on EMR&#xa;(clean, normalise, dedupe)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="1" vertex="1">
-                    <mxGeometry x="670" y="380" width="270" height="80" as="geometry"/>
+                <mxCell id="spark" value="Spark on EMR&#xa;(clean, normalise, dedupe)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="380" width="270" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="s3cur" value="S3 Curated Bucket&#xa;(Parquet outputs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
+                <mxCell id="s3cur" value="S3 Curated Bucket&#xa;(Parquet outputs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;fontSize=14;" parent="1" vertex="1">
                     <mxGeometry x="250" y="385" width="260" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="e1" value="download filings" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="source" target="ingest" edge="1">
+                <mxCell id="e1" value="download filings" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;fontSize=14;" parent="1" source="source" target="ingest" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e2" value="write raw CSV" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="ingest" target="s3raw" edge="1">
+                <mxCell id="e2" value="write raw CSV" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;fontSize=14;" parent="1" source="ingest" target="s3raw" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e3" value="read via Spark job" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="s3raw" target="spark" edge="1">
+                <mxCell id="e3" value="read via Spark job" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;fontSize=14;" parent="1" source="s3raw" target="spark" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="e4" value="write curated Parquet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;" parent="1" source="spark" target="s3cur" edge="1">
+                <mxCell id="e4" value="write curated Parquet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=block;html=1;labelBackgroundColor=#ffffff;fontSize=14;" parent="1" source="spark" target="s3cur" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
             </root>

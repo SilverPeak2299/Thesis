@@ -2,114 +2,192 @@
 \label{ch:baseline}
 
 \noindent
-This chapter outlines the baseline ETL pipeline that serves as a
-control model for later evaluation. It demonstrates a minimal,
-functional data workflow built with industry-standard components but
-without any embedded governance or assurance features. The baseline
-provides the empirical ground for measuring how DevSecOps practices
-enhance auditability in the proposed system.
+This chapter defines the baseline pipeline that serves as the control
+model for later evaluation. It represents a minimal but coherent ETL workflow
+constructed from standard open-source and cloud-native components, configured
+without embedded governance or assurance controls. The baseline shows how data
+moves, where control resides, and what traces of evidence are naturally
+produced. It establishes the reference point against which the DevSecOps
+architecture in Chapter~5 will be measured.
 
 \section{Overview}
 \noindent
-The pipeline extracts public data from the SEC~EDGAR API, stages it to
-Amazon~S3 as raw CSV, transforms it with Spark on~EMR, and writes
-curated Parquet outputs to S3. Airflow, running on a Dockerised~EC2
-instance, orchestrates the workflow. Infrastructure is deployed through
-Terraform and continuously integrated with GitHub~Actions, which builds
-the Airflow image, provisions resources, and triggers deployments on
-each \texttt{push} to \texttt{main}.
+The baseline pipeline ingests public financial filings from the
+SEC~EDGAR~API, stages them as raw~CSV objects in~Amazon~S3, transforms them with
+PySpark on~EMR, and outputs curated~Parquet datasets back to~S3. Airflow,
+running on a~Dockerised~EC2 instance, orchestrates the workflow. The
+infrastructure is declared in~Terraform and deployed through GitHub~Actions,
+which performs linting, builds the~Airflow image, provisions resources, and
+redeploys on each~\texttt{push} to~\texttt{main}.  
 
-\paragraph{Scope.}
-The configuration is intentionally simple. It omits authentication
-hardening, formal lineage capture, or immutability controls. Defaults
-are accepted where possible to keep the environment lightweight,
-reproducible, and comparable to the secured prototype that follows.
+\paragraph{Conceptual scope.}
+The configuration models a typical cloud-native pipeline stripped of security
+and compliance instrumentation. Defaults are accepted to keep the environment
+simple and reproducible; the goal is not performance optimisation but clarity.
+This baseline represents the state of practice before DevSecOps principles are
+introduced to turn operational consistency into demonstrable assurance.
 
 \section{Architecture}
 \noindent
-The system operates across three planes: orchestration, compute, and
-storage. Figure~\ref{fig:baseline-architecture} shows the arrangement of
-these components within AWS. Airflow on~EC2 acts as the control plane,
-submitting Spark jobs to EMR and coordinating their execution. The data
-plane spans two S3 buckets---one for raw ingestion and one for curated
-outputs---linked by Spark transformations.
+The system operates across three planes—\emph{orchestration}, \emph{compute},
+and \emph{storage}—with automation and infrastructure layers supporting them.
+Figure~\ref{fig:baseline-architecture} shows the overall arrangement within the
+AWS environment. Each component reflects a tooling category defined
+in Chapter~2 and illustrates both its operational value and its assurance gap.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{diagrams/baseline_pipeline/arcitecture.png}
+  \includegraphics[width=1\textwidth]{diagrams/baseline_pipeline/arcitecture.pdf}
   \caption{Baseline runtime architecture showing orchestration,
   compute, and storage components.}
   \label{fig:baseline-architecture}
 \end{figure}
 
-\noindent
-Continuous integration and deployment are automated through
-GitHub~Actions. Figure~\ref{fig:baseline-cicd} illustrates the CI/CD
-workflow: syntax checks precede infrastructure provisioning via
-Terraform, after which the Airflow image---which embeds the DAGs---is
-built, pushed to~GHCR, and redeployed to the EC2~host.
+\paragraph{Orchestration: Airflow.}
+Airflow defines task dependencies and execution order across the ETL process.
+It embodies the orchestration tools discussed in Section~2.6, functioning as a
+runtime scheduler and provenance log. In the baseline, these logs are mutable
+text records with no signatures or policy linkage; they record execution but not
+authority. The system therefore guarantees temporal order but not accountable
+control.
+
+\paragraph{Compute: PySpark on~EMR.}
+PySpark provides distributed transformation aligned with the compute and runtime
+control category from Section~2.6. It enforces schema validation and predictable
+transformations across nodes. Yet job scripts, dependencies, and configurations
+remain mutable; no digital signatures or versioned attestations confirm
+authorship. The compute layer executes correctly but offers no cryptographic
+proof of integrity.
+
+\paragraph{Storage: Amazon~S3.}
+S3 acts as both staging and curated store. It ensures durability and
+timestamped versioning but offers no immutability or content signing. Objects
+can be modified or deleted without trace, forcing lineage reconstruction from
+logs rather than metadata. The storage layer is reliable, yet unverifiable.
+
+\paragraph{Infrastructure: Terraform.}
+Terraform declares the infrastructure state and belongs to the
+Infrastructure-as-Code and Policy-as-Code tooling class. It provides
+repeatability through declarative configuration but lacks persistence in its
+execution records; logs are transient and unsigned. The result is
+infrastructure that can be reproduced, but not proven to match the reviewed
+plan.
+
+\paragraph{Automation: GitHub~Actions.}
+Continuous integration and delivery are handled through GitHub~Actions, shown in
+Figure~\ref{fig:baseline-cicd}. This pipeline unifies code, configuration, and
+deployment within a single repository; it represents the first step toward a
+GitOps model. However, it omits policy validation, multi-party approval, and
+artifact signing. Each push triggers infrastructure updates automatically,
+without checks that would confirm authenticity or intent.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\textwidth]{diagrams/baseline_pipeline/ci_cd.png}
-  \caption{CI/CD pipeline treated as a DAG within GitHub~Actions.}
+  \includegraphics[width=1\textwidth]{diagrams/baseline_pipeline/ci_cd.pdf}
+  \caption{CI/CD pipeline implemented in GitHub~Actions.}
   \label{fig:baseline-cicd}
 \end{figure}
 
 \section{Functionality}
 \noindent
-Figure~\ref{fig:baseline-dag} presents the Airflow~DAG that governs the
-ETL workflow. A single linear sequence performs ingestion, submission
-of Spark jobs, and post-run manifest recording.
+Figure~\ref{fig:baseline-dag} shows the Airflow~DAG that governs workflow
+execution. Tasks proceed linearly—ingestion, transformation, and manifest
+recording. The process runs reliably and can be repeated, but it cannot be
+independently verified.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{diagrams/baseline_pipeline/airflow_dag.png}
+  \includegraphics[width=1\textwidth]{diagrams/baseline_pipeline/airflow_dag.pdf}
   \caption{Baseline Airflow~DAG showing orchestration sequence.}
   \label{fig:baseline-dag}
 \end{figure}
 
-\noindent
-Data moves through three primary stages (Figure~\ref{fig:baseline-data}).
-The ingestion task fetches source files and stores them in the raw~S3
-bucket. Spark reads these raw objects, enforces schema consistency,
-cleans and deduplicates records, and writes Parquet datasets to the
-curated bucket, partitioned by ingestion date. Each run emits a simple
-manifest (\texttt{\_SUCCESS}) listing output paths for downstream
-validation.
+\paragraph{Ingestion.}
+A Python task retrieves structured JSON filings from the~EDGAR~API,
+normalises them, and writes timestamped~CSV files to a raw~S3 bucket. Each run
+creates a new partition, forming the input dataset for downstream processing.
+The representative schema is shown in Table~\ref{tab:edgar-schema}.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Field} & \textbf{Type} & \textbf{Description} \\
+\midrule
+cik & String & Company identifier assigned by the~SEC. \\
+form\_type & String & Filing category (e.g.,~10-K,~8-K). \\
+filing\_date & Date & Official submission date. \\
+accession\_no & String & Unique accession number for each filing. \\
+file\_url & String & Direct URL to the source document. \\
+company\_name & String & Registered name of the filer. \\
+\bottomrule
+\end{tabular}
+\caption{Representative schema of ingested~EDGAR~filing metadata.}
+\label{tab:edgar-schema}
+\end{table}
+
+\paragraph{Transformation.}
+The PySpark job reads the raw objects, validates schema consistency,
+deduplicates, and writes partitioned~Parquet datasets to the curated~bucket.
+Logs capture execution time and row counts but omit lineage metadata linking
+inputs, scripts, and outputs. The pipeline delivers correct results without
+proving how they were produced.
+
+\paragraph{Output and manifest.}
+A final task generates a \texttt{\_SUCCESS} manifest in~S3, listing output paths
+for verification. The manifest records completion but not content integrity; no
+hashes or signatures are included. Figure~\ref{fig:baseline-data} illustrates
+this flow.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.85\textwidth]{diagrams/baseline_pipeline/data_path.png}
+  \includegraphics[width=1\textwidth]{diagrams/baseline_pipeline/data_path.pdf}
   \caption{Data path from ingestion to curated output in the baseline pipeline.}
   \label{fig:baseline-data}
 \end{figure}
 
 \section{Observed Gaps}
 \noindent
-While the baseline performs correctly, it lacks the controls required
-for trustworthy audit evidence.
+The pipeline behaves correctly but lacks the mechanisms required to produce
+credible audit evidence. When compared against requirements~R1–R5 from
+Chapter~3, several weaknesses become clear.
 
-\paragraph{Lineage.}
-Provenance is implicit in log files rather than captured as structured
-metadata. No mapping links a specific input object, transformation
-script, and output dataset.
+\paragraph{R1: Governance Accountability.}
+Authorship and approval lineage are implicit. Commits identify contributors but
+are unsigned; Airflow and Terraform run under shared service identities, leaving
+no trace between authorised decisions and executed actions. Accountability is
+assumed rather than enforced.
 
-\paragraph{Reproducibility.}
-Environment state is defined by mutable container images. There is no
-guarantee that a re-run reproduces prior results byte-for-byte, nor any
-version pinning for dependencies or configuration.
+\paragraph{R2: Information Security Assurance.}
+Infrastructure and data outputs are not verified for integrity. Containers and
+S3 objects are mutable; dependency scanning is absent. Runtime isolation exists,
+but cryptographic assurance does not. Evidence of reliability depends on logs
+that can be altered or lost.
 
-\paragraph{Governance and Security.}
-IAM policies are broad, and actions are not gated by review or policy
-validation. Objects in S3 remain mutable and unsigned, and there is no
-mechanism to detect tampering or verify artifact integrity.
+\paragraph{R3: Operational Risk Control.}
+Reproducibility relies on mutable Docker images and library versions. State
+files and metadata are not preserved, so rollback cannot be guaranteed.
+Identical code may yield divergent results under different environments,
+breaking referential consistency.
+
+\paragraph{R4: Continuous Control Monitoring.}
+The CI/CD workflow runs syntax checks but no policy validation. Separation of
+duties and multi-party approvals are not automated. Monitoring is reactive
+rather than preventative; control assurance cannot be measured continuously.
+
+\paragraph{R5: End-to-End Evidence Chain.}
+No unified record links input data, transformations, configurations, and
+outputs. Logs are scattered across components with no correlation or
+immutability. Lineage reconstruction requires manual collation, undermining the
+principles of referentiality and verifiability.
 
 \section{Summary}
 \noindent
-The baseline ETL pipeline demonstrates a functioning but ungoverned
-data workflow. It provides consistent data movement from extraction to
-curated storage, yet its assurance relies on convention rather than
-design. The next chapter extends this model with explicit DevSecOps
-controls---embedding lineage tracking, immutable evidence, and governed
-infrastructure to meet auditability expectations.
+The baseline pipeline demonstrates a functioning but ungoverned ETL workflow. It
+moves data reliably from extraction to storage but depends on convention rather
+than control. Each tool—Airflow, PySpark, S3, Terraform, and GitHub~Actions—
+fulfils its operational role but not its assurance role. None provide signed
+artifacts, immutable logs, or reproducible lineage. These gaps define the
+starting point for the DevSecOps architecture in
+Chapter~5, which integrates governance and verification to
+transform a working pipeline into an auditable one.

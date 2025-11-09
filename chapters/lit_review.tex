@@ -529,29 +529,87 @@ reconciliation* binds control objectives to each applied change.
 commits and policies, closing the loop between declared intent and observed
 outcome \cite{anisetti_devsecops-based_2022, souppaya_secure_2022}.
 
+\section{RQ5: Evaluating Auditability and Governance}
+
+Evaluation forms a core component of Design Science Research, providing the
+means to demonstrate an artifact's utility, quality, and validity in context.
+Hevner~\cite{hevner_design_2004} and Peffers~\cite{peffers_design_2007}
+describe evaluation as integral to the build–evaluate cycle, while
+Gregor and Hevner~\cite{gregor_positioning_2013} distinguish between
+\textit{ex-ante} evaluation—assessing design logic before implementation—and
+\textit{ex-post} evaluation, which measures performance in operation.
+Together, these works establish evaluation as both a validation activity and a
+source of knowledge in its own right.
+
+Within DevSecOps literature, evaluation typically focuses on security or
+compliance performance rather than evidentiary assurance.
+Souppaya and Scarfone's NIST~SSDF~\cite{souppaya_secure_2022} and
+Anisetti~et~al.~\cite{anisetti_devsecops-based_2022} present process metrics for
+secure software delivery, while Weigand and
+Elsas~\cite{weigand_auditability_2019} frame auditability as a design property
+requiring verifiable, tamper-evident records.
+These studies demonstrate that control assurance can be measured, but they stop
+short of applying such evaluation to data-intensive workflows that must also
+satisfy regulatory expectations for lineage, reproducibility, and provenance.
+
+From a data-engineering perspective, evaluation of auditability is most often
+addressed indirectly through lineage reconstruction, data quality assessment,
+and provenance capture~\cite{elbaghazaoui_metadata_2025,
+elbaghazaoui_data_2025-1, mahmud_role_2022}.
+ETL research typically measures performance in terms of latency, scalability,
+or transformation accuracy, while evidence of compliance and reproducibility is
+treated as secondary.
+Existing frameworks for data lineage and metadata management establish
+mechanisms for tracing data flow but rarely define how the completeness or
+trustworthiness of that lineage should be evaluated\cite{wang_enabling_2011}.
+As a result, few approaches combine the quantitative rigor of DevSecOps metrics
+with the contextual assurance required in regulated data environments.
+
+The literature therefore points to a gap between existing DevSecOps evaluation
+frameworks—focused on software artifacts—and the needs of data-governance
+environments, where evidentiary completeness and verifiable lineage are central.
+Addressing this gap requires extending evaluation beyond security metrics to
+encompass measurable dimensions of auditability and governance in data-centric
+systems.
+
+
+\section{Synthesis and Related Works}
+
 \section{Synthesis and Related Works}
 
 Research at the intersection of DevSecOps and data governance converges on the
 same foundation—automation, traceability, and verifiable control—but few works
-treat these as parts of a single evidence system spanning the full ETL
-lifecycle.
+treat these as components of a unified evidence system spanning the full ETL
+lifecycle.  Existing frameworks address individual facets of the assurance
+problem—data quality, lineage, or security—but seldom integrate them under a
+common governance architecture capable of satisfying regulatory expectations for
+auditability.
 
 The IGI~Global collection \emph{Data Governance, DevSecOps, and Advancements in
-Modern Software} \cite{elbaghazaoui_data_2025} provides the strongest
-conceptual foundation. Its chapters explain how metadata management, lineage,
-and policy-as-code can bridge security automation and governance
-accountability. Vayyala \cite{elbaghazaoui_metadata_2025} presents metadata as
-a governance mechanism; Kose \cite{elbaghazaoui_agility_2025} links agile
-compliance to DevSecOps; and Soussane \cite{elbaghazaoui_integrating_2025}
-applies these principles to real-time analytics. Collectively, they demonstrate
-how DevSecOps can embed governance within delivery pipelines, though they stop
-short of implementing tamper-evident and reproducible evidence across the data
-lifecycle.
+Modern Software}~\cite{elbaghazaoui_data_2025} provides the strongest conceptual
+foundation.  Its chapters illustrate how metadata management, lineage, and
+policy-as-code can bridge security automation and governance accountability.
+Vayyala~\cite{elbaghazaoui_metadata_2025} presents metadata as a governance
+mechanism; Kose~\cite{elbaghazaoui_agility_2025} links agile compliance to
+DevSecOps; and Soussane~\cite{elbaghazaoui_integrating_2025} applies these
+principles to real-time analytics.  Collectively, they demonstrate how DevSecOps
+can embed governance within delivery pipelines, though they stop short of
+implementing tamper-evident and reproducible evidence across the data lifecycle.
 
-Subsequent research in software assurance
-\cite{anisetti_devsecops-based_2022, souppaya_secure_2022} and lifecycle
-management \cite{wing_data_2019, zhang_best_2022} reinforces these principles
-but remains domain-bound—software or data, not both. This thesis advances that
-junction by proposing a unified DevSecOps-enabled ETL toolchain that integrates
-assurance and governance into one continuous, verifiable end-to-end evidence
-chain for regulated industries.
+Subsequent studies in software assurance and lifecycle management reinforce
+these ideas but remain domain-bound—software or data, not both.  Anisetti
+et~al.~\cite{anisetti_devsecops-based_2022} and Souppaya and
+Scarfone~\cite{souppaya_secure_2022} formalise metrics for secure software
+delivery, while Wing~\cite{wing_data_2019} and Zhang~et~al.~\cite{zhang_best_2022}
+explore stewardship and reliability within data lifecycles.  Yet no current
+model provides a framework that spans both domains to create a single,
+tamper-evident audit trail linking code, configuration, and data artifacts.
+
+The research gap is therefore twofold.  First, auditability remains treated as
+an emergent property rather than a designed capability of ETL systems.  Second,
+evaluation methods in both DevSecOps and data governance literature rarely
+consider evidentiary completeness or lineage trustworthiness as measurable
+outcomes.  This thesis extends the existing body of work by proposing a unified
+DevSecOps-enabled ETL toolchain that operationalises continuous assurance
+through verifiable lineage, reproducibility, and governance evaluation.
+

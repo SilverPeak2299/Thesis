@@ -1,8 +1,11 @@
 \chapter{Methodology}
 \noindent
 This chapter outlines the methodology used to design, construct, and evaluate a
-DevSecOps toolchain that governs ETL workflows in regulated environments. The
-research applies a Design Science Research (DSR) approach, chosen for its focus
+DevSecOps toolchain that governs ETL workflows in regulated environments,
+including the framework for evaluating auditability and governance defined in
+Sub-Question~5.
+
+The research applies a Design Science Research (DSR) approach, chosen for its focus
 on building artifacts that address real-world problems while generating
 transferable knowledge \cite{hevner_design_2004}. Rather than developing a new
 ETL pipeline, this study designs the system that governs such pipelines—the
@@ -136,23 +139,27 @@ intrinsic.
 \section{Evaluation Framework}
 \noindent
 Evaluation in Design Science verifies that an artifact fulfils its intended
-purpose. Here, the goal is to confirm that the DevSecOps framework meets each
-requirement (R1–R5). Each requirement becomes an evaluation unit with defined
-control indicators, data sources, and assurance thresholds.
+purpose. In this study, evaluation operationalises Sub-Question~5 by defining
+how the DevSecOps framework will be assessed against the requirements~R1–R5.
+At this preliminary stage, evaluation criteria are expressed qualitatively
+rather than as fixed numeric thresholds. Each requirement becomes an evaluation
+unit with observable control indicators, data sources, and assurance
+conditions, while quantitative benchmarks are deferred to Thesis~B once
+empirical measurements are available.
 
 \subsection*{R1 Governance Accountability}
 \noindent
 \textbf{Objective:} Confirm that all changes are traceable to authenticated
-identities and documented approvals. 
+identities and documented approvals.  
 
 \textbf{Method:} Examine change events, approval records, and version metadata
 for completeness and signature validity.  
 
 \textbf{Control Indicators:}
 \begin{itemize}
-  \item 100\% of configuration and code changes linked to a verified identity.
-  \item 100\% of recorded approvals associated with tamper-evident artifacts.
-  \item Continuous lineage maintained across system versions.
+  \item Configuration and code changes are traceable to verified identities.
+  \item Approval events are associated with tamper-evident artifacts.
+  \item Lineage between versions remains continuous and reconstructable.
 \end{itemize}
 \textbf{Auditability Dimensions:} Normativity, Accountability.
 
@@ -166,9 +173,10 @@ are signed, validated, and free from known vulnerabilities.
 
 \textbf{Control Indicators:}
 \begin{itemize}
-  \item 100\% of artifacts validated through checksum or signature verification.
-  \item Zero undetected tampering events during testing.
-  \item Complete retention of verification records.
+  \item Artifacts are verified for integrity through signatures or checksums
+        before use.
+  \item No integrity violations remain undetected or unremediated during testing.
+  \item Verification records are retained and accessible for independent review.
 \end{itemize}
 \textbf{Auditability Dimensions:} Reliability, Verifiability.
 
@@ -182,9 +190,12 @@ outputs to reference baselines.
 
 \textbf{Control Indicators:}
 \begin{itemize}
-  \item $\geq$95\% lineage completeness between input, process, and output.
-  \item Successful re-execution of three or more historical states.
-  \item Recovery times within defined assurance thresholds.
+  \item Lineage information is sufficiently complete to reconstruct mappings
+        between inputs, processing steps, and outputs.
+  \item Historical workflow states can be replayed and produce consistent,
+        explainable results.
+  \item Recovery procedures restore prior states within limits that are
+        operationally acceptable for the reference context.
 \end{itemize}
 \textbf{Auditability Dimensions:} Referentiality, Reliability.
 
@@ -198,9 +209,12 @@ and validations occur consistently.
 
 \textbf{Control Indicators:}
 \begin{itemize}
-  \item $\geq$95\% of executions meet all control criteria.
-  \item No unapproved or unverified changes reach production.
-  \item All control evaluations generate verifiable records.
+  \item Policy checks and control validations run consistently for each change
+        and execution path.
+  \item Unverified or unapproved changes are prevented from reaching production
+        environments.
+  \item Each control evaluation produces verifiable evidence of the checks
+        performed and their outcomes.
 \end{itemize}
 \textbf{Auditability Dimensions:} Normativity, Accountability.
 
@@ -214,18 +228,20 @@ ensure each output can be reconstructed from recorded evidence.
 
 \textbf{Control Indicators:}
 \begin{itemize}
-  \item 100\% of evidence and lineage records validate without error.
-  \item All transformations traceable to original inputs.
-  \item Zero discrepancies in signature or hash verification tests.
+  \item Evidence and lineage records validate successfully across representative
+        workflow executions.
+  \item Each transformation is traceable to its original inputs and associated
+        configurations.
+  \item No unexplained inconsistencies appear in signature or hash verification
+        during evaluation.
 \end{itemize}
 \textbf{Auditability Dimensions:} Referentiality, Verifiability.
 
 \subsection*{Evaluation Synthesis}
 \noindent
-Each requirement is tested through direct observation and measurement, with
-results mapped back to the auditability dimensions in
+Each requirement is tested through direct observation and analysis, with results
+mapped back to the auditability dimensions in
 Table~\ref{tab:req-auditability}. Collectively, these evaluations determine
 whether the governance and assurance framework establishes a verifiable
-end-to-end evidence chain across its lifecycle. The analysis confirms not only
-functional correctness but also the degree to which the artifact embodies the
-principles of continuous assurance defined in Chapter~2.
+end-to-end evidence chain across its lifecycle, thereby addressing
+Sub-Question~5 in the context of the reference pipeline.

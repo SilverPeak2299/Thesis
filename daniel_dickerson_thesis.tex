@@ -1,63 +1,165 @@
-\documentclass[10pt,a4paper,twoside]{report}
+\documentclass[a4paper,oneside,phd,etd]{BYUPhys}
+\usepackage[a4paper,inner=32mm,outer=32mm,top=25mm,bottom=30mm,includeheadfoot]{geometry}
 
-% --- fonts: use scalable CM + proper encoding ---
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
+% phd/masters/honors/senior as needed
 
-\usepackage{graphicx}
-\usepackage{svg}
+% --------------------------- Load Packages ---------------------------------
+
+\usepackage{ifpdf}
+\ifpdf
+  \usepackage[pdftex]{graphicx}
+\else
+  \usepackage[dvips]{graphicx}
+\fi
+
+\usepackage{fancyhdr}
+  \fancyhead{}
+  \fancyhead[LO]{\slshape \rightmark}
+  \fancyhead[RO,LE]{\textbf{\thepage}}
+  \fancyhead[RE]{\slshape \leftmark}
+  \fancyfoot{}
+  \pagestyle{fancy}
+  \renewcommand{\chaptermark}[1]{\markboth{\chaptername \ \thechapter. #1}{}}
+  \renewcommand{\sectionmark}[1]{\markright{\thesection \ #1}}
+
+\usepackage{cite}
+\usepackage{url}
+\urlstyle{rm}
+
 \usepackage{amsmath}
-\usepackage[numbers,sort&compress]{natbib}
-\usepackage{microtype} % keep after fonts
-\usepackage{geometry}
-\usepackage{titlesec}
-\usepackage{multicol}
+\usepackage{amssymb}
+\usepackage{subfigure}
+\usepackage{amsxtra}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{verbatim}
+\usepackage{enumerate}
+
+% Extra stuff you actually use
 \usepackage{booktabs}
 \usepackage{float}
-\usepackage{array}
-\usepackage{wasysym}
+\usepackage{svg}      % for .svg figures (requires --shell-escape)
+\usepackage{wasysym}  % for \CIRCLE etc.
+
+% Caption format from template
+\usepackage[labelfont=bf,labelsep=colon]{caption}
+ \DeclareCaptionFormat{suggested}{\singlespace#1#2#3\par\doublespace}
+ \captionsetup{format=suggested}
+
+% Hyperref from template (keep last)
+\usepackage[bookmarksnumbered,pdfpagelabels=true,plainpages=false,colorlinks=true,
+            linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+
+% ------------------------- Preliminary page fields -------------------------
+
+% For Masters/PhD: graduation year and month
+  \Year{2025}
+  \Month{November}
+  \Author{Daniel Dickerson}
+
+% Title (split across two lines if needed)
+\TitleTop{Auditable ETL Pipelines in Regulated Environments}
+\TitleBottom{Using a DevSecOps-Based Toolchain}
 
 
-% (good practice) load hyperref last
-\usepackage{hyperref}
-% Hide colored boxes around links in the generated PDF
-\hypersetup{hidelinks}
 
-\geometry{
-  inner=32mm,
-  outer=24mm,
-  top=25mm,
-  bottom=30mm,
-  headheight=14pt,
-  headsep=12pt,
-  footskip=14mm
+ \DegreeTitle{Bachelor of Engineering (Honours)
+ \\ Software Engineering}
+
+% Your research advisor
+ \Advisor{Supervisor: Dr Ansgar Fehnker}
+
+% Acknowledgements
+  \Acknowledgments{
+  \vspace{-1.5cm}
+    \noindent I would like to thank my supervisor, Dr Ansgar Fehnker,
+    for his guidance and feedback throughout this project, the industry
+    collaborators who provided context and constraints for the case
+    study, and my friends and family for their continued support.
+  }
+
+% Statement / declaration
+  \Statement{
+    \noindent I, Daniel Dickerson, declare that this report, submitted
+    as part of the requirement for the award of Bachelor of Engineering
+    in the School of Engineering, Macquarie University, is entirely my
+    own work unless otherwise referenced or acknowledged. This document
+    has not been submitted for qualification or assessment at any other
+    academic institution.
+    \vspace{0.5cm}
+
+    \noindent Student's Name:\quad Daniel Dickerson
+
+    \vspace{0.25cm}
+
+    \noindent Student's Signature:\quad\rule{4cm}{0.4pt}
+
+    \vspace{0.25cm}
+
+    \noindent Date:\quad\rule{4cm}{0.4pt}
+  }
+
+% Abstract
+\Abstract{
+\vspace{-1.5cm}
+This thesis investigates how a DevSecOps toolchain can be designed to
+support ETL (Extract--Transform--Load) workflows in regulated industries,
+with a focus on auditability and governance. It adopts a design science
+methodology to construct and evaluate an architecture that layers
+DevSecOps practices over a baseline ETL pipeline, implemented with Apache
+Airflow for orchestration, Apache Spark for processing, and Amazon S3 for
+storage.
+
+The proposed toolchain integrates Infrastructure as Code (Terraform),
+containerisation (Docker), and CI/CD automation (GitHub Actions), together
+with security and governance controls such as signed artifacts, immutable
+logs, and policy-as-code checks. The evaluation focuses on three criteria:
+(i) code and data lineage, (ii) reproducibility of historical states, and
+(iii) tamper detection across code, configuration, and data artifacts.
+
+Results show that the DevSecOps-enhanced pipeline improves traceability
+of transformations and deployments, supports repeatable rollback to
+previous states, and provides stronger guarantees against undetected
+modification of critical assets. These findings suggest that DevSecOps
+practices can be adapted beyond traditional software delivery to support
+data-intensive ETL workflows operating under prudential regulation and
+other high-assurance environments.
 }
 
-\raggedbottom
+\fussy
 
-% Make paragraphs separated by a full blank line and remove indentation
-\setlength{\parskip}{\baselineskip}
-\setlength{\parindent}{0pt}
-
-\title{Designing a DevSecOps Toolchain to Support ETL Workflows in Regulated Industries}
-\author{Daniel Dickerson}
-\date{\today}
-
+% ---------------------------------------------------------------------------
 \begin{document}
 
-% Single column for title and TOC
-\maketitle
-% Typeset the ToC with compact paragraph spacing (local change)
-\begingroup
-  % reset paragraph spacing locally so the ToC is tighter
-  \setlength{\parskip}{0pt}
-  \setlength{\parindent}{0pt}
-  	\tableofcontents
-\endgroup
+ % Start page counting in roman numerals
+ \frontmatter
 
+ % Formal preliminary pages (title, signature page, abstract, etc.)
+ \makepreliminarypages
 
-% Chapters
+\doublespace
+
+ \clearemptydoublepage
+\singlespace
+ % Table of contents
+ \tableofcontents
+
+\clearemptydoublepage
+% List of figures
+\listoffigures
+
+\clearemptydoublepage
+% List of tables
+\listoftables
+
+\clearemptydoublepage
+
+% Start regular page counting at page 1
+\mainmatter
+
+% --------------------------- Your thesis chapters --------------------------
+
 \input{chapters/intro.tex}
 \input{chapters/lit_review.tex}
 \input{chapters/methodology.tex}
@@ -68,8 +170,61 @@
 \input{chapters/discussion.tex}
 \input{chapters/conclusion.tex}
 
-% References (IEEE style)
-\bibliographystyle{IEEEtranN}
+
+
+\appendix
+
+\chapter{Abbreviations}
+\label{chap:abbreviations}
+
+\begin{tabbing}
+APRA  \qquad\qquad \= Australian Prudential Regulation Authority\\
+AWS   \> Amazon Web Services\\
+CI/CD \> Continuous Integration / Continuous Delivery\\
+CPG   \> Prudential Practice Guide (APRA)\\
+CPS   \> Prudential Standard (APRA)\\
+DAST  \> Dynamic Application Security Testing\\
+DAG   \> Directed Acyclic Graph\\
+DLC   \> Data Lifecycle\\
+DSR   \> Design Science Research\\
+ELT   \> Extract--Load--Transform\\
+EMR   \> Elastic MapReduce\\
+EC2   \> Elastic Compute Cloud\\
+ETL   \> Extract--Transform--Load\\
+GDPR  \> General Data Protection Regulation\\
+GHCR  \> GitHub Container Registry\\
+GitOps \> Git-based Operations\\
+HIPAA \> Health Insurance Portability and Accountability Act\\
+IaC   \> Infrastructure as Code\\
+IAM   \> Identity and Access Management\\
+IEEE  \> Institute of Electrical and Electronics Engineers\\
+ISO   \> International Organization for Standardization\\
+ML    \> Machine Learning\\
+MLOps \> Machine Learning Operations\\
+NIST  \> National Institute of Standards and Technology\\
+PaC   \> Policy as Code\\
+RBAC  \> Role-Based Access Control\\
+S3    \> Simple Storage Service\\
+SAST  \> Static Application Security Testing\\
+SCA   \> Software Composition Analysis\\
+SBOM  \> Software Bill of Materials\\
+SDLC  \> Software Development Lifecycle\\
+SSDF  \> Secure Software Development Framework\\
+\end{tabbing}
+
+
+
+\chapter{Baseline Pipeline Configuration}
+% e.g. Terraform modules, Docker compose, Airflow DAGs
+% \input{chapters/appendix_baseline.tex}
+
+\chapter{Additional Evaluation Artifacts}
+% e.g. extra tables, logs, screenshots
+% \input{chapters/appendix_extra_eval.tex}
+
+% ----------------------------- Bibliography --------------------------------
+
+\bibliographystyle{IEEEtranS}
 \bibliography{references}
 
 \end{document}
