@@ -35,6 +35,7 @@
 \usepackage{array}
 \usepackage{verbatim}
 \usepackage{enumerate}
+\usepackage{tabularx}
 
 % Extra stuff you actually use
 \usepackage{booktabs}
@@ -73,10 +74,12 @@
 % Acknowledgements
   \Acknowledgments{
   \vspace{-1.5cm}
-    \noindent I would like to thank my supervisor, Dr Ansgar Fehnker,
-    for his guidance and feedback throughout this project, the industry
-    collaborators who provided context and constraints for the case
-    study, and my friends and family for their continued support.
+    \noindent
+    I would like to thank my supervisor, Dr~Ansgar~Fehnker, for his
+    guidance and feedback throughout this project; Dr~Kate~Stefanov,
+    for her ongoing advice and coordination through the weekly thesis
+    sessions; and my industry co-supervisors, Aneesh~Kondepuri and
+    Richard~Hawkes, for providing feedback and assistance throughout this project.
   }
 
 % Statement / declaration
@@ -93,38 +96,39 @@
 
     \vspace{0.25cm}
 
-    \noindent Student's Signature:\quad\rule{4cm}{0.4pt}
+    \noindent Student's Signature: Daniel Dickerson
 
     \vspace{0.25cm}
 
-    \noindent Date:\quad\rule{4cm}{0.4pt}
+    \noindent Date: \today
   }
 
 % Abstract
 \Abstract{
 \vspace{-1.5cm}
-This thesis investigates how a DevSecOps toolchain can be designed to
-support ETL (Extract--Transform--Load) workflows in regulated industries,
-with a focus on auditability and governance. It adopts a design science
-methodology to construct and evaluate an architecture that layers
-DevSecOps practices over a baseline ETL pipeline, implemented with Apache
-Airflow for orchestration, Apache Spark for processing, and Amazon S3 for
-storage.
+This thesis explores how a DevSecOps toolchain can be designed to support
+ETL (Extract–Transform–Load) workflows in regulated industries, with a
+focus on auditability and governance. It applies a Design Science Research
+approach to design a control framework that translates regulatory
+expectations—such as those in APRA’s CPS 230, 234, and 510—into
+technical assurance mechanisms.
 
-The proposed toolchain integrates Infrastructure as Code (Terraform),
-containerisation (Docker), and CI/CD automation (GitHub Actions), together
-with security and governance controls such as signed artifacts, immutable
-logs, and policy-as-code checks. The evaluation focuses on three criteria:
-(i) code and data lineage, (ii) reproducibility of historical states, and
-(iii) tamper detection across code, configuration, and data artifacts.
+The work to date defines a conceptual baseline pipeline using Apache
+Airflow for orchestration, PySpark on EMR for transformation, and Amazon S3
+for storage. Infrastructure is provisioned through Terraform and deployed
+via GitHub Actions, forming a reproducible but ungoverned model that
+establishes how data moves, where control resides, and what evidence is
+naturally produced. Analysis of this baseline identifies gaps in governance,
+integrity verification, and end-to-end lineage, forming the foundation for
+the DevSecOps architecture that follows.
 
-Results show that the DevSecOps-enhanced pipeline improves traceability
-of transformations and deployments, supports repeatable rollback to
-previous states, and provides stronger guarantees against undetected
-modification of critical assets. These findings suggest that DevSecOps
-practices can be adapted beyond traditional software delivery to support
-data-intensive ETL workflows operating under prudential regulation and
-other high-assurance environments.
+The study positions DevSecOps as a bridge between software assurance and
+data governance, proposing that automation, Infrastructure-as-Code, and
+policy enforcement can transform ETL pipelines from operational utilities
+into verifiable systems of record. The research completed so far defines the
+regulatory context, design requirements, and evaluation framework that will
+guide the subsequent construction and assessment of the DevSecOps-enabled
+pipeline.
 }
 
 \fussy
@@ -212,15 +216,6 @@ SDLC  \> Software Development Lifecycle\\
 SSDF  \> Secure Software Development Framework\\
 \end{tabbing}
 
-
-
-\chapter{Baseline Pipeline Configuration}
-% e.g. Terraform modules, Docker compose, Airflow DAGs
-% \input{chapters/appendix_baseline.tex}
-
-\chapter{Additional Evaluation Artifacts}
-% e.g. extra tables, logs, screenshots
-% \input{chapters/appendix_extra_eval.tex}
 
 % ----------------------------- Bibliography --------------------------------
 

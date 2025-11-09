@@ -345,24 +345,25 @@ Assurance depends on implementation. The ability to trace, verify, and
 reproduce each operational event relies on tools that enforce control, capture
 lineage, and preserve evidence of change. In both DevSecOps and ETL
 environments, tooling translates regulatory requirements such as those in
-CPG~235 and CPS~234/510 into machine-verifiable artifacts
+CPG~235 and CPS~234/510 into machine-verifiable artefacts
 \cite{australian_prudential_regulation_authority_prudential_2013, cps234,
 cps510}.  
 
 This section examines the tool categories that make such evidence possible. In
 DevSecOps, frameworks for infrastructure-as-code, policy validation, and
-continuous integration generate signed artifacts and lineage and evidence
-metadata that prove system integrity. In ETL pipelines, orchestration, metadata
-management, and validation platforms create traceable datasets and transformation
+continuous integration generate signed artefacts and lineage and evidence
+metadata that prove system integrity. In ETL pipelines, ingestion and
+orchestration components, processing engines, metadata catalogues, validation
+frameworks, and monitoring systems create traceable datasets and transformation
 histories that support data governance. Each tool category contributes to the
-same end-to-end evidence chain linking software and data processes into a
+same end-to-end evidence chain, linking software and data processes into a
 single, verifiable system of record.
 
 \subsection*{DevSecOps tooling: from code to operations}
 
 \subsubsection*{Infrastructure- and Policy-as-Code}
 
-IaC and PaC convert infrastructure and policy into versioned artifacts so that
+IaC and PaC convert infrastructure and policy into versioned artefacts so that
 compliance checks run before change. Terraform, CloudFormation, OPA, Checkov,
 and Conftest generate explicit evidence of desired state and policy evaluation
 \cite{anisetti_devsecops-based_2022, elbaghazaoui_safeguarding_2025}. Key
@@ -376,10 +377,12 @@ contrasts appear in Table~\ref{tab:iac_pac_tools}.
     \toprule
     Tool & Strengths & Limitations \\
     \midrule
-    Terraform & Versioned infra; plan/apply logs; OPA integration & Limited native provenance \\
-    CloudFormation & CloudTrail linkage; tight IAM controls & Vendor lock-in \\
-    OPA / Conftest & Declarative policy; decision logs as evidence & Rule complexity \\
-    Checkov & IaC scanning; SBOM export & Limited contextual correlation \\
+    Terraform & Versioned infra; plan/apply logs; OPA integration &
+    Limited audit trail \\
+    CloudFormation & CloudTrail linkage; tight IAM controls &
+    Vendor lock-in \\
+    OPA / Conftest & Declarative policy; decision logs as evidence &
+    Rule complexity \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -387,7 +390,7 @@ contrasts appear in Table~\ref{tab:iac_pac_tools}.
 \subsubsection*{CI/CD orchestration}
 
 GitHub Actions, GitLab CI, Jenkins, and Azure Pipelines attach identity,
-review, and signatures to every run; pipeline logs form part of the evidence
+review, and signatures to every run; pipeline logs form part of the evidentiary
 chain \cite{souppaya_secure_2022, chen_design_2022}. Table~\ref{tab:cicd_systems}
 summarises key trade-offs.
 
@@ -399,10 +402,14 @@ summarises key trade-offs.
     \toprule
     Tool & Strengths & Limitations \\
     \midrule
-    GitHub Actions & Signed runs and artifacts; Git provenance & Coarse access audit \\
-    GitLab CI & Built-in approvals; compliance reports & Higher ops cost \\
-    Jenkins & Extensible audit plugins & Plugin sprawl \\
-    Azure Pipelines & RBAC tie-in; policy checks & Cloud specific \\
+    GitHub Actions & Signed runs and artefacts; Git provenance &
+    Coarse access audit \\
+    GitLab CI & Built-in approvals; compliance reports &
+    Higher operational cost \\
+    Jenkins & Extensible audit plugins &
+    Plugin sprawl \\
+    Azure Pipelines & RBAC tie-in; policy checks &
+    Cloud-specific integrations \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -411,31 +418,33 @@ summarises key trade-offs.
 
 Security scanners create structured evidence of vulnerabilities and dependency
 lineage. They integrate with CI/CD pipelines and feed policy gates
-\cite{cruz_open_2023, rangnau_continuous_2020}. Table~\ref{tab:security_scanning}
+\cite{cruz_open_2023, rangnau_continuous_2020,
+elbaghazaoui_safeguarding_2025}. Table~\ref{tab:security_scanning}
 summarises trade-offs.
 
 \begin{table}[h]
   \centering
-  \caption{Security scanning tools and audit artifacts}
+  \caption{Security scanning tools and audit artefacts}
   \label{tab:security_scanning}
   \begin{tabular}{@{}lll@{}}
     \toprule
     Tool & Strengths & Limitations \\
     \midrule
-    SonarQube & Persistent quality/issue history & Needs tuning; limited container context \\
-    OWASP ZAP & Reproducible web tests; open formats & Lower throughput at scale \\
-    Snyk & Dependency risk; SBOM generation & Proprietary backend; partial offline \\
-    Trivy & Unified SCA/SAST; SBOM export & Narrow policy correlation scope \\
+    SonarQube & Tracks code quality and issues & Limited container context \\
+    OWASP ZAP & Reproducible web tests; open output & Slow at scale \\
+    Snyk & Dependency risk scoring; SBOMs & Proprietary backend \\
+    Trivy & Combined SCA/SAST; SBOMs & Narrow policy scope \\
     \bottomrule
   \end{tabular}
 \end{table}
 
+
 \subsubsection*{Testing and validation}
 
 Test frameworks provide repeatable proof of expected behaviour; their outputs
-become verifiable artifacts \cite{souppaya_secure_2022,
-rangnau_continuous_2020}. Table~\ref{tab:test_frameworks} outlines key
-examples.
+become verifiable artefacts that link requirements to executions
+\cite{souppaya_secure_2022, rangnau_continuous_2020}. Table~\ref{tab:test_frameworks}
+outlines key examples.
 
 \begin{table}[h]
   \centering
@@ -445,9 +454,12 @@ examples.
     \toprule
     Framework & Strengths & Limitations \\
     \midrule
-    Postman / Newman & Versioned API suites; runnable logs & Manual upkeep of collections \\
-    PyTest & Parametrised fixtures; stable outputs & Python-only scope \\
-    JUnit & Mature CI integration; clear reports & No native audit metadata \\
+    Postman / Newman & Versioned API suites; runnable logs &
+    Manual upkeep of collections \\
+    PyTest & Parametrised fixtures; stable outputs &
+    Python-only scope \\
+    JUnit & Mature CI integration; clear reports &
+    No native audit metadata \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -467,10 +479,10 @@ tools and their audit characteristics.
     \toprule
     Tool & Strengths & Limitations \\
     \midrule
-    Docker & Image digests and signatures & Limited fine-grained runtime policy \\
-    Kubernetes & Declarative policy; drift detection & Multi-cluster audit complexity \\
-    Falco & Real-time event evidence & Rule maintenance overhead \\
-    Prisma Cloud / Sysdig & Centralised compliance view & Proprietary; cost \\
+    Docker & Image signatures; digest verification & Limited runtime policy control \\
+    Kubernetes & Declarative policy; drift detection & Complex multi-cluster audits \\
+    Falco & Real-time event monitoring & High rule upkeep \\
+    Prisma Cloud / Sysdig & Centralised compliance view & Proprietary; costly \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -490,12 +502,123 @@ Table~\ref{tab:observability} highlights typical stacks.
     \toprule
     Tool & Strengths & Limitations \\
     \midrule
-    Prometheus & Transparent, timestamped metrics & High cost for long retention \\
-    Grafana & Clear dashboards; evidence views & Dependent on source data quality \\
-    ELK / Splunk & Searchable forensic logs & Operational cost; index complexity \\
+    Prometheus & Transparent, timestamped metrics &
+    High cost for long retention \\
+    Grafana & Clear dashboards; evidence views &
+    Dependent on source data quality \\
+    ELK / Splunk & Searchable forensic logs &
+    Operational cost; index complexity \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\subsection*{ETL tooling: from ingestion to lineage}
+\noindent
+ETL ecosystems expose their own audit surface. Ingestion tools capture how data
+enters governed infrastructure; orchestrators record how it moves; processing
+engines determine how it changes; and metadata, validation, privacy, and
+monitoring systems preserve the story of what happened and when. Together,
+these tools produce the evidence needed to link data handling to governance
+expectations in regulated environments
+\cite{sreepathy_data_2024, mahmud_role_2022,
+elbaghazaoui_metadata_2025, yang_impact_2025}.
+
+
+\subsubsection*{Orchestration}
+Orchestrators manage dependencies, retries, and execution order. Their run
+histories and task states give ETL workflows a temporal structure that can be
+replayed and inspected \cite{sreepathy_data_2024, mahmud_role_2022}. They
+connect ingestion with transformation and expose where control decisions were
+applied. Table~\ref{tab:orchestration} compares common orchestration systems and
+the forms of execution evidence they provide.
+
+\begin{table}[h]
+  \centering
+  \caption{Orchestration systems and their execution evidence}
+  \label{tab:orchestration}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Tool & Strengths & Limitations \\
+    \midrule
+    Apache Airflow & Clear DAGs; task history & Manual scaling; weak lineage \\
+    Azure Data Factory & Built-in control; Purview link & Limited cross-cloud use \\
+    AWS Step Functions & Visual flows; CloudWatch logs & Coarse logs; AWS-only \\
+    Dagster & Data-aware; built-in lineage & Small community; steep setup \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\subsubsection*{Transformation engines}
+Processing engines carry out the transformations that regulators most care
+about; they decide how raw records become derived data products. Engines such as
+Spark, EMR, Dataflow, and Delta Lake can provide deterministic checkpoints and
+time-travel capabilities that support reproducible proofs of change
+\cite{mohna_ai-ready_2022, mahmud_role_2022}. Table~\ref{tab:engines} outlines
+their main assurance properties.
+
+\begin{table}[h]
+  \centering
+  \caption{Processing engines and reproducibility guarantees}
+  \label{tab:engines}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Engine & Strengths & Limitations \\
+    \midrule
+    Apache Spark& Distributed compute; checkpoint versioning & Complex lineage tracing \\
+    Google Dataflow & Managed scaling; audit logging & Cloud lock-in \\
+    Delta Lake & ACID tables; rollback support & Storage overhead \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\subsubsection*{Metadata and lineage}
+Catalogues and lineage systems form the spine of auditability: they connect
+datasets, schemas, and processes into a coherent graph that can be queried and
+tested \cite{elbaghazaoui_metadata_2025, yang_impact_2025}. These tools turn
+implicit relationships into explicit evidence, supporting both governance and
+impact analysis. Table~\ref{tab:metadata} summarises key options.
+
+\begin{table}[h]
+  \centering
+  \caption{Metadata and lineage systems as audit structure}
+  \label{tab:metadata}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Tool & Strengths & Limitations \\
+    \midrule
+    Apache Atlas & Open lineage; policy integration & Latency at scale \\
+    Microsoft Purview & Rich lineage views; Azure native & Proprietary scope \\
+    Amundsen & Lightweight metadata discovery & Limited enforcement links \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\subsubsection*{Operational monitoring}
+Monitoring and observability tools turn runtime behaviour into an audit
+surface. Metrics, traces, and logs enable lineage verification, incident
+reconstruction, and control testing over time \cite{sreepathy_data_2024}. In
+ETL contexts, these systems complete the evidence chain by linking pipeline
+events to infrastructure and application signals.
+Table~\ref{tab:observability-etl} summarises common options.
+
+\begin{table}[h]
+  \centering
+  \caption{ETL observability as an audit surface}
+  \label{tab:observability-etl}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Tool & Strengths & Limitations \\
+    \midrule
+    Azure Monitor & Unified infra and data view & Short retention limits \\
+    AWS CloudWatch & Deep AWS integration; trace logging & Complex audit queries \\
+    Prometheus & Open telemetry; clear metrics & High data volume \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 
 \subsection*{Convergence}
 
@@ -572,8 +695,6 @@ Addressing this gap requires extending evaluation beyond security metrics to
 encompass measurable dimensions of auditability and governance in data-centric
 systems.
 
-
-\section{Synthesis and Related Works}
 
 \section{Synthesis and Related Works}
 
