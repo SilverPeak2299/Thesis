@@ -1,24 +1,236 @@
 \chapter{Proposed Architecture}
-To be completed in Thesis B
 
-% \section{Design Principles}
-% Outline the guiding principles of the proposed DevSecOps-integrated ETL system:
-% automation, immutability, traceability, reproducibility.
+This chapter presents the proposed architecture designed to improve
+auditability and governance within ETL workflows operating in regulated
+environments. The architecture builds upon the baseline pipeline
+introduced in Chapter~\ref{chap:Baseline Pipeline}, extending it with
+DevSecOps practices that introduce traceability, governance controls,
+and verifiable audit evidence.
 
-% \section{High-Level Overview}
-% Provide an architectural diagram comparing baseline and proposed design.
+The chapter is structured in four stages. First, a high level overview
+of the system behaviour is presented using process maps. These maps
+describe the lifecycle of changes, pipeline execution, and audit
+reconstruction. Second, the architecture is decomposed into its
+subsystems and control layers. Third, the data and metadata flows
+through the system are described in more detail. Finally, the complete
+architecture is synthesised and its components are summarised.
 
-% \section{Core Components}
-% Explain each layer:
-% \begin{itemize}
-%     \item \textbf{Infrastructure as Code:} Terraform for provisioning.
-%     \item \textbf{Orchestration:} Airflow for controlled execution.
-%     \item \textbf{Security:} CI/CD checks, artifact signing, SAST/SCA.
-%     \item \textbf{Governance:} Immutable audit logs, metadata tracking.
-% \end{itemize}
+\section{Architectural Overview}
 
-% \section{Integration with DevSecOps Practices}
-% Map the proposed pipeline to the DevSecOps lifecycle (plan → code → build → test → release → monitor).
+The proposed architecture introduces governance and auditability
+capabilities around a standard ETL workflow. Rather than focusing
+solely on the execution of data transformations, the system captures
+the full lifecycle of a pipeline change, from the initial change
+request through to the production of datasets and the generation of
+audit evidence.
 
-% \section{Expected Outcomes}
-% Summarize the architectural advantages for auditability and compliance.
+Figure~\ref{fig:architecture_overview} presents the overall lifecycle
+of the system. The architecture is organised into four conceptual
+layers:
+
+\begin{itemize}
+\item Change management
+\item Execution plane
+\item Control plane
+\item Evidence and audit layer
+\end{itemize}
+
+Together these layers ensure that every dataset produced by the system
+can be traced back to the change request, code revision, and execution
+context that generated it.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/architecture/unified_architecture.png}
+\caption{Unified DevSecOps ETL lifecycle}
+\label{fig:architecture_overview}
+\end{figure}
+
+\section{Process Maps}
+
+To explain the behaviour of the system, the architecture is first
+described using a set of process maps. These maps capture the key
+operational flows that occur during the lifecycle of an ETL pipeline.
+
+Five primary processes are considered:
+
+\begin{enumerate}
+\item Change management workflow
+\item CI/CD release workflow
+\item Infrastructure change workflow
+\item Runtime ETL execution workflow
+\item Lineage and audit reconstruction workflow
+\end{enumerate}
+
+Each process map focuses on a specific aspect of the system while
+maintaining links to the broader architecture.
+
+\subsection{Change Management Workflow}
+
+The change management process captures the origin of pipeline changes
+and provides the foundation for traceability. Every modification to
+the pipeline begins with a change request, typically recorded as a
+ticket in a version controlled issue tracking system.
+
+Figure~\ref{fig:change_management} illustrates this workflow.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/process/change_management.png}
+\caption{Change management workflow}
+\label{fig:change_management}
+\end{figure}
+
+This process ensures that every code change can be linked to a
+documented change request, forming the first step in the audit chain.
+
+\subsection{CI/CD Release Workflow}
+
+The CI/CD workflow governs how code changes are validated, packaged,
+and deployed. Automated checks enforce governance policies before a
+change can progress through the pipeline.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/process/cicd_workflow.png}
+\caption{CI/CD release workflow}
+\label{fig:cicd_workflow}
+\end{figure}
+
+This process introduces automated testing, security checks, and
+artifact signing to ensure that deployed pipeline versions are
+verifiable and tamper resistant.
+
+\subsection{Infrastructure Change Workflow}
+
+Infrastructure configuration is managed using Infrastructure as Code
+(IaC). This ensures that changes to compute resources, storage, and
+access policies are version controlled and reproducible.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/process/infra_change.png}
+\caption{Infrastructure change workflow}
+\label{fig:infra_change}
+\end{figure}
+
+\subsection{Runtime ETL Execution Workflow}
+
+Once deployed, the ETL pipeline executes according to a scheduled or
+externally triggered workflow. The orchestration layer coordinates the
+execution of transformation jobs and ensures that operational metadata
+is captured during each run.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/process/runtime_execution.png}
+\caption{Runtime ETL execution workflow}
+\label{fig:runtime_execution}
+\end{figure}
+
+Runtime data quality checks are integrated into the pipeline to
+validate data before it is promoted to downstream layers.
+
+\subsection{Lineage and Audit Reconstruction Workflow}
+
+The final process map describes how audit queries reconstruct the
+origin of a dataset by traversing the metadata captured throughout the
+pipeline lifecycle.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/process/audit_query.png}
+\caption{Audit reconstruction workflow}
+\label{fig:audit_query}
+\end{figure}
+
+This workflow demonstrates how the system answers key audit questions
+such as:
+
+\begin{itemize}
+\item Why did a dataset change?
+\item Which pipeline run produced the data?
+\item Which code revision was responsible?
+\end{itemize}
+
+\section{Data and Metadata Flows}
+
+While the process maps describe system behaviour, it is also necessary
+to understand how information moves through the architecture.
+
+Two categories of information flow through the system:
+
+\begin{itemize}
+\item Data flows (ETL datasets)
+\item Metadata flows (audit evidence)
+\end{itemize}
+
+\subsection{Data Flows}
+
+The primary data flow follows a standard ETL structure in which raw
+datasets are transformed into curated outputs. The pipeline execution
+layer orchestrates these transformations.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/data/data_flow.png}
+\caption{Data flow through the ETL pipeline}
+\label{fig:data_flow}
+\end{figure}
+
+\subsection{Metadata Flows}
+
+In addition to data transformations, the proposed architecture captures
+metadata describing the execution context of each pipeline run.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{diagrams/data/metadata_flow.png}
+\caption{Metadata and audit evidence flow}
+\label{fig:metadata_flow}
+\end{figure}
+
+This metadata forms the basis for reconstructing lineage and supporting
+audit queries.
+
+\section{Architectural Components}
+
+The architecture consists of several components that operate together
+to support the DevSecOps lifecycle.
+
+\subsection{Change Management System}
+
+Tracks change requests and links code modifications to documented
+business or operational needs.
+
+\subsection{CI/CD Pipeline}
+
+Validates changes through automated checks and produces signed
+deployment artifacts.
+
+\subsection{Pipeline Orchestration}
+
+Schedules and coordinates ETL execution.
+
+\subsection{Transformation Engine}
+
+Executes data transformations and produces datasets.
+
+\subsection{Data Quality Framework}
+
+Applies validation rules to ensure data integrity.
+
+\subsection{Metadata and Lineage Store}
+
+Stores execution metadata and supports lineage reconstruction.
+
+\section{Summary}
+
+The proposed architecture introduces a governance oriented DevSecOps
+layer around a traditional ETL pipeline. By capturing metadata across
+the entire lifecycle of a pipeline change, the system enables full
+traceability from a produced dataset back to the originating change
+request.
+
+This design provides the foundation for the prototype implementation
+described in the following chapter.

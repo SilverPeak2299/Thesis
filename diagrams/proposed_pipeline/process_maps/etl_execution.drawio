@@ -1,0 +1,106 @@
+<mxfile host="65bd71144e">
+    <diagram name="Map D - Runtime ETL with Data Quality" id="0">
+        <mxGraphModel dx="1071" dy="803" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="A" value="Pipeline trigger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="60" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="B" value="Airflow DAG triggered" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="60" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="C" value="DAG run created" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="60" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="D" value="Glue job start" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="60" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="E" value="Read raw dataset (S3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="160" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="F" value="Schema validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="590" y="160" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="G" value="Data quality checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="160" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="H" value="Data contract validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="160" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="I" value="Transformation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="270" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="J" value="Post-transform quality checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="270" width="240" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="K" value="Write curated dataset (S3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="570" y="270" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="L" value="Data quality certification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="270" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="M" value="Write gold dataset (S3)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="370" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="N" value="Execution logs emitted" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="490" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="O" value="Runtime metadata recorded" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="490" width="240" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="P" value="Lineage metadata stored" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="380" width="240" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" parent="1" source="A" target="B" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" parent="1" source="B" target="C" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" parent="1" source="C" target="D" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" parent="1" source="D" target="E" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" parent="1" source="E" target="F" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" parent="1" source="F" target="G" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" parent="1" source="G" target="H" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" parent="1" source="H" target="I" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" parent="1" source="I" target="J" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" parent="1" source="J" target="K" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" parent="1" source="K" target="L" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" parent="1" source="L" target="M" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" parent="1" source="I" target="N" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" parent="1" source="N" target="O" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" parent="1" source="M" target="P" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" parent="1" source="O" target="P" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
