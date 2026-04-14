@@ -1,0 +1,343 @@
+<mxfile host="65bd71144e" compressed="false">
+    <diagram id="hlsa-page-1" name="High Level Solution Architecture">
+        <mxGraphModel dx="2253" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="hlsa-title" value="High-Level Solution Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=24;fontStyle=1;fontColor=#111827;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="20" width="390" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-source-boundary" value="External Source Boundary" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=32;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="70" width="747" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-source-edgar" value="SEC EDGAR API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="hlsa-source-boundary" vertex="1">
+                    <mxGeometry x="262.5" y="50" width="220" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-delivery-boundary" value="Delivery and Control Boundary" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=32;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="200" width="747" height="245" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-github" value="GitHub Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="22" y="55" width="138" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-pr" value="Pull Request +&#xa;Approval Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="180" y="48" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-actions" value="GitHub Actions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="350" y="55" width="138" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-terraform" value="Terraform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="575" y="55" width="135" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-tests" value="Unit / Integration&#xa;Tests" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="22" y="128" width="135" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-sonarqube" value="SonarQube&#xa;SAST / SCA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="170" y="128" width="120" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-dependency-scan" value="Secrets&#xa;Scan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="305" y="128" width="138" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-policy-validation" value="Policy-as-Code&#xa;Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="458" y="128" width="138" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-opa" value="OPA Policy&#xa;Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="620" y="128" width="100" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-attestation" value="GitHub Native Attestation&#xa;Approved Artifact" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="hlsa-delivery-boundary" vertex="1">
+                    <mxGeometry x="250" y="195" width="245" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-aws-account" value="AWS Account Boundary" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=34;fillColor=#ffffff;strokeColor=#6b7280;fontColor=#111827;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="470" width="747" height="625" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-band-exec" value="Execution Plane" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=30;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;fontStyle=1;" parent="hlsa-aws-account" vertex="1">
+                    <mxGeometry x="18" y="45" width="710" height="165" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-mwaa" value="MWAA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="hlsa-band-exec" vertex="1">
+                    <mxGeometry x="35" y="72" width="145" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-glue-jobs" value="AWS Glue&#xa;Python Jobs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="hlsa-band-exec" vertex="1">
+                    <mxGeometry x="235" y="66" width="170" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-cloudwatch" value="CloudWatch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-exec" vertex="1">
+                    <mxGeometry x="470" y="72" width="150" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-band-data" value="Data Platform" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=30;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;fontStyle=1;" parent="hlsa-aws-account" vertex="1">
+                    <mxGeometry x="18" y="225" width="710" height="165" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-raw" value="S3 Raw Zone" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-data" vertex="1">
+                    <mxGeometry x="35" y="70" width="145" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-curated" value="S3 Curated Zone" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-data" vertex="1">
+                    <mxGeometry x="215" y="70" width="150" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-gold" value="S3 Gold Zone" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-data" vertex="1">
+                    <mxGeometry x="400" y="70" width="140" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-iceberg" value="S3 Tables / Iceberg" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-data" vertex="1">
+                    <mxGeometry x="565" y="70" width="120" height="54" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-band-gov" value="Governance and Evidence Plane" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=30;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;fontStyle=1;" parent="hlsa-aws-account" vertex="1">
+                    <mxGeometry x="18" y="405" width="710" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-crawler" value="Glue Crawler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="hlsa-band-gov" vertex="1">
+                    <mxGeometry x="25" y="72" width="135" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-catalog" value="Glue Data Catalog" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="hlsa-band-gov" vertex="1">
+                    <mxGeometry x="190" y="72" width="150" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-lineage" value="OpenLineage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-gov" vertex="1">
+                    <mxGeometry x="370" y="72" width="135" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-openmetadata" value="OpenMetadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="hlsa-band-gov" vertex="1">
+                    <mxGeometry x="535" y="72" width="145" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-iam" value="IAM Roles" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;" parent="hlsa-band-gov" vertex="1">
+                    <mxGeometry x="130" y="128" width="120" height="38" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-secrets" value="Secrets Manager" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;" parent="hlsa-band-gov" vertex="1">
+                    <mxGeometry x="340" y="135" width="160" height="38" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-analytics" value="Analytics Consumer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="92" y="1120" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-audit" value="Audit / Lineage Query" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="545" y="1120" width="190" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-github" target="hlsa-actions" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="131" y="240"/>
+                            <mxPoint x="459" y="240"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e1b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-github" target="hlsa-pr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-e1c" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-pr" target="hlsa-actions" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-e2" value="blocking control" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-opa" target="hlsa-actions" edge="1">
+                    <mxGeometry x="-0.1619" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="700" y="310"/>
+                            <mxPoint x="600" y="310"/>
+                            <mxPoint x="600" y="290"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e3" value="infrastructure as code" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-actions" target="hlsa-terraform" edge="1">
+                    <mxGeometry x="-0.0345" y="28" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-actions" target="hlsa-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="490" y="320"/>
+                            <mxPoint x="490" y="320"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-actions" target="hlsa-tests" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="400" y="310"/>
+                            <mxPoint x="130" y="310"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-actions" target="hlsa-sonarqube" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="440" y="320"/>
+                            <mxPoint x="270" y="320"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4c" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-actions" target="hlsa-dependency-scan" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="470" y="310"/>
+                            <mxPoint x="470" y="310"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4d" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-actions" target="hlsa-policy-validation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="510" y="308"/>
+                            <mxPoint x="567" y="308"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4e" value="policy rules" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-opa" target="hlsa-policy-validation" edge="1">
+                    <mxGeometry x="0.5758" y="44" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4f" value="gated release" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-tests" target="hlsa-attestation" edge="1">
+                    <mxGeometry x="0.0043" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="90" y="415"/>
+                            <mxPoint x="370" y="415"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4g" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-sonarqube" target="hlsa-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="240" y="400"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4h" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-dependency-scan" target="hlsa-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="375" y="415"/>
+                            <mxPoint x="370" y="415"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e4i" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-policy-validation" target="hlsa-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="530" y="415"/>
+                            <mxPoint x="420" y="415"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e5" value="approved workflow artifact" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-attestation" target="hlsa-mwaa" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="413" y="460"/>
+                            <mxPoint x="120" y="460"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e6" value="platform provisioning" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-terraform" target="hlsa-mwaa" edge="1">
+                    <mxGeometry x="-0.0292" y="10" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="800" y="278"/>
+                            <mxPoint x="800" y="550"/>
+                            <mxPoint x="166" y="550"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e7" value="source data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-source-edgar" target="hlsa-glue-jobs" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint y="144"/>
+                            <mxPoint y="560"/>
+                            <mxPoint x="378" y="560"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e8" value="orchestrates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-mwaa" target="hlsa-glue-jobs" edge="1">
+                    <mxGeometry x="-0.2" y="30" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e9" value="logs and metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-glue-jobs" target="hlsa-cloudwatch" edge="1">
+                    <mxGeometry x="0.1385" y="40" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e10" value="ingest" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-glue-jobs" target="hlsa-raw" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="350" y="705"/>
+                            <mxPoint x="165" y="705"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e11" value="transform" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-raw" target="hlsa-curated" edge="1">
+                    <mxGeometry x="0.1111" y="42" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e12" value="promote" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-curated" target="hlsa-gold" edge="1">
+                    <mxGeometry x="0.1111" y="42" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e13" value="table abstraction" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-gold" target="hlsa-iceberg" edge="1">
+                    <mxGeometry x="0.5273" y="42" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e14" value="catalog scan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-gold" target="hlsa-crawler" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="500" y="850"/>
+                            <mxPoint x="185" y="850"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-crawler" target="hlsa-catalog" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-e16" value="metadata context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-catalog" target="hlsa-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="323" y="1000"/>
+                            <mxPoint x="666" y="1000"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e17" value="lineage events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-glue-jobs" target="hlsa-lineage" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="440" y="660"/>
+                            <mxPoint x="830" y="660"/>
+                            <mxPoint x="830" y="930"/>
+                            <mxPoint x="485" y="930"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-lineage" target="hlsa-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="hlsa-e19" value="execution permissions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-iam" target="hlsa-glue-jobs" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint y="1022"/>
+                            <mxPoint y="660"/>
+                            <mxPoint x="378" y="660"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e20" value="secrets" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="hlsa-secrets" target="hlsa-mwaa" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="583" y="1080"/>
+                            <mxPoint x="-20" y="1080"/>
+                            <mxPoint x="-20" y="610"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e21" value="serves governed data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-iceberg" target="hlsa-analytics" edge="1">
+                    <mxGeometry x="-0.1825" y="20" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="780" y="792"/>
+                            <mxPoint x="780" y="1100"/>
+                            <mxPoint x="182" y="1100"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="hlsa-e22" value="lineage and evidence query" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="hlsa-openmetadata" target="hlsa-audit" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="690" y="1060"/>
+                            <mxPoint x="690" y="1060"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

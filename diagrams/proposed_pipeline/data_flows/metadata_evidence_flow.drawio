@@ -1,0 +1,303 @@
+<mxfile host="65bd71144e" compressed="false">
+    <diagram id="metadata-evidence-page" name="Metadata and Evidence Flow">
+        <mxGraphModel dx="998" dy="594" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="meta-boundary-change" value="Change Management" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="20" width="790" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-issue" value="GitHub Issue&#xa;(change request)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="meta-boundary-change" vertex="1">
+                    <mxGeometry x="110" y="45" width="210" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-pr" value="Pull Request +&#xa;Approval Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="meta-boundary-change" vertex="1">
+                    <mxGeometry x="470" y="45" width="180" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-boundary-delivery" value="CI/CD and Infrastructure Control" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#d1d5db;strokeColor=#9ca3af;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="180" width="790" height="310" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-actions" value="GitHub Actions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="300" y="50" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-opa" value="OPA Policy&#xa;Engine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="540" y="110" width="95" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-attestation" value="GitHub Native&#xa;Attestation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="110" y="240" width="190" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-artifact" value="Approved Artifact&#xa;Version" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="330" y="240" width="190" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-terraform" value="Terraform" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="577.5" y="50" width="145" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-infra-state" value="Infrastructure&#xa;State Version" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="560" y="240" width="180" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-tests" value="Unit / Integration&#xa;Tests" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="40" y="125" width="130" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-sonarqube" value="SonarQube&#xa;SAST / SCA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="185" y="125" width="130" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-secrets" value="Secrets&#xa;Scan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="330" y="125" width="130" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-policy-validation" value="Policy-as-Code&#xa;Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="meta-boundary-delivery" vertex="1">
+                    <mxGeometry x="510" y="180" width="155" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-boundary-runtime" value="Runtime Execution" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="510" width="790" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-mwaa-run" value="MWAA Run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="meta-boundary-runtime" vertex="1">
+                    <mxGeometry x="130" y="55" width="170" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-glue-run" value="Glue Job Run" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="meta-boundary-runtime" vertex="1">
+                    <mxGeometry x="350" y="55" width="170" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-dataset" value="Dataset Version&#xa;(S3 Tables / Iceberg)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="meta-boundary-runtime" vertex="1">
+                    <mxGeometry x="570" y="50" width="180" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-boundary-governance" value="Metadata Governance" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="700" width="790" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-lineage" value="OpenLineage&#xa;Events" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="meta-boundary-governance" vertex="1">
+                    <mxGeometry x="90" y="55" width="180" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-run-metadata" value="Run Metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="meta-boundary-governance" vertex="1">
+                    <mxGeometry x="320" y="55" width="170" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-catalog-metadata" value="Catalog Metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="meta-boundary-governance" vertex="1">
+                    <mxGeometry x="560" y="55" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-openmetadata" value="OpenMetadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="meta-boundary-governance" vertex="1">
+                    <mxGeometry x="310" y="135" width="190" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-boundary-audit" value="Audit Reconstruction" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="930" width="790" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-audit-query" value="Audit Query" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;" parent="meta-boundary-audit" vertex="1">
+                    <mxGeometry x="130" y="65" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-reconstruct" value="Reconstructed Evidence Chain&#xa;dataset -&gt; run -&gt; artifact -&gt; infra -&gt; change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#6b7280;fontColor=#ffffff;" parent="meta-boundary-audit" vertex="1">
+                    <mxGeometry x="410" y="50" width="300" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-issue" target="meta-pr" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-pr" target="meta-actions" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="560" y="220"/>
+                            <mxPoint x="420" y="220"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e3" value="policy gate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-opa" target="meta-actions" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="550" y="318"/>
+                            <mxPoint x="550" y="270"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-actions" target="meta-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="210" y="270"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-actions" target="meta-tests" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e4b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-actions" target="meta-sonarqube" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="370" y="285"/>
+                            <mxPoint x="280" y="285"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4c" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-actions" target="meta-secrets" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="400" y="300"/>
+                            <mxPoint x="425" y="300"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4d" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-actions" target="meta-policy-validation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="490" y="300"/>
+                            <mxPoint x="520" y="300"/>
+                            <mxPoint x="520" y="370"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4e" value="policy rules" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-opa" target="meta-policy-validation" edge="1">
+                    <mxGeometry x="0.6923" y="73" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4f" value="gated release" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-tests" target="meta-attestation" edge="1">
+                    <mxGeometry x="-0.68" y="-5" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="105" y="440"/>
+                            <mxPoint x="215" y="440"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4g" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-sonarqube" target="meta-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="250" y="440"/>
+                            <mxPoint x="215" y="440"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4h" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-secrets" target="meta-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="395" y="370"/>
+                            <mxPoint x="290" y="370"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e4i" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="meta-policy-validation" target="meta-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="550" y="380"/>
+                            <mxPoint x="320" y="380"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-attestation" target="meta-artifact" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="330" y="450"/>
+                            <mxPoint x="330" y="450"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e6" value="IaC pipeline" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-actions" target="meta-terraform" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-terraform" target="meta-infra-state" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="810" y="255"/>
+                            <mxPoint x="810" y="428"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e8" value="approved runtime" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="meta-artifact" target="meta-mwaa-run" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="425" y="500"/>
+                            <mxPoint x="190" y="500"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e9" value="execution context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-infra-state" target="meta-mwaa-run" edge="1">
+                    <mxGeometry x="-0.766" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="650" y="550"/>
+                            <mxPoint x="270" y="550"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-mwaa-run" target="meta-glue-run" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-glue-run" target="meta-dataset" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e12" value="lineage emission" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-glue-run" target="meta-lineage" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="460" y="670"/>
+                            <mxPoint x="180" y="670"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e13" value="run record" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-mwaa-run" target="meta-run-metadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="215" y="650"/>
+                            <mxPoint x="405" y="650"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e14" value="table and schema context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-dataset" target="meta-catalog-metadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="660" y="690"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-lineage" target="meta-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="210" y="820"/>
+                            <mxPoint x="350" y="820"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-run-metadata" target="meta-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="meta-e17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-catalog-metadata" target="meta-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="550" y="780"/>
+                            <mxPoint x="550" y="850"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e18" value="artifact reference" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-artifact" target="meta-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="570" y="448"/>
+                            <mxPoint x="570" y="830"/>
+                            <mxPoint x="490" y="830"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e19" value="infra reference" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-infra-state" target="meta-openmetadata" edge="1">
+                    <mxGeometry x="0.7444" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="830" y="448"/>
+                            <mxPoint x="830" y="870"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e20" value="change reference" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="meta-issue" target="meta-openmetadata" edge="1">
+                    <mxGeometry x="0.8118" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="215" y="170"/>
+                            <mxPoint x="10" y="170"/>
+                            <mxPoint x="10" y="860"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e21" value="queryable lineage and evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="meta-openmetadata" target="meta-audit-query" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="405" y="920"/>
+                            <mxPoint x="220" y="920"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="meta-e22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="meta-audit-query" target="meta-reconstruct" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

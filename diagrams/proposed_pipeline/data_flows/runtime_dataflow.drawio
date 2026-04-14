@@ -1,0 +1,276 @@
+<mxfile host="65bd71144e" compressed="false">
+    <diagram id="runtime-dataflow-page" name="Runtime Dataflow">
+        <mxGraphModel dx="1848" dy="594" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1180" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="run-boundary-source" value="Trigger and Source" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="20" width="790" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-trigger" value="External Trigger" style="ellipse;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="run-boundary-source" vertex="1">
+                    <mxGeometry x="520" y="45" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-edgar" value="SEC EDGAR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#a1a1aa;fontColor=#ffffff;" parent="run-boundary-source" vertex="1">
+                    <mxGeometry x="100" y="45" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-boundary-context" value="Approved Execution Context" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="170" width="790" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-artifact" value="Approved Workflow&#xa;Artifact" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="run-boundary-context" vertex="1">
+                    <mxGeometry x="280" y="113" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-attestation" value="GitHub Native&#xa;Attestation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-context" vertex="1">
+                    <mxGeometry x="40" y="118" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-infra-state" value="Terraform State&#xa;Version" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-context" vertex="1">
+                    <mxGeometry x="540" y="50" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-sonarqube" value="SonarQube&#xa;SAST / SCA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-context" vertex="1">
+                    <mxGeometry x="45" y="50" width="190" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-secrets" value="Secrets Scan" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-context" vertex="1">
+                    <mxGeometry x="290" y="50" width="170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-policy" value="Policy-as-Code +&#xa;OPA Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-context" vertex="1">
+                    <mxGeometry x="500" y="113" width="220" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e6c" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;exitX=0;exitY=0;exitDx=0;exitDy=0;" parent="run-boundary-context" source="run-policy" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="650" y="113" as="sourcePoint"/>
+                        <mxPoint x="180" y="118" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="500" y="100"/>
+                            <mxPoint x="180" y="100"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-boundary-runtime" value="AWS Runtime" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="370" width="790" height="620" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-mwaa" value="MWAA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="310" y="50" width="170" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-ingest" value="Glue Ingestion&#xa;Job" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="120" y="140" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-schema-gate" value="Schema&#xa;Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="350" y="140" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-raw" value="S3 Raw Zone" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="560" y="140" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-transform" value="Glue Transform&#xa;Job" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7c2d12;strokeColor=#f97316;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="350" y="240" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-crawler" value="Glue Crawler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="560" y="240" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-quality-gate" value="Data Quality&#xa;Checks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="120" y="340" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-curated" value="S3 Curated Zone" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="350" y="340" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-catalog" value="Glue Data Catalog" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#3b82f6;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="560" y="340" width="160" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-contract-gate" value="Data Contract&#xa;Validation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="120" y="440" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-promotion-gate" value="Promotion&#xa;Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#ef4444;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="350" y="440" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-gold" value="S3 Gold Zone" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="120" y="535" width="170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-iceberg" value="S3 Tables /&#xa;Iceberg" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-runtime" vertex="1">
+                    <mxGeometry x="350" y="535" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-boundary-metadata" value="Metadata and Evidence" style="swimlane;horizontal=1;whiteSpace=wrap;html=1;startSize=36;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="1010" width="790" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-lineage" value="OpenLineage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-metadata" vertex="1">
+                    <mxGeometry x="70" y="45" width="180" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-openmetadata" value="OpenMetadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-metadata" vertex="1">
+                    <mxGeometry x="520" y="45" width="180" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-logs" value="Execution Logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-metadata" vertex="1">
+                    <mxGeometry x="70" y="105" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-metadata" value="Run Metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#064e3b;strokeColor=#34d399;fontColor=#ffffff;" parent="run-boundary-metadata" vertex="1">
+                    <mxGeometry x="520" y="105" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-trigger" target="run-mwaa" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="830" y="95"/>
+                            <mxPoint x="830" y="448"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e2" value="source extract" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="run-edgar" target="run-ingest" edge="1">
+                    <mxGeometry x="-0.6529" y="20" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="60" y="95"/>
+                            <mxPoint x="60" y="540"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e3" value="orchestrates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="run-mwaa" target="run-ingest" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e4" value="approved version" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-artifact" target="run-mwaa" edge="1">
+                    <mxGeometry x="0.2593" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="405" y="360"/>
+                            <mxPoint x="490" y="360"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e5" value="trust context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-attestation" target="run-mwaa" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="200" y="360"/>
+                            <mxPoint x="395" y="360"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e6" value="infra context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-infra-state" target="run-mwaa" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="780" y="250"/>
+                            <mxPoint x="780" y="430"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e6a" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="run-sonarqube" target="run-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e6b" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;" parent="1" source="run-secrets" target="run-attestation" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-ingest" target="run-schema-gate" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-schema-gate" target="run-raw" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e9" value="reads raw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="run-raw" target="run-transform" edge="1">
+                    <mxGeometry x="0.0051" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="620" y="580"/>
+                            <mxPoint x="465" y="580"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-transform" target="run-quality-gate" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-quality-gate" target="run-curated" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e12" value="catalog scan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-raw" target="run-crawler" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-crawler" target="run-catalog" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e14" value="promotion input" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="run-curated" target="run-contract-gate" edge="1">
+                    <mxGeometry x="-0.2727" y="10" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="310" y="770"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e15" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-contract-gate" target="run-promotion-gate" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-promotion-gate" target="run-gold" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="455" y="890"/>
+                            <mxPoint x="235" y="890"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e17" value="governed table" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;endArrow=block;" parent="1" source="run-gold" target="run-iceberg" edge="1">
+                    <mxGeometry y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e18" value="table metadata" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-iceberg" target="run-catalog" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="600" y="935"/>
+                            <mxPoint x="600" y="780"/>
+                            <mxPoint x="635" y="780"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e19" value="lineage events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-ingest" target="run-lineage" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="235" y="600"/>
+                            <mxPoint x="120" y="600"/>
+                            <mxPoint x="120" y="1000"/>
+                            <mxPoint x="90" y="1000"/>
+                            <mxPoint x="90" y="1078"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e20" value="lineage events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-transform" target="run-lineage" edge="1">
+                    <mxGeometry x="-0.7065" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="465" y="680"/>
+                            <mxPoint x="580" y="680"/>
+                            <mxPoint x="580" y="985"/>
+                            <mxPoint x="160" y="985"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e21" value="catalog context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-catalog" target="run-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="655" y="970"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;" parent="1" source="run-lineage" target="run-openmetadata" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="run-e23" value="debug evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-ingest" target="run-logs" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="190" y="580"/>
+                            <mxPoint x="70" y="580"/>
+                            <mxPoint x="70" y="1135"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e24" value="debug evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-transform" target="run-logs" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="10" y="630"/>
+                            <mxPoint x="10" y="1150"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="run-e25" value="run context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;dashed=1;endArrow=block;" parent="1" source="run-mwaa" target="run-metadata" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="425" y="490"/>
+                            <mxPoint x="780" y="490"/>
+                            <mxPoint x="780" y="1135"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
