@@ -1,236 +1,465 @@
 \chapter{Proposed Architecture}
+\label{ch:proposed-architecture}
+\noindent
+This chapter presents the proposed DevSecOps architecture for governing an
+ETL pipeline in a regulated environment. It builds directly on the baseline
+pipeline from Chapter~\ref{ch:baseline}, retaining the same essential data
+movement while adding the control, evidence, and verification mechanisms
+required to satisfy the governance objectives defined in Chapter~3.
 
-This chapter presents the proposed architecture designed to improve
-auditability and governance within ETL workflows operating in regulated
-environments. The architecture builds upon the baseline pipeline
-introduced in Chapter~\ref{chap:Baseline Pipeline}, extending it with
-DevSecOps practices that introduce traceability, governance controls,
-and verifiable audit evidence.
+The design should be read as a governance architecture rather than merely a
+runtime topology. Its purpose is not only to execute extraction,
+transformation, and loading tasks, but to ensure that each operational change,
+deployment, and dataset version can be explained after the fact using
+authoritative evidence. In this sense, the proposed contribution sits above the
+business logic of the pipeline and governs the conditions under which that
+logic is allowed to operate.
 
-The chapter is structured in four stages. First, a high level overview
-of the system behaviour is presented using process maps. These maps
-describe the lifecycle of changes, pipeline execution, and audit
-reconstruction. Second, the architecture is decomposed into its
-subsystems and control layers. Third, the data and metadata flows
-through the system are described in more detail. Finally, the complete
-architecture is synthesised and its components are summarised.
+The architecture is described at escalating levels of detail. It begins with a
+lifecycle view of the governed system, then decomposes the major architectural
+subsystems, then narrows to the runtime data and metadata flows, and finally
+follows a representative run from change request to dataset version and audit
+reconstruction. Consistent with the methodology, the controls described here
+should be interpreted as representative minimum controls for the thesis
+prototype, not as a claim of production-complete assurance.
 
-\section{Architectural Overview}
+\section{Lifecycle Overview}
+\noindent
+At the highest level, the proposed architecture links four concerns that are
+separate or weakly connected in the baseline: change intent, release control,
+runtime execution, and audit reconstruction. The central design claim is that a
+dataset should never appear as an isolated output. It should instead be the
+observable consequence of an approved change, an attested release, a specific
+infrastructure state, and a recorded execution context.
 
-The proposed architecture introduces governance and auditability
-capabilities around a standard ETL workflow. Rather than focusing
-solely on the execution of data transformations, the system captures
-the full lifecycle of a pipeline change, from the initial change
-request through to the production of datasets and the generation of
-audit evidence.
+Figure~\ref{fig:proposed-unified-map} presents this lifecycle as a single
+governed process. The top lane captures change management, where a GitHub Issue
+establishes the initial statement of intent and a pull request subjects the
+change to automated and human review. The second lane captures the execution
+plane, where an approved artifact is used to run the pipeline and produce a
+dataset version. The third lane introduces blocking controls, particularly
+artifact verification and runtime data quality gates. The fourth lane captures
+the evidence layer, where logs, run metadata, lineage metadata, and
+infrastructure references are retained so that an auditor can reconstruct what
+happened without manually correlating disconnected systems.
 
-Figure~\ref{fig:architecture_overview} presents the overall lifecycle
-of the system. The architecture is organised into four conceptual
-layers:
-
-\begin{itemize}
-\item Change management
-\item Execution plane
-\item Control plane
-\item Evidence and audit layer
-\end{itemize}
-
-Together these layers ensure that every dataset produced by the system
-can be traced back to the change request, code revision, and execution
-context that generated it.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/architecture/unified_architecture.png}
-\caption{Unified DevSecOps ETL lifecycle}
-\label{fig:architecture_overview}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/process_maps/unified_map.png}
+  \caption{Unified lifecycle of the governed ETL architecture.}
+  \label{fig:proposed-unified-map}
 \end{figure}
 
-\section{Process Maps}
+\paragraph{Change intent as the start of lineage.}
+The evidence chain begins before the pipeline runs. A governed change must
+start with a documented issue or change request that records why the change is
+being made and what requirement or defect it addresses. This addresses
+Requirement~R1 by preserving decision authority alongside code authorship.
 
-To explain the behaviour of the system, the architecture is first
-described using a set of process maps. These maps capture the key
-operational flows that occur during the lifecycle of an ETL pipeline.
+\paragraph{Release control as the bridge between code and runtime.}
+The architecture does not allow code to move directly from repository to
+execution environment by convention alone. It introduces CI/CD gates, policy
+evaluation, and artifact attestation so that runtime execution is tied to an
+approved release object rather than to an ambiguous repository state. This is
+the primary mechanism by which Requirements~R2 and~R4 are operationalised.
 
-Five primary processes are considered:
+\paragraph{Runtime control as a governed execution path.}
+The runtime path remains recognisably ETL\@: data are ingested, transformed,
+validated, and written to governed storage. What changes is that each step
+operates within a recorded control context. The run is identified, the deployed
+artifact is referenced, the infrastructure state is captured, and promotion to
+the final analytical layer is blocked unless quality conditions are met.
 
-\begin{enumerate}
-\item Change management workflow
-\item CI/CD release workflow
-\item Infrastructure change workflow
-\item Runtime ETL execution workflow
-\item Lineage and audit reconstruction workflow
-\end{enumerate}
+\paragraph{Audit reconstruction as an explicit design goal.}
+The final concern is not throughput or convenience but reconstructability.
+Requirement~R5 demands that the system answer questions such as: Which change
+produced this dataset version? Which approved artifact ran? Which
+infrastructure state was active? Which control checks passed or failed? The
+architecture is therefore designed backwards from the audit query as much as it
+is designed forwards from the ETL process.
 
-Each process map focuses on a specific aspect of the system while
-maintaining links to the broader architecture.
+\section{Structural Decomposition}
+\noindent
+Where the lifecycle view explains the system behaviourally, the high-level
+solution architecture explains it structurally. Figure~\ref{fig:proposed-hlsa}
+shows the major subsystems and boundaries that participate in the governed
+pipeline.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/architecture/hlsa.png}
+  \caption{High-level solution architecture for the proposed pipeline.}
+  \label{fig:proposed-hlsa}
+\end{figure}
+
+\paragraph{External source boundary.}
+The source system remains the SEC~EDGAR~API, preserving comparability with the
+baseline. This is important analytically: the proposed architecture is not an
+alternative business pipeline, but a governed form of the same core workload.
+
+\paragraph{Delivery and control boundary.}
+The first major subsystem is the delivery and control boundary. It combines the
+GitHub repository, pull request approval gate, GitHub~Actions, Terraform,
+automated tests, security scanning, policy-as-code validation, and artifact
+attestation. This boundary is the control-plane entry point for all code and
+configuration change. In the implementation contract, it is also where the
+logical release manifest is assembled, linking the deployable Airflow and Glue
+assets to the CI run and attestation evidence that produced them.
+
+\paragraph{AWS account boundary.}
+Within the cloud target, the architecture is divided into three bands:
+\emph{execution plane}, \emph{data platform}, and \emph{governance and evidence
+plane}. This separation matters because the thesis is evaluating more than
+runtime correctness. The execution plane runs the workflow, the data platform
+stores the outputs, and the governance plane preserves the context that makes
+those outputs auditable.
+
+\paragraph{Execution plane.}
+The execution plane consists of MWAA, AWS~Glue Python jobs, and CloudWatch.
+MWAA acts as the orchestration surface for governed cloud execution, while Glue
+performs the operational work of ingestion, transformation, quality checking,
+and promotion. CloudWatch provides operational telemetry and supporting logs.
+During development, the same orchestration logic can be exercised locally in
+Docker-based Airflow, but the governed target architecture remains MWAA in the
+AWS environment.
+
+\paragraph{Data platform.}
+The data platform is intentionally layered. Raw extracted data are written to
+an~S3 raw zone. Normalised and contract-coerced records are written to an~S3
+curated zone. Promoted analytical outputs are then written to the gold layer,
+represented conceptually as an~S3 gold zone and technically as Amazon~S3
+Tables backed by Iceberg semantics. This progressive structure preserves the
+staging logic of ETL while distinguishing between transient intermediates and
+governed analytical state.
+
+\paragraph{Governance and evidence plane.}
+The governance and evidence plane contains Glue~Crawler, Glue~Data~Catalog,
+OpenLineage, OpenMetadata, IAM Roles, and Secrets Manager. These components
+provide metadata context, service boundaries, secret handling, and queryable
+lineage. The design intent is that runtime metadata should not remain trapped
+inside operational logs. It should be surfaced into a metadata plane that can
+join lineage events, catalog state, change references, and artifact
+provenance.
+
+\paragraph{Downstream consumption.}
+The architecture ends with two downstream actors: the analytics consumer and
+the audit or lineage query user. This distinction is deliberate. The analytics
+consumer needs governed data products; the auditor needs reconstructed
+evidence. A mature architecture must satisfy both, but they query different
+parts of the system for different reasons.
+
+\section{Governed Process Maps}
+\noindent
+The high-level structure becomes clearer when decomposed into the concrete
+processes that operate across it. The process maps in this section show how the
+same architecture behaves under different concerns: change governance,
+continuous delivery, infrastructure change, runtime execution, and audit
+reconstruction.
 
 \subsection{Change Management Workflow}
+\noindent
+Figure~\ref{fig:proposed-change-management} shows how the architecture treats
+change management as the first control surface rather than as an informal
+project-management layer.
 
-The change management process captures the origin of pipeline changes
-and provides the foundation for traceability. Every modification to
-the pipeline begins with a change request, typically recorded as a
-ticket in a version controlled issue tracking system.
-
-Figure~\ref{fig:change_management} illustrates this workflow.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/process/change_management.png}
-\caption{Change management workflow}
-\label{fig:change_management}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/process_maps/change_management.png}
+  \caption{Governed change management workflow.}
+  \label{fig:proposed-change-management}
 \end{figure}
 
-This process ensures that every code change can be linked to a
-documented change request, forming the first step in the audit chain.
+The process begins with a change request and a GitHub Issue containing design
+notes and acceptance criteria. Development then proceeds on a branch that
+references the ticket identifier, ensuring that the repository history carries
+forward the originating governance reference. A pull request triggers automated
+checks covering linting, tests, policy validation, security review, and ticket
+enforcement. If those checks fail, the change returns for remediation; if they
+pass, the change still requires explicit human approval from the Code Owner and
+Data Owner before merge.
+
+This workflow operationalises Requirement~R1 by binding intent, authorship, and
+approval into a single continuous chain. It also contributes to Requirement~R4,
+because policy and validation are not optional review activities but blocking
+controls in the merge path.
 
 \subsection{CI/CD Release Workflow}
+\noindent
+Figure~\ref{fig:proposed-cicd} narrows to the release path itself.
 
-The CI/CD workflow governs how code changes are validated, packaged,
-and deployed. Automated checks enforce governance policies before a
-change can progress through the pipeline.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/process/cicd_workflow.png}
-\caption{CI/CD release workflow}
-\label{fig:cicd_workflow}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/process_maps/ci_cd_process.png}
+  \caption{CI/CD workflow for packaging, attestation, and deployment.}
+  \label{fig:proposed-cicd}
 \end{figure}
 
-This process introduces automated testing, security checks, and
-artifact signing to ensure that deployed pipeline versions are
-verifiable and tamper resistant.
+Once a change is merged, GitHub~Actions performs build and lint checks, unit
+and integration testing, security scanning, and policy-as-code validation.
+Only then is the deployment artifact built, attested, and released for
+deployment. This sequencing is critical. In the baseline, deployment is driven
+primarily by repository events; in the proposed architecture, deployment is
+driven by the successful creation of an approved release object. The conceptual
+trace becomes:
+\texttt{commit -> CI run -> approved artifact -> attestation -> release ->
+deployment}.
+
+This is the principal mechanism for satisfying Requirement~R2. Integrity is not
+assumed because a file exists in the repository; it is asserted only after the
+artifact has passed the required gates and has provenance attached to it.
 
 \subsection{Infrastructure Change Workflow}
+\noindent
+Figure~\ref{fig:proposed-infra-change} shows that infrastructure change is
+governed using the same logic as application change.
 
-Infrastructure configuration is managed using Infrastructure as Code
-(IaC). This ensures that changes to compute resources, storage, and
-access policies are version controlled and reproducible.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/process/infra_change.png}
-\caption{Infrastructure change workflow}
-\label{fig:infra_change}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/process_maps/infra_change.png}
+  \caption{Infrastructure change workflow with Terraform state capture.}
+  \label{fig:proposed-infra-change}
 \end{figure}
+
+Terraform changes begin with an issue, pass through pull-request review, and
+are subjected to validation and policy checks before merge. After
+\texttt{terraform apply}, the applied infrastructure state version is recorded
+as evidence. This gives the architecture a durable reference to the platform
+configuration that existed at the time a dataset was produced. That reference
+is essential for Requirement~R3 because reproducibility depends not only on
+code version, but also on the state of the environment in which the code ran.
 
 \subsection{Runtime ETL Execution Workflow}
+\noindent
+Figure~\ref{fig:proposed-runtime-process} shows the governed runtime path.
 
-Once deployed, the ETL pipeline executes according to a scheduled or
-externally triggered workflow. The orchestration layer coordinates the
-execution of transformation jobs and ensures that operational metadata
-is captured during each run.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/process/runtime_execution.png}
-\caption{Runtime ETL execution workflow}
-\label{fig:runtime_execution}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/process_maps/etl_execution.png}
+  \caption{Governed runtime execution workflow.}
+  \label{fig:proposed-runtime-process}
 \end{figure}
 
-Runtime data quality checks are integrated into the pipeline to
-validate data before it is promoted to downstream layers.
+The flow begins with a pipeline trigger and Airflow~DAG creation, followed by
+verification that the runtime is using an approved artifact. Glue jobs then
+read the source dataset, perform schema validation, run data quality and data
+contract checks, apply the transformation, and produce curated output. Only
+after the post-transform checks pass is the dataset promoted to the gold layer.
+Execution logs, run evidence, and lineage evidence are recorded as separate but
+linked outputs.
+
+The important difference from the baseline is that quality and promotion are
+not descriptive afterthoughts. They are blocking decisions in the runtime path.
+This converts data quality from an operational best practice into a control
+instrument that directly governs whether an output is permitted to become a
+governed dataset version.
 
 \subsection{Lineage and Audit Reconstruction Workflow}
+\noindent
+Figure~\ref{fig:proposed-audit-query} reverses the direction of reasoning and
+begins with the audit question instead of the pipeline trigger.
 
-The final process map describes how audit queries reconstruct the
-origin of a dataset by traversing the metadata captured throughout the
-pipeline lifecycle.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/process/audit_query.png}
-\caption{Audit reconstruction workflow}
-\label{fig:audit_query}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/process_maps/lineage_and_audit_query.png}
+  \caption{Audit reconstruction workflow from dataset to change intent.}
+  \label{fig:proposed-audit-query}
 \end{figure}
 
-This workflow demonstrates how the system answers key audit questions
-such as:
+An audit request begins with a dataset under investigation. From that gold
+dataset, the system performs a lineage lookup to identify the pipeline run ID,
+retrieves runtime metadata as authoritative evidence, consults execution logs
+as supporting evidence, and identifies the artifact version, Git commit,
+infrastructure state version, and originating change request. The intended
+result is a coherent reconstruction of \texttt{data + code + infrastructure +
+intent}.
 
-\begin{itemize}
-\item Why did a dataset change?
-\item Which pipeline run produced the data?
-\item Which code revision was responsible?
-\end{itemize}
+This workflow directly expresses Requirement~R5. A system that can only produce
+logs has not solved the governance problem; it has only moved the manual work
+to a later stage. The proposed design aims to make reconstruction a first-class
+system capability.
 
 \section{Data and Metadata Flows}
+\noindent
+The process maps describe behaviour over time. The data-flow diagrams explain
+how runtime assets, datasets, and evidence objects move between components.
+Three views are important: the overall system data flow, the governed runtime
+flow, and the metadata and evidence flow.
 
-While the process maps describe system behaviour, it is also necessary
-to understand how information moves through the architecture.
+\subsection{System Data Flow}
+\noindent
+Figure~\ref{fig:proposed-system-dataflow} presents the end-to-end system data
+flow across the repository, delivery controls, AWS runtime, metadata services,
+and downstream consumers.
 
-Two categories of information flow through the system:
-
-\begin{itemize}
-\item Data flows (ETL datasets)
-\item Metadata flows (audit evidence)
-\end{itemize}
-
-\subsection{Data Flows}
-
-The primary data flow follows a standard ETL structure in which raw
-datasets are transformed into curated outputs. The pipeline execution
-layer orchestrates these transformations.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/data/data_flow.png}
-\caption{Data flow through the ETL pipeline}
-\label{fig:data_flow}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/data_flows/system_dataflow.png}
+  \caption{System-level data flow across delivery, runtime, and metadata layers.}
+  \label{fig:proposed-system-dataflow}
 \end{figure}
 
-\subsection{Metadata Flows}
+The governing repository and CI/CD systems produce an approved workflow
+artifact. That artifact, together with Terraform-provisioned infrastructure,
+establishes the approved runtime context for MWAA and Glue. Runtime data then
+move from SEC~EDGAR into the raw zone, from raw to curated, and from curated to
+the gold layer. The gold layer is surfaced as governed tables through
+S3~Tables/Iceberg, with Glue~Crawler and Glue~Data~Catalog providing additional
+metadata context.
 
-In addition to data transformations, the proposed architecture captures
-metadata describing the execution context of each pipeline run.
+This system view shows why the proposed architecture is more than an
+orchestration pattern. The delivery path, runtime path, and metadata path are
+linked so that the data product and the control product remain synchronised.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{diagrams/data/metadata_flow.png}
-\caption{Metadata and audit evidence flow}
-\label{fig:metadata_flow}
+\subsection{Runtime Data Flow}
+\noindent
+Figure~\ref{fig:proposed-runtime-dataflow} narrows from the whole system to a
+single governed execution context.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/data_flows/runtime_dataflow.png}
+  \caption{Runtime flow showing the approved execution context and control gates.}
+  \label{fig:proposed-runtime-dataflow}
 \end{figure}
 
-This metadata forms the basis for reconstructing lineage and supporting
-audit queries.
+This view emphasises that runtime execution is dependent on prior control
+outcomes. External triggering alone is insufficient. The run must also inherit
+an approved workflow artifact, its attestation, the relevant Terraform state
+version, and the evidence that required policy and security gates have already
+passed. Once in runtime, the flow proceeds through MWAA, Glue ingestion, schema
+validation, the raw zone, Glue transformation, the curated zone, data quality
+checks, data contract validation, the promotion gate, and finally the gold
+dataset and table abstraction.
 
-\section{Architectural Components}
+The diagram therefore combines two forms of control. The first is
+pre-execution control, inherited from CI/CD\@. The second is in-execution
+control, applied to data and transformation results before promotion. Together
+they bind Requirements~R2, R3, and~R4 to the same execution path.
 
-The architecture consists of several components that operate together
-to support the DevSecOps lifecycle.
+\subsection{Metadata and Evidence Flow}
+\noindent
+Figure~\ref{fig:proposed-metadata-flow} describes the movement of evidence and
+references rather than business data.
 
-\subsection{Change Management System}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{diagrams/proposed_pipeline/data_flows/metadata_evidence_flow.png}
+  \caption{Metadata and evidence flow supporting audit reconstruction.}
+  \label{fig:proposed-metadata-flow}
+\end{figure}
 
-Tracks change requests and links code modifications to documented
-business or operational needs.
+The metadata flow begins in change management with the issue and pull request,
+continues through GitHub~Actions, OPA policy evaluation, attestation, approved
+artifact version, Terraform, and infrastructure state version, then enters the
+runtime as MWAA and Glue run metadata. At runtime, dataset versions, lineage
+events, run records, and catalog metadata are pushed into OpenMetadata, which
+acts as the query hub for reconstructed evidence chains. The intended audit
+path is explicit in the diagram:
+\texttt{dataset -> run -> artifact -> infrastructure -> change}.
 
-\subsection{CI/CD Pipeline}
+This design choice is central to the thesis. Logs alone are retained only as
+supporting evidence. The authoritative audit chain is constructed from linked
+metadata references that can be queried consistently and validated
+independently.
 
-Validates changes through automated checks and produces signed
-deployment artifacts.
+\section{Worked Example: One Governed EDGAR Run}
+\noindent
+To make the architecture concrete, this section follows the representative
+pipeline slice implemented in the prototype repository. The current codebase
+models a single governed EDGAR flow centred on the
+\texttt{edgar\_governed\_pipeline}, with separate ingestion, transformation,
+quality, and promotion steps plus a versioned run manifest.
 
-\subsection{Pipeline Orchestration}
+\paragraph{1. Change and release preparation.}
+A change begins as a GitHub Issue and is implemented on a branch that encodes
+the governing issue identifier. The pull request body carries phase and
+requirement references, which are parsed into machine-readable governance
+inputs for CI policy checks. Automated validation then evaluates branch naming,
+issue linkage, template completeness, tests, and policy conditions before the
+change is allowed to merge. Once approved, the release process produces a
+logical release object that binds together the workflow artifact, the CI run,
+the attestation record, and the deployment target.
 
-Schedules and coordinates ETL execution.
+\paragraph{2. Run initialisation.}
+When the DAG is triggered, it first creates a run context and an initial
+manifest. In the current prototype, that manifest records the
+\texttt{run\_id}, \texttt{pipeline\_id}, \texttt{dataset\_date},
+\texttt{source\_ref}, \texttt{release\_manifest\_ref},
+\texttt{terraform\_state\_ref}, \texttt{change\_ref}, the expected job
+references, the gold table coordinates, and the initial status. This occurs
+before any data movement, which means the execution is evidence-bearing from
+its first step rather than only at completion.
 
-\subsection{Transformation Engine}
+\paragraph{3. Ingestion.}
+The ingestion job reads the EDGAR source payload, expands the
+\texttt{filings.recent} structure into row-wise records, normalises the key
+fields, and writes two raw outputs: the original payload and the normalised
+record set. In the current implementation these outputs are partitioned by
+\texttt{dataset\_date} and \texttt{run\_id}. The manifest is then updated with
+the raw output locations and the raw row count. At this point, the run can
+already prove which source was consulted and where the first persisted outputs
+were written.
 
-Executes data transformations and produces datasets.
+\paragraph{4. Transformation and contract coercion.}
+The transformation job reads the normalised raw records, enriches them with the
+run identifier and dataset date, coerces them to the curated data contract, and
+writes the curated dataset to the curated zone. The manifest is updated again
+with the curated output location, the contract reference, and the curated row
+count. This step is significant because it converts the raw landing zone into a
+schema-governed intermediate suitable for policy-based promotion.
 
-\subsection{Data Quality Framework}
+\paragraph{5. Runtime quality gate.}
+The data quality step evaluates the curated output against a small but explicit
+control set: the curated object must exist, it must match the declared
+contract, the row count must be greater than zero, and required identifiers
+must be populated. The result is recorded in the manifest as a structured
+\texttt{quality\_result}. If any check fails, the run is finalised with a
+\texttt{failed\_quality} status and no dataset version is emitted. This is the
+runtime expression of the blocking controls shown in the process maps.
 
-Applies validation rules to ensure data integrity.
+\paragraph{6. Promotion and dataset versioning.}
+If the quality gate passes, the promotion step writes the approved records to
+the gold table target. The current prototype computes a deterministic dataset
+version from the gold table identity and a digest of the promoted content, then
+stores both the dataset version and the write result in the manifest. This
+matters for Requirement~R3: replayability and reconstruction are only credible
+if the final version identifier is stable for identical governed inputs and
+execution conditions.
 
-\subsection{Metadata and Lineage Store}
+\paragraph{7. Final manifest and audit lookup.}
+At the end of the run, the manifest contains the raw outputs, curated outputs,
+quality result, row counts, dataset version, gold write result, timestamps, and
+final status. In the integration flow used by the prototype, a representative
+run is linked to references such as
+\texttt{release-manifests/dev-edgar-v1.json},
+\texttt{terraform-state/dev/serial-0001}, and
+\texttt{issue/EDGAR-1}. An auditor starting from the resulting dataset version
+can therefore traverse back to the run manifest, then to the release
+manifest, infrastructure state reference, and governing change request. The
+evidence chain is not inferred; it is recorded explicitly.
 
-Stores execution metadata and supports lineage reconstruction.
+\paragraph{Worked-example significance.}
+This example illustrates the architectural argument of the thesis. The novelty
+is not that EDGAR data can be ingested or transformed; the baseline already
+demonstrates that. The novelty is that the governed run emits enough linked
+context to explain why the dataset exists, under what authority it was
+produced, which control conditions were satisfied, and how the same state could
+be replayed or challenged later.
 
 \section{Summary}
+\noindent
+The proposed architecture transforms the baseline ETL pipeline into a governed
+data-delivery system. It introduces a control plane that begins with change
+intent, continues through automated and human release gates, governs runtime
+promotion decisions, and preserves a queryable evidence chain spanning code,
+configuration, data, and infrastructure.
 
-The proposed architecture introduces a governance oriented DevSecOps
-layer around a traditional ETL pipeline. By capturing metadata across
-the entire lifecycle of a pipeline change, the system enables full
-traceability from a produced dataset back to the originating change
-request.
-
-This design provides the foundation for the prototype implementation
-described in the following chapter.
+At the conceptual level, the architecture integrates change management,
+continuous delivery, runtime orchestration, metadata governance, and audit
+reconstruction into one lifecycle. At the structural level, it separates the
+execution plane, data platform, and governance plane while linking them through
+attested artifacts, infrastructure references, lineage events, and run
+manifests. At the operational level, it culminates in a governed pipeline run
+whose dataset version can be reconstructed back to its originating change
+request. This architecture provides the design foundation for the prototype and
+the evaluation that follow.
