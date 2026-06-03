@@ -1,0 +1,85 @@
+\chapter{Implementation Version Details}
+\label{chap:implementation-versions}
+\noindent
+This appendix records the implementation versions and platform references used
+by the prototype. The tables are separated from Chapter~\ref{ch:results}
+because they support repeatability, but they are not themselves the main
+results of the evaluation.
+
+\begin{table}[H]
+  \centering
+  \caption{Runtime and orchestration plane versions.}
+  \label{tab:appendix-runtime-plane}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}p{0.24\textwidth}X@{}}
+    \toprule
+    \textbf{Component} & \textbf{Version or source} & \textbf{Role} \\
+    \midrule
+    Prototype package & \texttt{0.1.0} & Versioned package for jobs, manifests, metadata, and scripts. \\
+    Python runtime & \texttt{>=3.11} & Minimum runtime declared by the package. \\
+    Apache Airflow & \texttt{2.9.3-python3.11} & DAG runtime used to mirror the MWAA orchestration interface during development. \\
+    MWAA & \texttt{mw1.small} & Target managed Airflow environment class. \\
+    OpenMetadata server & \texttt{1.12.6} & Catalogue and lineage-facing metadata service. \\
+    OpenMetadata database image & \texttt{1.12.6} & Metadata database image used by the catalogue service. \\
+    Elasticsearch & \texttt{7.16.3} & Search backend used by OpenMetadata. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Governance and CI/CD plane versions.}
+  \label{tab:appendix-governance-plane}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}p{0.24\textwidth}X@{}}
+    \toprule
+    \textbf{Component} & \textbf{Version or source} & \textbf{Role} \\
+    \midrule
+    GitHub Actions Python & \texttt{3.12} & Runtime used by PR and release controls. \\
+    GitHub Actions checkout & \texttt{checkout@v4} & Checks out source for CI and release workflows. \\
+    GitHub Actions Python setup & \texttt{setup-python@v5} & Provides the workflow Python runtime. \\
+    GitHub Actions artifacts & \texttt{upload-artifact@v4} & Uploads control and runtime evidence. \\
+    GitHub attestation & \texttt{actions/attest@v4} & Generates release-bundle provenance. \\
+    OPA setup action & \texttt{setup-opa@v2} & Installs OPA for governance policy evaluation. \\
+    OPA version & \texttt{latest} & Evaluates pull-request change-gate policies. \\
+    Ruff & \texttt{0.11.10} & Python lint control in the PR workflow. \\
+    Pytest & \texttt{7.4.4} & Unit, integration, and ETL smoke validation. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Cloud target and infrastructure plane versions.}
+  \label{tab:appendix-cloud-plane}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}p{0.24\textwidth}X@{}}
+    \toprule
+    \textbf{Component} & \textbf{Version or source} & \textbf{Role} \\
+    \midrule
+    Terraform & \texttt{>=1.6.0} & Infrastructure-as-code layer for AWS resources. \\
+    AWS provider & \texttt{\textasciitilde{}>6.39} & Terraform provider constraint for AWS. \\
+    S3 bucket versioning & \texttt{Enabled} & Versioning setting applied to raw, curated, manifest, and MWAA artifact buckets. \\
+    S3 server-side encryption & \texttt{AES256} & Default encryption setting applied to the storage buckets. \\
+    S3 public access block & \texttt{true} controls & Public ACL and policy access blocked for the storage buckets. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Evidence and release plane references.}
+  \label{tab:appendix-evidence-plane}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}p{0.24\textwidth}X@{}}
+    \toprule
+    \textbf{Artifact} & \textbf{Version or reference} & \textbf{Role} \\
+    \midrule
+    OpenLineage schema & \texttt{1-0-0} schema URL & Shape used for emitted lineage events. \\
+    Governed change & \texttt{EDGAR-1} & Initial governed EDGAR implementation record. \\
+    Release manifest & \texttt{dev-edgar-v1} & Sample governed release for replay and tests. \\
+    Dataset version & \texttt{9b5fd26a2005c02b} & Promoted gold dataset version used for reconstruction. \\
+    Code artifact hashes & 5 SHA-256 hashes & Hashes for the DAG and ingest, transform, quality, and promotion jobs. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}

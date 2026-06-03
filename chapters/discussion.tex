@@ -1,14 +1,138 @@
 \chapter{Discussion}
-To be completed in Thesis B
+\noindent
+The results and evaluation show that the proposed architecture can turn ETL
+governance into a set of linked evidence artifacts. The main finding is not
+that the EDGAR pipeline processed a large amount of data. The stronger finding
+is that a produced dataset version can be connected back to the run manifest,
+release manifest, infrastructure reference, change record, code bundle, quality
+decision, OpenLineage event, and OpenMetadata-compatible records. This changes
+the audit problem from a manual search across tools into a structured
+reconstruction exercise.
 
-% \section{Summary of Findings}
-% Recap the main evaluation results and architectural improvements.
+\section{Interpretation of the Findings}
+\noindent
+The prototype supports the central argument of the thesis: auditability is
+stronger when evidence is captured during delivery and runtime rather than
+assembled after the fact. In the baseline pipeline, the system could show that
+tasks had run and that outputs existed, but the evidence was distributed across
+logs, storage paths, infrastructure state, and repository history. The proposed
+architecture instead treats those references as part of the data product's
+evidence model.
 
-% \section{Implications for Practice}
-% Explain how this approach could generalize to other regulated environments.
+This is important because regulated data pipelines are not only judged by
+whether data appears in the correct destination. They are also judged by
+whether the organisation can explain who authorised the change, which code ran,
+which infrastructure state supported the run, what controls passed, and how the
+output can be reproduced or challenged. The worked example in
+Chapter~\ref{ch:results} shows that these questions can be answered from the
+manifest and metadata chain, rather than from an informal investigation.
 
-% \section{Limitations}
-% Note scalability, data type constraints, or untested regulatory frameworks.
+\section{Reliance on GitHub}
+\noindent
+The most significant architectural tension is the reliance on GitHub. In the
+implemented design, GitHub provides issue tracking, pull request review,
+source-control history, CI/CD execution, release control, ownership signals,
+and attestation. This is convenient because it places many governance
+functions close to the code. It also creates a concentration of trust. If
+GitHub is unavailable, degraded, or internally inconsistent, several parts of
+the control plane are affected at the same time.
 
-% \section{Future Work}
-% Propose enhancements—e.g., integrating ML pipelines, policy-as-code frameworks, or extended logging.
+The GitHub outages encountered during development made this issue more
+concrete. The problem is not simply that an outage slows down development. The
+deeper problem is that the architecture uses GitHub as both a workflow engine
+and a source of governance evidence. A platform incident can therefore affect
+the ability to approve changes, run controls, produce attestations, and inspect
+historical state. In a system whose purpose is to improve trust, this
+dependency needs to be treated as a design risk rather than an operational
+inconvenience.
+
+The implementation mitigates this by storing independent release
+manifests, run manifests, hashes, audit-chain files, and metadata references.
+Those artifacts mean the produced evidence is not held only in GitHub's user
+interface or workflow history. The remaining design concern is that GitHub
+still remains the place where many approvals, workflow decisions, and release
+provenance references originate.
+
+A stronger production architecture would split these responsibilities across
+multiple services. Source control and pull requests could remain in GitHub, but
+release authority could be backed by an independent artifact registry and
+signed release store. Attestation could be verified through a separate
+provenance service. Policy decisions could be recorded in a policy engine or
+governance evidence store rather than only in CI logs. Runtime manifests could
+remain in versioned object storage, and catalogue records could remain in a
+metadata system such as OpenMetadata. This would reduce the blast radius of a
+single platform incident and make the evidence chain more defensible.
+
+\section{Implications for Practice}
+\noindent
+The practical implication is that DevSecOps controls should be designed as
+evidence-producing controls, not only as blocking gates. A failed check can
+prevent a deployment, but an auditable system also needs to record which check
+ran, what it checked, what artifact it applied to, and how that decision links
+to the final data product. The proposed architecture demonstrates this pattern
+through reference checks, quality results, code hashes, source-control fields,
+and metadata references.
+
+The second implication is that data governance needs to be attached to runtime
+state. A release manifest is useful, but it is not sufficient unless the run
+manifest records that the release was actually used. A data contract is useful,
+but it is not sufficient unless the quality result records that the contract was
+checked before promotion. A lineage system is useful, but it is not sufficient
+unless the lineage event links to the same dataset version and run manifest as
+the rest of the evidence chain.
+
+\section{Scope and Extensions}
+\noindent
+The evaluation scope was intentionally centred on the evidence chain rather
+than on platform-scale benchmarking. The worked example uses a representative
+EDGAR fixture and a controlled run so that the links between source reference,
+release evidence, runtime manifest, quality result, lineage, and dataset
+version can be inspected directly. Production-scale throughput, long-term
+retention behaviour, and sustained failure recovery are separate operational
+concerns that build on the same evidence model.
+
+The development scope also reflects an intentional split between design target
+and iteration environment. The architecture is designed for the target AWS
+environment, but Docker-based Airflow was used during development because MWAA
+provisioning and teardown were too slow for normal iteration. This allowed the
+evidence model to be exercised repeatedly while keeping the target architecture
+as the point of reference.
+
+The policy scope is focused on demonstrating where governance decisions attach
+to the pipeline. The prototype includes the structure for governance checks and
+quality checks. A broader policy catalogue could extend the same pattern to
+access-control rules, separation of duties, data classification checks,
+retention rules, and incident-response evidence.
+
+\section{Future Work}
+\noindent
+Future work should first explore a less centralised governance architecture.
+The most direct extension would be to split the current GitHub-dependent
+control plane into separate services for source control, release signing,
+artifact storage, policy decisions, attestations, and evidence retention. This
+would allow the system to continue preserving audit evidence even when one
+provider is unavailable or degraded.
+
+Future work should also explore escalating environments. The current work uses
+a development harness to evaluate the evidence model against the target
+architecture. A fuller environment pathway would define a sequence of
+controlled environments. A development environment would test DAG shape, schema
+validation, and manifest construction. A staging environment would test MWAA,
+S3, Terraform state, OpenMetadata, and OpenLineage integration using
+non-production data. A production-like environment would then test release
+promotion, policy enforcement, and audit reconstruction under stricter access
+control. This would separate fast evidence-model iteration from managed-service
+validation without changing the architecture being evaluated.
+
+Further work should also test negative and degraded cases. The current example
+focuses on a successful governed run. A fuller evaluation should include failed
+quality gates, unresolved governance references, failed attestation, missing
+metadata publication, GitHub outage scenarios, and replay of historical dataset
+versions. These cases would show whether the architecture only records success
+or whether it can also explain failure.
+
+Finally, future work should increase the variety of data and workflow patterns.
+The EDGAR example is useful because it is structured and repeatable, but
+regulated organisations often operate mixed batch, streaming, API, and
+machine-learning pipelines. Applying the evidence-chain model to those cases
+would test whether the architecture generalises beyond a single ETL pattern.

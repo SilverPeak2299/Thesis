@@ -1,13 +1,101 @@
 \chapter{Conclusion}
-To be completed in Thesis B
-% \section{Restating the Research Question}
-% Reiterate the main question and summarize how your design addressed it.
+\noindent
+This thesis set out to answer the question:
 
-% \section{Key Contributions}
-% List concrete deliverables (architecture, prototype, metrics, evaluation).
+\begin{quote}
+How can a DevSecOps toolchain be designed to support ETL workflows in regulated
+industries, enhancing auditability and data governance?
+\end{quote}
 
-% \section{Reflections}
-% Discuss broader lessons about DevSecOps integration into data pipelines.
+The answer developed in this thesis is that DevSecOps can support governed ETL
+when the delivery pipeline and the data pipeline are treated as one evidence
+system. In the proposed architecture, a dataset is not only the output of an
+Airflow run. It is the result of a governed change, an approved release, a
+specific infrastructure state, a known code bundle, a quality decision, and a
+recorded lineage path. Auditability is therefore designed into the workflow
+rather than reconstructed after the workflow has already completed.
 
-% \section{Closing Remarks}
-% Tie back to the motivation and note the continuing relevance for regulated industries.
+\section{Summary of Contributions}
+\noindent
+The first contribution of this thesis is the architecture itself. Chapter~5
+presented a governed ETL architecture at escalating levels of detail, beginning
+with the high-level system structure and moving through process maps, data
+flows, metadata flows, and a worked execution path. This architecture extends a
+standard Airflow and AWS-style ETL pipeline with change governance, release
+manifests, policy checks, quality gates, lineage publication, metadata
+records, and audit-chain artifacts.
+
+The second contribution is the implemented prototype. The implementation used a
+governed EDGAR pipeline to show how the architecture can be materialised in
+code. The prototype produced run manifests, release references, change
+references, code hashes, quality results, OpenLineage-style events,
+OpenMetadata-compatible records, and audit-chain files. Although the
+demonstration was intentionally scoped, it showed that a produced dataset
+version can be traced back to the authority, code, infrastructure, and controls
+that produced it.
+
+The third contribution is the evaluation framework and requirement mapping.
+Chapter~3 translated auditability and governance concerns into five system
+requirements: governance accountability, information security assurance,
+operational risk control, continuous control monitoring, and end-to-end
+evidence chain. Chapter~7 then evaluated the prototype against these
+requirements and linked each one back to the auditability dimensions of
+normativity, accountability, referentiality, reliability, and verifiability.
+
+\section{Findings}
+\noindent
+The main finding is that auditability improves when evidence is captured as
+part of the delivery and runtime workflow. The baseline pipeline could produce
+data and operational logs, but it did not bind the output to a complete
+governance chain. The proposed architecture changed this by making the run
+manifest and metadata artifacts central to the system.
+
+The worked example in Chapter~6 demonstrated this point. Starting from the
+example dataset version, the evidence chain could be followed to the
+audit-chain artifact, run manifest, release manifest, Terraform reference,
+change record, code hashes, quality decision, lineage event, and metadata
+records. This does not remove the need for human judgement in an audit, but it
+does change what the auditor is judging. Instead of assembling evidence from
+unrelated logs and repository history, the auditor can inspect a structured
+chain of fields and artifacts.
+
+The evaluation also showed that the architecture is strongest when controls
+produce evidence, not only decisions. A policy check that blocks deployment is
+useful, but it becomes auditable when its result is retained and linked to the
+release or run. A data contract is useful, but it becomes auditable when the
+quality result records that the contract was checked before promotion. A
+lineage record is useful, but it becomes stronger when it points to the same
+dataset version and manifest as the rest of the evidence chain.
+
+\section{Scope and Reflection}
+\noindent
+The demonstration was intentionally scoped around the evidence model. The EDGAR
+pipeline and representative run were used to test whether a governed ETL system
+could connect release identity, runtime state, quality evidence, lineage, and
+metadata into a coherent audit chain. Production-scale reliability, multi-team
+access-control behaviour, and long-term retention are operational extensions of
+that same architecture rather than the focus of the evaluation.
+
+The most important design trade-off is reliance on GitHub. GitHub is useful
+because it brings source control, issues, pull requests, CI/CD, and release
+automation close together. At the same time, that convenience concentrates
+trust. The outages encountered during development made this risk clear. A
+future production version of this architecture should split some of these
+responsibilities across independent services so that audit evidence is not
+dependent on one platform remaining continuously available and internally
+consistent.
+
+\section{Closing Remarks}
+\noindent
+This thesis demonstrates that DevSecOps can enhance ETL governance when it is
+used to create durable evidence, not only automation. The proposed architecture
+does not treat compliance as a final review step. It treats governance
+references, release identity, code integrity, quality decisions, lineage, and
+metadata as normal outputs of the pipeline.
+
+For regulated environments, this matters because trust in data depends on more
+than correct transformation logic. It depends on whether the organisation can
+explain how the data was produced, who authorised the change, which controls
+ran, and how the output can be reconstructed. The architecture developed in
+this thesis provides a practical path toward that goal by making auditability a
+designed property of the ETL system.

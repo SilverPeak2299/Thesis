@@ -1,23 +1,298 @@
 \chapter{Evaluation}
+\label{ch:evaluation}
+\noindent
+This chapter evaluates the results reported in Chapter~\ref{ch:results}
+against the requirements defined in Chapter~3. The results chapter shows what
+the implemented architecture produced. This chapter considers whether those
+outputs satisfy the requirements and whether they satisfy the auditability
+definition used throughout the thesis.
 
-To be completed in Thesis B
+The evaluation uses the definition from Chapter~2, where auditability is framed
+as the designed capability of a system to allow its processes, controls, and
+outcomes to be observed and verified by stakeholders. In that definition,
+auditability is not a single log file or a general claim that monitoring
+exists. It is made up of normativity, accountability, referentiality
+infrastructure, reliability, and verifiability
+\cite{weigand_auditability_2019}. The evaluation therefore asks whether the
+implemented fields and artifacts make those dimensions visible in the system.
 
-% \section{Evaluation Framework}
-% Define how the artifact is assessed — e.g., lineage completeness, reproducibility, tamper detection.
+\section{Evaluation Approach}
+\noindent
+The assessment follows the R1--R5 requirement matrix from Chapter~3 and the
+control matrix in the proposed-solution repository. Each requirement is
+evaluated in three steps. First, the requirement is mapped back to the relevant
+auditability dimensions. Second, the concrete evidence fields are identified.
+Third, the observed result is judged against the requirement.
 
-% \section{Experimental Setup}
-% Describe datasets, test environments, and CI/CD validation routines.
+This approach deliberately treats the evidence artifacts as the primary object
+of evaluation. A pipeline run is not considered auditable only because it
+completed successfully. It is considered auditable if the produced dataset can
+be linked to the governing change, release, infrastructure reference, runtime
+code, quality decision, lineage event, and metadata record without manual log
+collation.
 
-% \section{Results}
-% Present tables, metrics, and visualizations of outcomes.
+\section{R1 Governance Accountability}
+\noindent
+R1 requires production-relevant changes to be linked to documented authority.
+In Chapter~3 this requirement was tied to normativity and accountability.
+Normativity is satisfied when the system records which governance rule or
+change process applies to an action. Accountability is satisfied when the run
+can be linked back to the actor, change, or approved release that authorised
+the action.
 
-% \section{Discussion}
-% Interpret results in context:
-% - How did the toolchain improve governance?
-% - What measurable gains were observed?
+\begin{table}[H]
+  \centering
+  \caption{R1 governance accountability evidence fields.}
+  \label{tab:evaluation-r1-fields}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+    \toprule
+    \textbf{Field or artifact} & \textbf{Evaluation role} \\
+    \midrule
+    \texttt{change\_ref} & Links the run to the governing change record. \\
+    \texttt{release\_manifest\_ref} & Links the run to the approved release definition. \\
+    \texttt{terraform\_state\_ref} & Links the run to the infrastructure state reference. \\
+    \texttt{reference\_checks.change\_ref} & Records whether the change record resolved at runtime. \\
+    \texttt{reference\_checks.release\_manifest\_ref} & Records whether the release manifest resolved at runtime. \\
+    \texttt{reference\_checks.terraform\_state\_ref} & Records whether the infrastructure reference resolved at runtime. \\
+    \texttt{source\_control.commit} & Links the release and run evidence to the source revision. \\
+    Change record \texttt{change\_id} & Names the governed change, for example \texttt{EDGAR-1}. \\
+    Release manifest \texttt{release\_id} & Names the governed release, for example \texttt{dev-edgar-v1}. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
-% \section{Threats to Validity}
-% Discuss internal and external validity considerations.
+The requirement is demonstrated because the implemented run is not recorded as
+an isolated Airflow execution. The run manifest contains the change, release,
+and Terraform references, and the reference-check block records whether each
+reference existed when the run evidence was produced. This means the run can be
+read as an authorised operational event rather than only as a scheduled task.
 
-% \section{Summary}
-% Wrap up the findings and prepare for the discussion/conclusion chapters.
+The link to the auditability definition is direct. The \texttt{change\_ref} and
+\texttt{release\_manifest\_ref} fields provide normativity because they record
+the governing process that applied to the run. The source-control and release
+fields provide accountability because they bind the run to a concrete change
+record and code revision. The reference checks are important because they
+prevent the evidence chain from merely naming authority; they record that the
+named authority resolved.
+
+\section{R2 Information Security Assurance}
+\noindent
+R2 requires deployable artifacts and configuration to be verified for integrity
+and security before they are used. In Chapter~3 this was tied to reliability
+and verifiability. Reliability is concerned with whether the evidence faithfully
+represents the artifact that ran. Verifiability is concerned with whether an
+independent reviewer can test the claim.
+
+\begin{table}[H]
+  \centering
+  \caption{R2 information security assurance evidence fields.}
+  \label{tab:evaluation-r2-fields}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+    \toprule
+    \textbf{Field or artifact} & \textbf{Evaluation role} \\
+    \midrule
+    \texttt{code\_bundle.release\_manifest\_sha256} & Records the digest of the release manifest. \\
+    \texttt{code\_bundle.artifacts.path} & Names each DAG or job artifact included in the bundle. \\
+    \texttt{code\_bundle.artifacts.sha256} & Records a SHA-256 hash for each code artifact. \\
+    \texttt{source\_control.repository} & Records the source repository used for the release. \\
+    \texttt{source\_control.commit} & Records the source revision associated with the run. \\
+    \texttt{attestation.provider} & Records the attestation provider expected by the evidence model. \\
+    \texttt{attestation.subject\_digest} & Carries the subject digest used to bind provenance to the release artifact. \\
+    GitHub Actions controls & Provide the CI/CD surface for linting, tests, policy checks, artifact upload, and attestation. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+The requirement is demonstrated by the way the implementation records artifact
+identity. The code bundle includes hashes for the DAG and the ingest,
+transform, quality, and promotion jobs. These hashes make the run evidence more
+reliable because an auditor can compare the recorded digest with the file that
+is claimed to have run. The source-control fields then bind those artifacts to
+the repository and commit.
+
+The release provenance fields extend the same chain to the release context. The
+evidence model records the provider, workflow, run, URL, and subject digest
+fields needed to connect the release bundle to GitHub-native provenance. In
+the implemented results, this requirement is evaluated through the demonstrated
+source revision, run reference, release reference, and SHA-256 artifact hashes.
+
+This satisfies the auditability definition because the security claim is
+independently testable. An evaluator does not need to trust a written statement
+that the correct files were used. The evaluator can inspect
+\texttt{code\_bundle.artifacts.sha256}, compare it with the artifact contents,
+and then follow \texttt{source\_control.commit} back to the release source.
+
+\section{R3 Operational Risk Control}
+\noindent
+R3 requires the workflow to support reproducibility, recovery, and visibility
+over operational state. In Chapter~3 this requirement was tied to
+referentiality and reliability. Referentiality is satisfied when the run record
+connects the output to its source, intermediate, and runtime records.
+Reliability is satisfied when the recorded state is complete enough to support
+replay and diagnosis.
+
+\begin{table}[H]
+  \centering
+  \caption{R3 operational risk control evidence fields.}
+  \label{tab:evaluation-r3-fields}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+    \toprule
+    \textbf{Field or artifact} & \textbf{Evaluation role} \\
+    \midrule
+    \texttt{run\_id} & Identifies the specific governed execution. \\
+    \texttt{pipeline\_id} & Identifies the pipeline definition that ran. \\
+    \texttt{dataset\_date} & Identifies the dataset partition or business date. \\
+    \texttt{source\_ref} & Records the source input used by the run. \\
+    \texttt{raw\_outputs} & Records the raw payload and normalised raw output references. \\
+    \texttt{curated\_outputs.curated\_uri} & Records the curated dataset produced by transformation. \\
+    \texttt{quality\_result.status} & Records whether the quality gate passed. \\
+    \texttt{gold\_write\_result} & Records the promoted gold table write result. \\
+    \texttt{dataset\_version} & Records the stable output version used for reconstruction. \\
+    \texttt{status} & Records the final run outcome. \\
+    \texttt{completed\_at} & Records when the run evidence was finalised. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+The requirement is demonstrated because the run manifest records enough state
+to reconstruct how the output was created. It contains source, raw, curated,
+quality, promotion, and dataset-version fields in a single evidence object.
+This reduces operational risk because recovery no longer depends on reading
+unrelated logs and guessing which task output should be trusted.
+
+The manifest validator strengthens the result. For a successful run, the
+validator requires a \texttt{dataset\_version}, a \texttt{gold\_write\_result},
+and metadata references to the OpenMetadata run record, OpenMetadata dataset
+record, OpenLineage event, and audit-chain path. It also requires reference
+checks for the release, Terraform, and change references. A run is therefore
+not merely successful because the final task completed. It is successful
+because the evidence needed for reconstruction is present.
+
+This maps to referentiality because each stage of the data path points to the
+next stage. It maps to reliability because the system records the final status,
+quality result, row-count evidence, and completion time together with the
+output version. The result is a recovery-oriented run record rather than a
+best-effort operational log.
+
+\section{R4 Continuous Control Monitoring}
+\noindent
+R4 requires controls to run continuously and to produce evidence of their
+outcomes. In Chapter~3 this requirement was tied to normativity and
+accountability. Normativity is present when controls are embedded into the
+workflow rather than applied after the fact. Accountability is present when the
+result of each control decision is retained.
+
+\begin{table}[H]
+  \centering
+  \caption{R4 continuous control monitoring evidence fields.}
+  \label{tab:evaluation-r4-fields}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+    \toprule
+    \textbf{Field or artifact} & \textbf{Evaluation role} \\
+    \midrule
+    \texttt{quality\_result.checks.curated\_output\_exists} & Records whether the curated output existed. \\
+    \texttt{quality\_result.checks.schema\_matches\_contract} & Records whether the curated output matched the contract. \\
+    \texttt{quality\_result.checks.row\_count\_gt\_zero} & Records whether the curated output contained records. \\
+    \texttt{quality\_result.checks.required\_ids\_non\_null} & Records whether required identifiers were populated. \\
+    \texttt{curated\_outputs.contract\_path} & Links the quality decision to the data contract. \\
+    \texttt{reference\_checks} & Records whether governance references resolved before the run evidence was accepted. \\
+    \texttt{metadata\_refs.openlineage\_event\_path} & Records where the lineage event evidence was written. \\
+    \texttt{metadata\_refs.openmetadata\_run\_path} & Records where the run metadata evidence was written. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+The requirement is demonstrated because the implementation converts controls
+into runtime evidence. The quality result is not a general pass/fail statement;
+it records named checks. The contract path also remains in the manifest, which
+means the schema decision can be traced back to the exact contract used for the
+check.
+
+This matters for auditability because continuous monitoring must be observable.
+If a quality or governance check only appears in a log line, the control is
+difficult to test independently. In this implementation, the check result is a
+field in the manifest and therefore becomes part of the same evidence chain as
+the dataset version. The same pattern is used for governance references:
+\texttt{reference\_checks} records whether the release manifest, Terraform
+state reference, and change record resolved.
+
+R4 is therefore satisfied within the implemented scope. The system demonstrates
+that control execution and control outcome can be captured as structured
+runtime evidence. The remaining production concern is scale and policy
+coverage: more policies would be needed for a complete enterprise deployment,
+but the architecture pattern is demonstrated.
+
+\section{R5 End-to-End Evidence Chain}
+\noindent
+R5 is the strongest auditability requirement because it asks whether a promoted
+dataset can be reconstructed from evidence without manual log collation. In
+Chapter~3 this requirement was tied to referentiality and verifiability. It is
+also the requirement that most directly tests the thesis claim.
+
+\begin{table}[H]
+  \centering
+  \caption{R5 end-to-end evidence chain fields.}
+  \label{tab:evaluation-r5-fields}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+    \toprule
+    \textbf{Field or artifact} & \textbf{Evaluation role} \\
+    \midrule
+    \texttt{dataset\_version} & Starting point for reconstruction from the gold dataset. \\
+    Audit-chain \texttt{manifest\_ref} & Resolves the dataset version to the run manifest. \\
+    Audit-chain \texttt{release\_manifest\_ref} & Resolves the dataset version to the release manifest. \\
+    Audit-chain \texttt{terraform\_state\_ref} & Resolves the dataset version to the infrastructure state reference. \\
+    Audit-chain \texttt{change\_ref} & Resolves the dataset version to the governing change. \\
+    Audit-chain \texttt{code\_bundle} & Carries the runtime code hashes into the reconstruction path. \\
+    \texttt{metadata\_refs.audit\_chain\_path} & Records where the audit-chain artifact was written. \\
+    OpenLineage \texttt{inputs} & Records source, raw, curated, and manifest lineage inputs. \\
+    OpenLineage \texttt{outputs} & Records the gold-table lineage output and dataset version facet. \\
+    OpenMetadata dataset \texttt{manifest\_ref} & Links the catalogue dataset record back to the run manifest. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+The implemented result satisfies R5 because the dataset version
+\texttt{9b5fd26a2005c02b} can be used as the first lookup key. From there, the
+audit-chain artifact points to the run manifest. The run manifest then points
+to the release manifest, Terraform state reference, change record, code bundle,
+quality result, OpenLineage event, and OpenMetadata records.
+
+This is the clearest link back to the auditability definition. Referentiality
+is demonstrated because the evidence chain preserves the points of recording
+for source data, raw output, curated output, manifest storage, metadata
+publication, and gold promotion. Verifiability is demonstrated because those
+links are materialised as fields and paths rather than implied by naming
+convention. An evaluator can follow the fields directly:
+\texttt{dataset\_version} to audit-chain file, audit-chain
+\texttt{manifest\_ref} to run manifest, run manifest to governance references,
+and metadata references to lineage and catalogue records.
+
+R5 is therefore demonstrated because the system provides a structured
+reconstruction path. The baseline pipeline could show that tasks ran and files
+existed, but it did not bind the output to the change, release, infrastructure,
+code, quality, lineage, and catalogue evidence in one chain. The proposed
+architecture does.
+
+\section{Evaluation Summary}
+\noindent
+The evaluation shows that the proposed architecture satisfies R1--R5 within
+the implemented scope. More importantly, each requirement is satisfied in terms
+of the auditability definition from Chapter~2. R1 and R4 demonstrate
+normativity and accountability by recording the governing change, release,
+reference checks, and control outcomes. R2 and R3 demonstrate reliability by
+recording artifact hashes, source-control provenance, quality status, and
+complete run state. R3 and R5 demonstrate referentiality by linking source,
+raw, curated, manifest, metadata, and gold records. R2 and R5 demonstrate
+verifiability because the recorded hashes, manifests, metadata references, and
+audit-chain fields can be inspected independently.
+
+The result is that auditability is implemented as a set of linked evidence
+fields, not as a retrospective explanation. The proposed architecture therefore
+meets the thesis objective: it improves ETL governance by making the authority,
+integrity, runtime state, control decisions, and output reconstruction path
+part of the delivery and execution workflow.

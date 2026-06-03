@@ -1,0 +1,412 @@
+\chapter{Results}
+\label{ch:results}
+\noindent
+This chapter presents the results from implementing and exercising the proposed
+governed ETL architecture. The results are intentionally scoped to the
+implemented architecture. They demonstrate whether the architecture can produce
+the forms of evidence required by the evaluation framework in Chapter~3. The
+formal assessment of those results against the requirements is provided in
+Chapter~\ref{ch:evaluation}.
+
+The implemented prototype uses the governed EDGAR pipeline described in
+Chapter~5. The pipeline ingests a representative SEC~EDGAR fixture, writes raw
+and curated records through the S3 storage zones, validates the curated output
+against a data contract, promotes the passing dataset to the governed gold
+table layer, and records run evidence in JSON manifests and metadata artifacts.
+This setup was sufficient to test the central claim of the architecture: that a
+produced dataset version can be reconstructed back to the run, code bundle,
+release manifest, infrastructure reference, and change record that produced it.
+
+\section{Implementation Details}
+\noindent
+The implementation continues the architecture described in Chapter~5 by
+materialising the proposed controls across the target orchestration,
+infrastructure, metadata, and evidence planes. The pipeline was implemented as a
+governed Airflow workflow intended for MWAA, with Terraform defining the AWS
+resources, S3 separating the raw, curated, manifest, and gold data zones, and
+the metadata layer recording lineage, quality, release, and reconstruction
+evidence. The important implementation result is that each produced dataset
+version carries enough references to connect the data product back to the
+release manifest, change record, code bundle, infrastructure state, quality
+result, OpenLineage event, and OpenMetadata records.
+
+The target implementation therefore follows the same split used in the
+architecture chapter. The orchestration plane schedules and executes the EDGAR
+workflow through Airflow on MWAA. The data plane stores source, intermediate,
+manifest, and promoted outputs in the S3-backed zones. The governance plane
+uses GitHub Actions, OPA policy checks, release manifests, and artifact
+attestation to control change. The evidence plane then persists the run
+manifest, audit-chain file, lineage event, catalogue record, and schema
+contract so that the produced gold dataset can be reconstructed without relying
+on memory of the deployment.
+
+The main implementation hurdle was the cost of repeatedly provisioning the
+managed orchestration environment. The MWAA environment took approximately
+45~minutes to create from Terraform and approximately 15~minutes to tear down.
+That made full rebuilds too slow for normal development, so a Docker-based
+Airflow environment was used during local development to allow faster
+iteration before deployment to the target architecture.
+
+The second major issue during development was the recent instability of
+GitHub. Frequent outages affected the ability to develop and test the system,
+with particular frustration caused by the GitHub merge-queue incident. Because
+the target architecture depends on GitHub for issues, pull requests, release
+controls, ownership, and attestation, these incidents reinforced the need to
+retain independent release manifests, hashes, and run manifests rather than
+relying only on platform state. These issues create uncertainty in a system
+where the foundational principle is trust. Questions about reliance on GitHub
+are therefore returned to later in the thesis.
+
+The detailed implementation version and platform reference tables are provided
+in Appendix~\ref{chap:implementation-versions} so that the results discussion
+can focus on the evidence produced by the architecture rather than the support
+stack inventory.
+
+\section{Observed Results}
+\noindent
+The results in this chapter are presented as a worked example following one
+representative governed EDGAR run. The purpose of doing this is to show how the
+architecture behaves when an auditor starts from a produced dataset and follows
+the evidence chain backward. The example run ingested the representative
+SEC~EDGAR fixture, transformed it into the curated contract shape, executed the
+quality gate, promoted the passing output to the gold table, and wrote the
+surrounding run, lineage, catalogue, and audit-chain evidence.
+
+For this demonstration run, the promoted gold dataset version was
+\texttt{9b5fd26a2005c02b}. The value is used throughout the remainder of this
+chapter as the example lookup key, not as a claim that the identifier itself is
+important outside this run. Repeated execution over the same governed input,
+contract, and transformation logic resolved to the same version identifier,
+which is the expected behaviour because the version is derived from promoted
+content and table identity. The important result was therefore not the volume
+of data processed, but that the run produced a stable governed output with
+enough surrounding evidence to explain that output without manual log
+collation.
+
+Table~\ref{tab:results-artifact-linkage} summarises how the artifacts in this
+single worked example point to each other. The table should be read as the
+traceback path for the demonstration run rather than as a general inventory of
+all possible evidence files.
+
+\begin{table}[H]
+  \centering
+  \caption{Evidence artifact linkage used for audit reconstruction.}
+  \label{tab:results-artifact-linkage}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\textwidth}{@{}p{0.25\textwidth}p{0.26\textwidth}X@{}}
+    \toprule
+    \textbf{Artifact} & \textbf{Pointer field} & \textbf{What it resolves to} \\
+    \midrule
+    Gold dataset & \texttt{dataset\_version} & Resolves to the audit-chain artifact for \texttt{9b5fd26a2005c02b}. \\
+    Audit-chain artifact & \texttt{manifest\_ref} & Resolves to the run manifest that produced the dataset. \\
+    Run manifest & \texttt{release\_manifest\_ref} & Resolves to the release manifest that defines the DAG and job files. \\
+    Run manifest & \texttt{change\_ref} & Resolves to the governed change record, including the \texttt{EDGAR-1} implementation record. \\
+    Run manifest & \texttt{terraform\_state\_ref} & Resolves to the infrastructure state reference for the execution environment. \\
+    Run manifest & \texttt{curated\_outputs.contract\_path} & Resolves to the curated contract used by the quality gate. \\
+    Run manifest & \texttt{code\_bundle.artifacts} & Resolves to hashed DAG, ingest, transform, quality, and promotion files. \\
+    Run manifest & \texttt{metadata\_refs} & Resolves to OpenLineage, OpenMetadata, and audit-chain metadata records. \\
+    OpenLineage event & \texttt{inputs} and \texttt{outputs} & Resolves source, raw, curated, manifest, and gold-table lineage endpoints. \\
+    OpenMetadata dataset record & \texttt{upstreams} and \texttt{manifest\_ref} & Resolves the dataset back to upstream inputs and the producing run manifest. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+In this demonstration run, the quality gate showed that the curated dataset
+existed, matched the declared contract, contained non-empty records, and had
+required identifiers populated. These are deliberately simple controls, but
+they demonstrate the runtime enforcement pattern: a dataset is not promoted
+because a task finishes; it is promoted because the required checks pass and
+their results are recorded.
+
+The generated run manifest is the main evidence object for the example. For the
+successful run, it records the run identifier, source reference, raw outputs,
+curated output, contract path, row counts, quality result, gold table
+coordinates, dataset version, release manifest reference, Terraform state
+reference, and change reference. In the complete governed Airflow run, the
+manifest also records source-control provenance, code bundle hashes,
+attestation fields, reference checks, OpenLineage output,
+OpenMetadata-style records, and the audit-chain path. This satisfies the
+practical requirement that the output can be explained without manually
+reconstructing the run from unrelated logs.
+
+\section{Evidence Schemas}
+\noindent
+The results are grounded in the structure of the evidence artifacts rather than
+only in task success. Each artifact below is materialised as JSON and records a
+different part of the governed chain. In the worked example, these schemas
+explain what each evidence artifact is expected to carry as the run moves from
+ingestion through promotion and then into audit reconstruction.
+
+\begin{table}[H]
+  \centering
+  \caption{Run manifest schema.}
+  \label{tab:schema-run-manifest}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{run\_id} & Identifies the specific governed execution. \\
+    \texttt{pipeline\_id} & Identifies the pipeline definition that ran. \\
+    \texttt{dataset\_date} & Identifies the dataset partition being produced. \\
+    \texttt{source\_ref} & Records the upstream source object or fixture used for ingestion. \\
+    \texttt{release\_manifest\_ref} & Links execution to the approved release definition. \\
+    \texttt{terraform\_state\_ref} & Links execution to the infrastructure state reference. \\
+    \texttt{change\_ref} & Links execution to the governing change record. \\
+    \texttt{job\_refs} & Lists the ingest, transform, quality, and promotion jobs used by the run. \\
+    \texttt{raw\_outputs} & Records raw payload and normalized raw output locations. \\
+    \texttt{curated\_outputs} & Records curated output and contract path. \\
+    \texttt{gold\_write\_result} & Records promoted gold table write details. \\
+    \texttt{row\_counts} & Stores raw, curated, and promoted count consistency evidence. \\
+    \texttt{quality\_result} & Captures the blocking quality-gate result and per-check outcomes. \\
+    \texttt{dataset\_version} & Identifies the promoted gold dataset version. \\
+    \texttt{reference\_checks} & Records whether release, infrastructure, and change references resolved at runtime. \\
+    \texttt{source\_control} & Captures repository, branch, commit, and commit URL evidence. \\
+    \texttt{code\_bundle} & Captures release-manifest and job artifact hashes. \\
+    \texttt{attestation} & Captures GitHub attestation provider and subject fields. \\
+    \texttt{metadata\_refs} & Links to catalogue, lineage, and audit-chain artifacts. \\
+    \texttt{status} & Records the final run state. \\
+    \texttt{started\_at} & Records when the manifest began tracking the run. \\
+    \texttt{completed\_at} & Records when the run evidence was finalised. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Release manifest schema.}
+  \label{tab:schema-release-manifest}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{release\_id} & Names the governed release, such as \texttt{dev-edgar-v1}. \\
+    \texttt{pipeline\_id} & Binds the release to \texttt{edgar\_governed\_pipeline}. \\
+    \texttt{dag\_bundle\_ref} & Points to the Airflow DAG bundle included in the release. \\
+    \texttt{jobs} & Lists the ingest, transform, quality, and promotion job files. \\
+    \texttt{source\_control} & Records commit, branch, repository, and commit URL when provided by the release workflow. \\
+    \texttt{artifact\_bundle} & Reserves the package path, digest, subject digest, and attestation bundle path. \\
+    \texttt{attestation} & Records GitHub attestation provider, run, workflow, URL, and subject digest fields. \\
+    \texttt{notes} & Documents the release purpose or environment. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Change record schema.}
+  \label{tab:schema-change-record}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{change\_id} & Names the governing change, for example \texttt{EDGAR-1}. \\
+    \texttt{title} & Describes the implementation or rehearsal governed by the change. \\
+    \texttt{source} & Identifies the governance source used for the change record. \\
+    \texttt{source\_control} & Stores commit, branch, repository, and commit URL fields when available. \\
+    \texttt{attestation} & Mirrors the GitHub attestation fields used by release and run evidence. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Curated contract schema.}
+  \label{tab:schema-curated-contract}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{dataset} & Names the contract target, \texttt{edgar\_curated}. \\
+    \texttt{description} & Explains the deterministic governed EDGAR filing slice. \\
+    \texttt{required\_fields} & Requires \texttt{accession\_number} and \texttt{company\_cik}. \\
+    \texttt{columns} & Defines 8 expected curated columns and their string types. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Audit-chain schema.}
+  \label{tab:schema-audit-chain}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{dataset\_version} & Starts reconstruction from the promoted gold dataset version. \\
+    \texttt{gold\_table\_uri} & Identifies the promoted gold table location. \\
+    \texttt{pipeline\_id} & Identifies the pipeline that produced the dataset. \\
+    \texttt{run\_id} & Identifies the producing run. \\
+    \texttt{manifest\_ref} & Resolves the dataset to the producing run manifest. \\
+    \texttt{source\_ref} & Identifies the source input used by the run. \\
+    \texttt{release\_manifest\_ref} & Links the dataset to release evidence. \\
+    \texttt{terraform\_state\_ref} & Links the dataset to infrastructure evidence. \\
+    \texttt{change\_ref} & Links the dataset to change evidence. \\
+    \texttt{source\_control} & Records commit provenance. \\
+    \texttt{code\_bundle} & Records release hashes and job hashes. \\
+    \texttt{attestation} & Records attestation provider and subject fields. \\
+    \texttt{quality\_status} & Records whether the dataset passed the quality gate before promotion. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{OpenLineage event schema.}
+  \label{tab:schema-openlineage}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{eventType} & Records the lineage event type. \\
+    \texttt{eventTime} & Records the lineage event time. \\
+    \texttt{job} & Identifies the pipeline namespace and job name. \\
+    \texttt{run} & Identifies the OpenLineage run UUID and governance facets. \\
+    \texttt{inputs} & Lists source, raw, and curated upstream datasets. \\
+    \texttt{outputs} & Lists the run manifest and promoted S3~Tables dataset. \\
+    \texttt{facets.version} & Stores dataset version, content digest, and promoted records path. \\
+    \texttt{producer} & Records the producing metadata component. \\
+    \texttt{schemaURL} & Records the OpenLineage schema reference. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{OpenMetadata run-record schema.}
+  \label{tab:schema-openmetadata-run}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{entity\_type} & Marks the record as a pipeline run. \\
+    \texttt{pipeline\_id} & Identifies the producing pipeline. \\
+    \texttt{run\_id} & Identifies the producing run. \\
+    \texttt{dataset\_date} & Identifies the dataset partition. \\
+    \texttt{status} & Records run status. \\
+    \texttt{quality\_status} & Records quality-gate status. \\
+    \texttt{row\_counts} & Records count consistency. \\
+    \texttt{manifest\_ref} & Links the record back to the run manifest. \\
+    \texttt{source\_ref} & Links the record to the source input. \\
+    \texttt{release\_manifest\_ref} & Preserves the release reference. \\
+    \texttt{terraform\_state\_ref} & Preserves the infrastructure reference. \\
+    \texttt{change\_ref} & Preserves the change reference. \\
+    \texttt{source\_control} & Carries commit provenance into catalogue metadata. \\
+    \texttt{code\_bundle} & Carries artifact hashes into catalogue metadata. \\
+    \texttt{attestation} & Carries attestation fields into catalogue metadata. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{OpenMetadata dataset-record schema.}
+  \label{tab:schema-openmetadata-dataset}
+  \renewcommand{\arraystretch}{1.12}
+  \begin{tabularx}{\textwidth}{@{}p{0.3\textwidth}X@{}}
+    \toprule
+    \textbf{Field} & \textbf{Explanation} \\
+    \midrule
+    \texttt{entity\_type} & Marks the record as a dataset. \\
+    \texttt{dataset\_version} & Identifies the promoted dataset version. \\
+    \texttt{content\_digest} & Fingerprints the promoted dataset content. \\
+    \texttt{gold\_table\_bucket} & Identifies the gold table bucket. \\
+    \texttt{gold\_namespace} & Identifies the gold table namespace. \\
+    \texttt{gold\_table} & Identifies the gold table name. \\
+    \texttt{table\_uri} & Locates the promoted gold table. \\
+    \texttt{records\_path} & Locates the materialised records file. \\
+    \texttt{write\_result\_path} & Locates the write-result evidence file. \\
+    \texttt{row\_count} & Records count evidence. \\
+    \texttt{run\_id} & Links the dataset back to the producing run. \\
+    \texttt{manifest\_ref} & Links the dataset back to the producing run manifest. \\
+    \texttt{source\_curated\_uri} & Records the curated source used for promotion. \\
+    \texttt{upstreams} & Preserves upstream lineage inputs. \\
+    \texttt{source\_control} & Carries code provenance into the dataset record. \\
+    \texttt{attestation} & Carries attestation fields into the dataset record. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Audit Reconstruction Result}
+\noindent
+The strongest result from the worked example is the audit reconstruction path.
+Starting only from the gold dataset version
+\texttt{9b5fd26a2005c02b}, an auditor can resolve the audit-chain artifact at
+\path{metadata/audit-chain/9b5fd26a2005c02b.json}. Within this example, that
+artifact identifies the pipeline \texttt{edgar\_governed\_pipeline}, the
+Airflow run that produced the output, the source fixture, the gold table URI
+\path{s3tables://gold/edgar/filings}, the release manifest reference, the
+Terraform state reference, the source-control commit, and the code bundle
+hashes for the DAG and job scripts.
+
+The reconstruction then moves from the audit-chain artifact to the run
+manifest. The manifest records the raw payload and normalized raw record
+locations, the curated output location, the contract path, the quality result,
+and the promoted gold write result. The promoted write result records the
+table URI, dataset date, content digest, source curated URI, write-result path,
+and dataset version. This means the output can be traced backward from the
+gold table to the curated file, and then backward again to the raw source
+payload.
+
+The same manifest also reconstructs the control path for the example run. The
+\texttt{reference\_checks} block records that
+\path{release-manifests/dev-edgar-v1.json},
+\path{terraform-state/aws-target.json}, and
+\path{changes/EDGAR-1.json} resolved successfully. The
+\texttt{code\_bundle} block records the release-manifest SHA-256 hash and
+individual hashes for \path{pipelines/edgar_governed_pipeline.py},
+\path{jobs/ingest/edgar_ingest.py},
+\path{jobs/transform/edgar_transform.py},
+\path{jobs/quality/curated_quality_gate.py}, and
+\path{jobs/promote/promote_to_s3_table.py}. These hashes are important
+because they let the reconstruction identify the code that was intended to run,
+not only the path names of the files.
+
+The schema evidence is also part of the reconstruction. The curated output
+points to \path{contracts/edgar_curated_contract.json}, which declares the
+expected columns and requires \texttt{accession\_number} and
+\texttt{company\_cik}. The quality result then records that the curated file
+matched this contract and that required identifiers were present. In this
+sense, the schema is not separate documentation. It is executable evidence
+used by the quality gate and retained in the manifest.
+
+Finally, metadata publication connects the example run evidence file to the
+broader catalogue and lineage model. The \texttt{metadata\_refs} block points to the
+OpenLineage completion event, the OpenMetadata-compatible run record, the
+OpenMetadata-compatible dataset record, and the audit-chain path. It also
+records the pipeline FQN, storage service name, raw, curated, and gold
+container FQNs, and lineage edge count. The worked example therefore has two
+directions of proof: the manifest can reconstruct the run from the dataset,
+and the metadata records can expose the same run through lineage and catalogue
+surfaces.
+
+This result directly addresses the weakness observed in the baseline pipeline.
+In the baseline, a completed dataset could be associated with logs and output
+paths, but there was no single evidence object that bound the output to its
+change intent, runtime code, infrastructure reference, and quality decision. In
+the proposed implementation, those references are persisted together. The
+result is not merely more logging; it is a structured reconstruction path from
+dataset version back to operational authority.
+
+\section{Summary}
+\noindent
+The results show that the proposed architecture can produce a working evidence
+chain for a governed ETL run. In the representative worked example, the
+prototype generated a structured run manifest, 4 quality checks, 5 hashed code
+artifacts, 3 classes of metadata evidence, 6 lineage edges, and a stable
+dataset version that links the gold dataset back to code, infrastructure, and
+change references.
+
+These results are reported from the representative EDGAR evaluation run and the
+development harness used to exercise the target design. That scope is
+intentional because the purpose of the results is to test the evidence chain
+from release to runtime output. The prototype demonstrates the central
+architectural claim: auditability improves when governance evidence is captured
+as part of the delivery and runtime workflow, rather than reconstructed manually
+after a dataset has already been produced.
